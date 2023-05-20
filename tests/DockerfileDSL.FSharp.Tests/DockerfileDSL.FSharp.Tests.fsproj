@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <RootNamespace>DockerfileDSL.Fsharp.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="DSL.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FsUnit.Xunit" Version="5.3.0" />
+    <PackageReference Include="Xunit" Version="2.4.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DockerfileDSL.FSharp\DockerfileDSL.FSharp.fsproj" />
+  </ItemGroup>
+</Project>
