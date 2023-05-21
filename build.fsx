@@ -1,5 +1,9 @@
 #if FAKE
 #r "paket:
+nuget FSharp.Core 6.0.0
+nuget Microsoft.Build 16.10.0
+nuget Microsoft.Build.Framework 16.10.0
+nuget Microsoft.Build.Tasks.Core 16.10.0
 nuget Fake.DotNet.Cli
 nuget Fake.IO.FileSystem
 nuget Fake.Core.Target //"
