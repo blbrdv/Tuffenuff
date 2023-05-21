@@ -1,8 +1,9 @@
-module DockerfileDSL.FSharp.Core
+module DockerfileDSL.FSharp.Tests.DSL
 
 open Xunit
 open FsUnit.Xunit
 open FsUnit.CustomMatchers
+open DockerfileDSL.FSharp
 
 [<Fact>]
 let ``hello-world test`` () =

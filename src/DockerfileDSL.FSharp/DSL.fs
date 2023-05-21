@@ -1,44 +1,12 @@
 namespace DockerfileDSL.FSharp
 
 open System
+open System.IO
 open DockerfileDSL.FSharp.Domain
-open DockerfileDSL.FSharp.Utils.String
+open DockerfileDSL.FSharp.String
 
 [<AutoOpen>]
 module DSL =
-    let private quote value =
-        sprintf "%c%s%c" '"' (string value) '"'
-
-    let private print name value = sprintf "%s %s" name value
-
-    let private printKV key value = sprintf "%s=%s" key (quote value)
-
-    let private printList list =
-        if (list :> obj) :? string[] then 
-            list |> Seq.map quote |> String.concat ", " |> sprintf "[ %s ]"
-        else
-            list |> String.concat " "
-
-    let private printFlag name value =
-        if value then 
-            sprintf " --%s" name 
-        else 
-            ""
-
-    let private printParameter<'T> name (value : 'T option) =
-        if value.IsSome then 
-            sprintf " --%s=%s" name (string value.Value)
-        else
-            ""
-
-    let private printParameterQ<'T> name (value : 'T option) =
-        match value with
-        | Some s -> s |> quote |> Some
-        | _ -> None
-        |> printParameter name
-
-    let private trim (text : string) = text.TrimStart('\n')
-
     let render df = 
         let rec renderInstruction instr =
             match instr with
@@ -126,3 +94,7 @@ module DSL =
         
         r df
         |> trim
+
+    let toFile path text =
+        use stream = FileInfo(path).Create()
+        stream.Write text

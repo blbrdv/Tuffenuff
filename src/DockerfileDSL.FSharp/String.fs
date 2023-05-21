@@ -1,10 +1,43 @@
-namespace DockerfileDSL.FSharp.Utils
+namespace DockerfileDSL.FSharp
 
 open System.Text
 
-// stolen from
-// http://www.fssnip.net/7WR/title/Computation-expression-over-StringBuilder
-module internal String =
+module String =
+    let quote value =
+        sprintf "%c%s%c" '"' (string value) '"'
+
+    let print name value = sprintf "%s %s" name value
+
+    let printKV key value = sprintf "%s=%s" key (quote value)
+
+    let printList list =
+        if (list :> obj) :? string[] then 
+            list |> Seq.map quote |> String.concat ", " |> sprintf "[ %s ]"
+        else
+            list |> String.concat " "
+
+    let printFlag name value =
+        if value then 
+            sprintf " --%s" name 
+        else 
+            ""
+
+    let printParameter<'T> name (value : 'T option) =
+        if value.IsSome then 
+            sprintf " --%s=%s" name (string value.Value)
+        else
+            ""
+
+    let printParameterQ<'T> name (value : 'T option) =
+        match value with
+        | Some s -> s |> quote |> Some
+        | _ -> None
+        |> printParameter name
+
+    let trim (text : string) = text.TrimStart('\n')
+
+    // stolen from
+    // http://www.fssnip.net/7WR/title/Computation-expression-over-StringBuilder
     type StringBuffer = StringBuilder -> unit
 
     type StringBufferBuilder () =
