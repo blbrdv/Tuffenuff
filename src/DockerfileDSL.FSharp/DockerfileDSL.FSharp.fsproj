@@ -9,9 +9,9 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="String.fs" />
     <Compile Include="Domain.fs" />
     <Compile Include="Instructions.fs" />
-    <Compile Include="String.fs" />
     <Compile Include="DSL.fs" />
   </ItemGroup>
 </Project>
