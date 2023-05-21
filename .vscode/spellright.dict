@@ -1,5 +1,6 @@
 Dockerfile
 fsproj
+csproj
 src
 Cfg
 Dockerfiles
