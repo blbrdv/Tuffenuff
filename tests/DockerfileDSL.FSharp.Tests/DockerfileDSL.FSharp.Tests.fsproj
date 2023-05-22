@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Library</OutputType>
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
     <RootNamespace>DockerfileDSL.Fsharp.Tests</RootNamespace>
@@ -8,6 +9,7 @@
   <ItemGroup>
     <Compile Include="DSL.fs" />
     <Compile Include="String.fs" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FsUnit.Xunit" Version="5.3.0" />
