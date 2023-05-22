@@ -24,7 +24,7 @@ Target.create "Clean" (fun _ -> !! "src/**/bin" ++ "src/**/obj" |> Shell.cleanDi
 Target.create "Build" (fun _ -> !! "src/**/*.*proj" |> Seq.iter (DotNet.build id))
 
 Target.create "RunTests" (fun _ -> 
-    !! "tests/DockerfileDSL.FSharp.*/"
+    !! "tests/DockerfileDSL.FSharp.Tests2/"
     |> Seq.iter (
         DotNet.test (fun opt -> { opt with Configuration = DotNet.BuildConfiguration.Release })
     )
