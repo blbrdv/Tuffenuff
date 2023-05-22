@@ -1,0 +1,13 @@
+* text=auto
+
+*.fs     text diff=fsharp
+*.fsx    text diff=fsharp
+*.cs     text diff=csharp
+*.csx    text diff=csharp
+*.sln    text eol=crlf merge=union
+*.csproj text merge=union
+*.fsproj text merge=union
+
+*.sh text eol=lf
+
+*.png binary
