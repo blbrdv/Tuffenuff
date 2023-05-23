@@ -26,12 +26,12 @@ module DSL =
                     |> Seq.map (fun e -> 
                         let (key, value) = e
                         printKV key value)
-                    |> String.concat " \\\n    "
+                    |> String.concat eol_slash
                 }
 
             | From f ->
                 str {
-                    "\nFROM"
+                    sprintf "%sFROM" eol
                     printParameterQ "platform" f.Platform
                     sprintf " %s" f.Image
                     if f.Name.IsSome then 
@@ -74,7 +74,7 @@ module DSL =
                     printParameter "timeout" hc.Timeout
                     printParameter "start-period" hc.StartPeriod
                     printParameter "retries" hc.Retries
-                    sprintf " \\\n    CMD %s" (printList hc.Instructions)
+                    sprintf "%s CMD %s" eol_slash (printList hc.Instructions)
                 }
 
             | Onbuild onb -> 
@@ -90,7 +90,7 @@ module DSL =
                 | Instruction i -> renderInstruction i
                 | Subpart s -> r s |> trim
             )
-            |> String.concat "\n"
+            |> String.concat eol
         
         r df
         |> trim

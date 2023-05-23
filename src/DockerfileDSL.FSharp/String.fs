@@ -1,8 +1,13 @@
 namespace DockerfileDSL.FSharp
 
+open System
 open System.Text
 
 module String =
+    let eol = Environment.NewLine
+
+    let eol_slash = sprintf " \\%s    " eol
+
     let quote value =
         sprintf "%c%s%c" '"' (string value) '"'
 
@@ -34,7 +39,7 @@ module String =
         | _ -> None
         |> printParameter name
 
-    let trim (text : string) = text.TrimStart('\n')
+    let trim (text : string) = text.TrimStart(eol.ToCharArray())
 
     // stolen from
     // http://www.fssnip.net/7WR/title/Computation-expression-over-StringBuilder
