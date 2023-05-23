@@ -1,97 +1,76 @@
-// TODO: parametrize tests where possible
-module DockerfileDSL.FSharp.Tests.String
+module Tests.String
 
-open Xunit
-open FsUnit.Xunit
-open FsUnit.CustomMatchers
+open Expecto
 open DockerfileDSL.FSharp.String
 
-[<Fact>]
-let ``quote test`` () =
-    "\"quoted text\""
-    |> should equal
-    <| quote "quoted text"
+[<Tests>]
+let tests =
+    testList "string tests" [
+        testCase "quote test" <| fun _ ->
+            Expect.equal "\"quoted text\"" (quote "quoted text") 
+            <| "String should be quoted"
+        
+        testCase "print test" <| fun _ ->
+            Expect.equal "INSTRUCTION argument" (print "INSTRUCTION" "argument") 
+            <| "Instruction and argument should be printed separately"
+        
+        testCase "printKV test" <| fun _ ->
+            Expect.equal "key.name=\"somevalue\"" (printKV "key.name" "somevalue") 
+            <| "Key-Value print should be prettified"
+        
+        testCase "printList seq test" <| fun _ ->
+            Expect.equal "a b c" (printList (seq { "a"; "b"; "c" })) 
+            <| "Seq should be printed in shell form"
+        
+        testCase "printList list test" <| fun _ ->
+            Expect.equal "a b c" (printList [ "a"; "b"; "c" ]) 
+            <| "List should be printed in shell form"
+        
+        testCase "rintList array test" <| fun _ ->
+            Expect.equal """[ "a", "b", "c" ]""" (printList [| "a"; "b"; "c" |]) 
+            <| "Array should be printed in exec form"
+        
+        testCase "printFlag true test" <| fun _ ->
+            Expect.equal " --flag-name" (printFlag "flag-name" true) 
+            <| "Passed flag should be prettified"
+        
+        testCase "printFlag false test" <| fun _ ->
+            Expect.equal "" (printFlag "flag-name" false) 
+            <| "Unpassed flag should be equal to empty string"
+        
+        testCase "printParameter some test" <| fun _ ->
+            Expect.equal " --parameter=3" (printParameter "parameter" (Some 3)) 
+            <| "Parameter with value shoyld be prettified"
+        
+        testCase "printParameter none test" <| fun _ ->
+            Expect.equal "" (printParameter "parameter" None) 
+            <| "Parameter without value should be equal to empty string"
+        
+        testCase "printParameterQ test" <| fun _ ->
+            Expect.equal " --parameter=\"3\"" (printParameterQ "parameter" (Some 3)) 
+            <| "String parameter should be quoted"
+        
+        testCase "trim test" <| fun _ ->
+            Expect.equal "FROM scratch" (trim """
 
-[<Fact>]
-let ``print test`` () =
-    "INSTRUCTION argument"
-    |> should equal
-    <| print "INSTRUCTION" "argument"
+FROM scratch""" )
+            <| "First FROM instruction should be on first line"
 
-[<Fact>]
-let ``print key=value test`` () =
-    "key.name=\"somevalue\""
-    |> should equal
-    <| printKV "key.name" "somevalue"
+        testCase "StringBuilder CE test" <| fun _ ->
+            let a = "A"
+            let b = "B"
+            let c = "C"
 
-[<Fact>]
-let ``printList seq test`` () =
-    "a b c"
-    |> should equal
-    <| printList (seq { "a"; "b"; "c" })
-
-[<Fact>]
-let ``printList list test`` () =
-    "a b c"
-    |> should equal
-    <| printList [ "a"; "b"; "c" ]
-
-[<Fact>]
-let ``printList array test`` () =
-    """[ "a", "b", "c" ]"""
-    |> should equal
-    <| printList [| "a"; "b"; "c" |]
-
-[<Fact>]
-let ``printFlag true test`` () =
-    " --flag-name"
-    |> should equal
-    <| printFlag "flag-name" true
-
-[<Fact>]
-let ``printFlag false test`` () =
-    ""
-    |> should equal
-    <| printFlag "flag-name" false
-
-[<Fact>]
-let ``printParameter some test`` () =
-    " --parameter=3"
-    |> should equal
-    <| printParameter "parameter" (Some 3)
-
-[<Fact>]
-let ``printParameter none test`` () =
-    ""
-    |> should equal
-    <| printParameter "parameter" None
-
-[<Fact>]
-let ``printParameterQ test`` () =
-    " --parameter=\"3\""
-    |> should equal
-    <| printParameterQ "parameter"  (Some 3)
-
-[<Fact>]
-let ``trim test`` () =
-    "FROM scratch"
-    |> should equal
-    <| trim """
-FROM scratch"""
-
-[<Fact>]
-let ``StringBuilder CE test`` () =
-    let a = "A"
-    let b = "B"
-    let c = "C"
-
-    """A B
+            let expected = """A B
 C"""
-    |> should equal
-    <| str {
-        a
-        " "
-        b
-        "\n"
-        c
-    }
+            let actual = str {
+                a
+                " "
+                b
+                eol
+                c
+            }
+
+            Expect.equal expected actual "String should be builded"
+        
+    ]
