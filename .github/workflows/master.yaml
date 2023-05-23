@@ -1,15 +1,15 @@
-name: Dev
+name: Build and tests
 
 on:
   push:
     branches:
-    - dev
+    - master
   pull_request:
     branches:
-    - dev
+    - master
 
 jobs:
-  build:
+  master:
     strategy:
       fail-fast: false
       matrix:
@@ -27,5 +27,5 @@ jobs:
     - name: Restore tools
       run: dotnet tool restore
 
-    - name: Build and Test
+    - name: Run tests
       run: dotnet fake run build.fsx -t RunTests
