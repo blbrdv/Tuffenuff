@@ -74,7 +74,7 @@ module DSL =
                     printParameter "timeout" hc.Timeout
                     printParameter "start-period" hc.StartPeriod
                     printParameter "retries" hc.Retries
-                    sprintf "%s CMD %s" eol_slash (printList hc.Instructions)
+                    sprintf "%sCMD %s" eol_slash (printList hc.Instructions)
                 }
 
             | Onbuild onb -> 
