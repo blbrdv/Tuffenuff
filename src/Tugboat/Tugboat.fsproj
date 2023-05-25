@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>embedded</DebugType>
     <OutputType>Library</OutputType>
-    <RootNamespace>DockerfileDSL.Fsharp</RootNamespace>
+    <RootNamespace>Dockerfile.Tugboat</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

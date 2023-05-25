@@ -1,7 +1,7 @@
 module Tests.DSL
 
 open Expecto
-open DockerfileDSL.FSharp
+open Dockerfile.Tugboat
 
 [<Tests>]
 let tests =

@@ -1,4 +1,4 @@
-namespace DockerfileDSL.FSharp
+namespace Dockerfile.Tugboat
 
 open System
 open System.Collections.Generic

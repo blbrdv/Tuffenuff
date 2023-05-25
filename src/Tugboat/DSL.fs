@@ -1,9 +1,9 @@
-namespace DockerfileDSL.FSharp
+namespace Dockerfile.Tugboat
 
 open System
 open System.IO
-open DockerfileDSL.FSharp.Domain
-open DockerfileDSL.FSharp.String
+open Dockerfile.Tugboat.Domain
+open Dockerfile.Tugboat.String
 
 [<AutoOpen>]
 module DSL =

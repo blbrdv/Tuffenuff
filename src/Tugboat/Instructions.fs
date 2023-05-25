@@ -1,6 +1,6 @@
-namespace DockerfileDSL.FSharp
+namespace Dockerfile.Tugboat
 
-open DockerfileDSL.FSharp.Domain
+open Dockerfile.Tugboat.Domain
 
 [<AutoOpen>]
 module Instructions = 

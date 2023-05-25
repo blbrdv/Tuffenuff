@@ -1,4 +1,5 @@
-﻿module DockerfileDSL.FSharp.Tests2
+﻿module Tests.Main
+
 open Expecto
 
 [<EntryPoint>]

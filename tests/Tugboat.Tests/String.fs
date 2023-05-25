@@ -1,7 +1,7 @@
 module Tests.String
 
 open Expecto
-open DockerfileDSL.FSharp.String
+open Dockerfile.Tugboat.String
 
 [<Tests>]
 let tests =
