@@ -8,6 +8,8 @@
 *.csproj text merge=union
 *.fsproj text merge=union
 
+*.svg text
+
 *.sh text eol=lf
 
 *.png binary
