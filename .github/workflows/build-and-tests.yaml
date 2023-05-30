@@ -1,13 +1,6 @@
 name: Build and tests
 
 on: 
-  push:
-    paths-ignore:
-    - '.config/**'
-    - '.vscode/**'
-    - 'docs/**'
-    - 'imgs/**'
-    - '*.md'
   pull_request:
 
 jobs:
