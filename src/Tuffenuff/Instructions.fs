@@ -1,6 +1,6 @@
-namespace Dockerfile.Tugboat
+namespace Tuffenuff
 
-open Dockerfile.Tugboat.Domain
+open Tuffenuff.Domain
 
 [<AutoOpen>]
 module Instructions = 

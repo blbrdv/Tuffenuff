@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    paths-ignore:
+    - '.config/**'
+    - '.vscode/**'
+    tags:
+      - "*"
+
+jobs:
+  release-lib:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        global-json-file: global.json
+
+    - name: Restore tools
+      run: dotnet tool restore
+
+    - name: Nuget release
+      env:
+        KEY: ${{ secrets.NUGET_API_KEY }}
+      run: dotnet fake run build.fsx -t Release -e key=$KEY
+    
+    - run: |
+        if [[ $GITHUB_REF_NAME == *"-"* ]]; then
+          export IS_PRE_RELEASE="true"
+        else
+          export IS_PRE_RELEASE="false"
+        fi
+        echo "::set-env name=PRE_RELEASE::$IS_PRE_RELEASE"
+
+    - name: Github release
+      uses: docker://antonyurchenko/git-release:latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

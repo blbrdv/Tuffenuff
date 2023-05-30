@@ -1,7 +1,7 @@
 module Tests.String
 
 open Expecto
-open Dockerfile.Tugboat.String
+open Tuffenuff.String
 
 [<Tests>]
 let tests =
