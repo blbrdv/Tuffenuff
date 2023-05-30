@@ -1,3 +1,3 @@
-<div align="center">
-    <h1>DockerfileDSL</h1>
-</div>
+# Tuffenuff
+
+> The goal of this project is to make it simple to generate dockerfiles using a F# DSL by offering complete syntax support and the ability to create dockerfile from multiple parts.
