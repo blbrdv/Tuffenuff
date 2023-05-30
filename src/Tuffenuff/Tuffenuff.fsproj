@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <DebugType>embedded</DebugType>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Tuffenuff</RootNamespace>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
+    <Product>Tuffenuff</Product>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PackageId>Blbrdv.Tuffenuff</PackageId>
+    <Description>Simple F# DSL for generating human-readable dockerfiles</Description>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>dsl;dockerfile</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseExpression>WTFPL</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="String.fs" />
+    <Compile Include="Domain.fs" />
+    <Compile Include="Instructions.fs" />
+    <Compile Include="DSL.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="../../imgs/icon.png" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+</Project>

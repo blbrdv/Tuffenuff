@@ -1,7 +1,7 @@
 module Tests.DSL
 
 open Expecto
-open Dockerfile.Tugboat
+open Tuffenuff
 
 [<Tests>]
 let tests =

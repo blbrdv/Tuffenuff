@@ -1,9 +1,9 @@
-namespace Dockerfile.Tugboat
+namespace Tuffenuff
 
 open System
 open System.IO
-open Dockerfile.Tugboat.Domain
-open Dockerfile.Tugboat.String
+open Tuffenuff.Domain
+open Tuffenuff.String
 
 [<AutoOpen>]
 module DSL =

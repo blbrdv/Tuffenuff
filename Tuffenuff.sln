@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Dockerfile.Tugboat", "src\Tugboat\Tugboat.fsproj", "{F5B89EEF-A76B-41CD-B539-211811FFF3D6}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tuffenuff", "src\Tuffenuff\Tuffenuff.fsproj", "{F5B89EEF-A76B-41CD-B539-211811FFF3D6}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Dockerfile.Tugboat.Tests", "tests\Tugboat.Tests\Tugboat.Tests.fsproj", "{28291213-AF0F-4155-B325-6AF37E7573C8}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tuffenuff.Tests", "tests\Tuffenuff.Tests\Tuffenuff.Tests.fsproj", "{28291213-AF0F-4155-B325-6AF37E7573C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
