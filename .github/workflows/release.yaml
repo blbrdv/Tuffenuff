@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    paths-ignore:
+    - '.config/**'
+    - '.vscode/**'
+    branches:
+    - release
+
+jobs:
+  release-lib:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        global-json-file: global.json
+
+    - name: Restore tools
+      run: dotnet tool restore
+
+    - name: Release on Nuget
+      run: dotnet fake run build.fsx -t Release
