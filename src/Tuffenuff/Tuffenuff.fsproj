@@ -16,8 +16,8 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <PackageId>Blbrdv.Tuffenuff</PackageId>
-    <Description>Simple F# DSL for generating human-readable dockerfiles</Description>
+    <PackageId>Tuffenuff</PackageId>
+    <Description>Simple F# DSL for generating dockerfiles</Description>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>dsl;dockerfile</PackageTags>
