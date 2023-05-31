@@ -31,6 +31,7 @@ INCLUDE+ Dockerfile.common
 ENTRYPOINT [ "mybin" ]"""
             let actual = render <| df [
                 syntax "edrevo/dockerfile-plus"
+                br
                 from "alpine:latest" []
                 incl "Dockerfile.common"
                 entry [| "mybin" |]
@@ -53,6 +54,7 @@ ENTRYPOINT [ "mybin" ]"""
             let expected = """# multi-stage text
 ARG USERNAME="nonroot"
 ARG IMAGE="ubuntu:14.04"
+
 FROM ${IMAGE} AS build
 RUN apt-get install \
         wget \
@@ -77,7 +79,11 @@ CMD server"""
                 !/ "multi-stage text"
                 arg "USERNAME" "nonroot"
                 arg "IMAGE" "ubuntu:14.04"
+
+                br
                 !& externalDf
+
+                br
                 from img []
                 cp [ from_ "build" ] "/etc" "/app"
                 env "CONFIG" "/app/config"
