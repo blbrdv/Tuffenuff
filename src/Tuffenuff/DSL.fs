@@ -31,7 +31,7 @@ module DSL =
 
             | From f ->
                 str {
-                    sprintf "%sFROM" eol
+                    "FROM"
                     printParameterQ "platform" f.Platform
                     sprintf " %s" f.Image
                     if f.Name.IsSome then 
