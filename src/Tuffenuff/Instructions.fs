@@ -10,6 +10,8 @@ module Instructions =
 
     let plain = Plain
 
+    let br = plain ""
+
     let comment text = Simple { Name = "#"; Value = text } |> instr
 
     let ( !/ ) = comment
