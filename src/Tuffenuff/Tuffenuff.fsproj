@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>
     <Product>Tuffenuff</Product>
-    <Version>0.0.1-alpha</Version>
+    <Version>0.0.2-alpha</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>false</IncludeSymbols>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
