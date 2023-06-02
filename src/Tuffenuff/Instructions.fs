@@ -1,6 +1,6 @@
-namespace DockerfileDSL.FSharp
+namespace Tuffenuff
 
-open DockerfileDSL.FSharp.Domain
+open Tuffenuff.Domain
 
 [<AutoOpen>]
 module Instructions = 
@@ -10,6 +10,8 @@ module Instructions =
 
     let plain = Plain
 
+    let br = plain ""
+
     let comment text = Simple { Name = "#"; Value = text } |> instr
 
     let ( !/ ) = comment
@@ -18,11 +20,7 @@ module Instructions =
 
     let escape value = !/ (sprintf "escape=%c" value)
 
-    type FromParameter =
-        | As of string
-        | Platform of string
-
-    let as_ = As
+    let alias = As
 
     let platform = Platform
 
@@ -49,9 +47,44 @@ module Instructions =
 
     let fresh = from "scratch" []
 
-    let run elements = List { Name = "RUN"; Elements = elements } |> instr
+    let bind = BindOptionsBuilder ()
 
-    let ( !> ) command = [command] |> run
+    let cache = CacheOptionsBuilder ()
+
+    let tmpfs = TmpfsOptionsBuilder ()
+
+    let secret = SecretOptionsBuilder ()
+
+    let ssh = SshOptionsBuilder ()
+
+    let mount value = 
+        let x = value :> obj
+        match x with
+        | :? BindOptions as b -> b |> Bind
+        | :? CacheOptions as c -> c |> Cache
+        | :? TmpfsOptions as t -> t |> Tmpfs
+        | :? SecretOptions as s -> s |> Secret
+        | :? SshOptions as s -> s |> Ssh
+        | _ -> failwith "Invalid type provided"
+        |> Mount
+
+    let def = Def
+
+    let none = Absent
+
+    let host = Host
+    
+    let insecure = Insecure
+
+    let sandbox = Sandbox
+
+    let network = Network 
+
+    let security = Security
+
+    let run flags cmds = Run { Flags = flags; Commands = cmds } |> instr
+
+    let ( !> ) command = run [] [ command ]
 
     let cmd elements = List { Name = "CMD"; Elements = elements } |> instr
 
@@ -67,15 +100,7 @@ module Instructions =
 
     let env key value = envs [ (key, value) ]
 
-    type InsertParameter =
-        | From of string
-        | Chown of string
-        | Chmod of string
-        | Checksum of string
-        | KeepGitDir
-        | Link
-
-    let from_ = From
+    let from_ = Source
 
     let chown = Chown
 
@@ -137,10 +162,10 @@ module Instructions =
         let from = 
             ps
             |> Seq.tryFindBack (function
-                            | From _ -> true
+                            | Source _ -> true
                             | _ -> false) 
             |> Option.map (function
-                            | From s -> Some s
+                            | Source s -> Some s
                             | _ -> None)
             |> Option.flatten
         let chown = 
@@ -202,12 +227,6 @@ module Instructions =
     let stopsignal value = Simple { Name = "STOPSIGNAL"; Value = value } |> instr
 
     let ( !! ) = stopsignal
-
-    type HealthcheckParameter =
-        | Interval of string 
-        | Timeout of string
-        | StartPeriod of string
-        | Retries of int
 
     let interval = Interval
 

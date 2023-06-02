@@ -1,9 +1,9 @@
-namespace DockerfileDSL.FSharp
+namespace Tuffenuff
 
 open System
 open System.IO
-open DockerfileDSL.FSharp.Domain
-open DockerfileDSL.FSharp.String
+open Tuffenuff.Domain
+open Tuffenuff.String
 
 [<AutoOpen>]
 module DSL =
@@ -31,7 +31,7 @@ module DSL =
 
             | From f ->
                 str {
-                    sprintf "%sFROM" eol
+                    "FROM"
                     printParameterQ "platform" f.Platform
                     sprintf " %s" f.Image
                     if f.Name.IsSome then 

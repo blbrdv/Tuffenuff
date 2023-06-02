@@ -1,4 +1,4 @@
-namespace DockerfileDSL.FSharp
+namespace Tuffenuff
 
 open System
 open System.Text

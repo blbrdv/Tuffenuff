@@ -1,7 +1,7 @@
 module Tests.DSL
 
 open Expecto
-open DockerfileDSL.FSharp
+open Tuffenuff
 
 [<Tests>]
 let tests =
@@ -31,6 +31,7 @@ INCLUDE+ Dockerfile.common
 ENTRYPOINT [ "mybin" ]"""
             let actual = render <| df [
                 syntax "edrevo/dockerfile-plus"
+                br
                 from "alpine:latest" []
                 incl "Dockerfile.common"
                 entry [| "mybin" |]
@@ -41,18 +42,19 @@ ENTRYPOINT [ "mybin" ]"""
         testCase "multi-stage test" <| fun _ ->
             let img = % "IMAGE"
             let externalDf = df [
-                from img [ as_ "build" ]
+                from img [ alias "build" ]
                 !> """apt-get install \
         wget \
         somebloatware;"""
                 workdir "/etc"
                 !@ [ keep ] "https://git.example.com/some/thing.git" "."
-                ~~ (run [ "make install" ])
+                ~~ (run [] [ "make install" ])
             ]
 
             let expected = """# multi-stage text
 ARG USERNAME="nonroot"
 ARG IMAGE="ubuntu:14.04"
+
 FROM ${IMAGE} AS build
 RUN apt-get install \
         wget \
@@ -77,7 +79,11 @@ CMD server"""
                 !/ "multi-stage text"
                 arg "USERNAME" "nonroot"
                 arg "IMAGE" "ubuntu:14.04"
+
+                br
                 !& externalDf
+
+                br
                 from img []
                 cp [ from_ "build" ] "/etc" "/app"
                 env "CONFIG" "/app/config"
