@@ -42,13 +42,13 @@ ENTRYPOINT [ "mybin" ]"""
         testCase "multi-stage test" <| fun _ ->
             let img = % "IMAGE"
             let externalDf = df [
-                from img [ as_ "build" ]
+                from img [ alias "build" ]
                 !> """apt-get install \
         wget \
         somebloatware;"""
                 workdir "/etc"
                 !@ [ keep ] "https://git.example.com/some/thing.git" "."
-                ~~ (run [ "make install" ])
+                ~~ (run [] [ "make install" ])
             ]
 
             let expected = """# multi-stage text
