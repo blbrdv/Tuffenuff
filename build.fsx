@@ -47,6 +47,7 @@ Target.create "Release" (fun _ ->
     let setNugetPushParams (defaults : NuGet.NuGetPushParams) =
         { defaults with
             DisableBuffering = true
+            Source = Some "https://api.nuget.org/v3/index.json"
             ApiKey = Some nugetApiKey
         }
     let setParams (defaults : DotNet.NuGetPushOptions) =
