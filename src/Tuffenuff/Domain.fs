@@ -250,13 +250,6 @@ module Domain =
         | Secret of SecretOptions
         | Ssh of SshOptions
 
-    // type MountType =
-    //     | BindOptions of BindOptions
-    //     | CacheOptions
-    //     | TmpfsOptions
-    //     | SecretOptions
-    //     | SshOptions
-
     type NetworkType =
         | Def    // Default
         | Absent // None

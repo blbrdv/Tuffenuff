@@ -57,8 +57,6 @@ module Instructions =
 
     let ssh = SshOptionsBuilder ()
 
-    // let mount = Mount
-
     let mount value = 
         let x = value :> obj
         match x with
