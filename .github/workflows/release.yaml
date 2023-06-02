@@ -17,11 +17,10 @@ jobs:
     
     - run: |
         if [[ $GITHUB_REF_NAME == *"-"* ]]; then
-          export IS_PRE_RELEASE="true"
+          echo "PRE_RELEASE=true" >> $GITHUB_ENV
         else
-          export IS_PRE_RELEASE="false"
+          echo "PRE_RELEASE=false" >> $GITHUB_ENV
         fi
-        echo "::set-env name=PRE_RELEASE::$IS_PRE_RELEASE"
 
     - name: Github release
       uses: docker://antonyurchenko/git-release:latest
