@@ -14,18 +14,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
-    - uses: actions/setup-dotnet@v3
-      with:
-        global-json-file: global.json
-
-    - name: Restore tools
-      run: dotnet tool restore
-
-    - name: Nuget release
-      env:
-        KEY: ${{ secrets.NUGET_API_KEY }}
-      run: dotnet fake run build.fsx -t Release -e key=$KEY
     
     - run: |
         if [[ $GITHUB_REF_NAME == *"-"* ]]; then
@@ -39,3 +27,15 @@ jobs:
       uses: docker://antonyurchenko/git-release:latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        global-json-file: global.json
+
+    - name: Restore tools
+      run: dotnet tool restore
+
+    - name: Nuget release
+      env:
+        KEY: ${{ secrets.NUGET_API_KEY }}
+      run: dotnet fake run build.fsx -t Release -e key=$KEY
