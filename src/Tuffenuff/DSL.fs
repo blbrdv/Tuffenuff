@@ -98,3 +98,9 @@ module DSL =
     let toFile path text =
         use stream = FileInfo(path).Create()
         stream.Write text
+
+    let fromFile path =
+        seq {
+            for line in File.ReadLines(path) do
+                plain line
+        }
