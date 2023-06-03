@@ -92,6 +92,9 @@ module Instructions =
 
     let label key value = labels [ (key, value) ]
 
+    [<Obsolete("MAINTAINER instruction is deprecated, use LABEL instead.")>]
+    let maintainer name = Simple { Name = "MAINTAINER"; Value = name } |> instr
+
     let exp value = Simple { Name = "EXPOSE"; Value = value } |> instr
 
     let expose elements = List { Name = "EXPOSE"; Elements = elements } |> instr
