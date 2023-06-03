@@ -21,7 +21,7 @@
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>dsl;dockerfile</PackageTags>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,6 +34,5 @@
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="/" Visible="false" />
     <None Include="../../imgs/logo.png" Pack="true" PackagePath="/" Visible="false" />
-    <None Include="../../LICENSE" Pack="true" PackagePath="/" Visible="false" />
   </ItemGroup>
 </Project>
