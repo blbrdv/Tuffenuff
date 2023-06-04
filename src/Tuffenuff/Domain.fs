@@ -322,30 +322,31 @@ type Instruction =
     | Onbuild of OnbuildInstruction
     | Healthcheck of HealthcheckInstruction
 
-
 and RunInstructionBuilder () =
-    let mutable _state = RunInstruction.Create()
 
-    member __.Yield (cmd : string) =
-        _state <- { _state with Commands = _state.Commands |> Seq.append [ cmd ] }
+    member __.Yield _ = RunInstruction.Create()
 
-    member __.Yield (cmds : string seq) =
-        _state <- { _state with Commands = _state.Commands |> Seq.append cmds }
+    [<CustomOperation "cmd">]
+    member __.Command (state : RunInstruction, cmd : string) =
+        { state with Commands = state.Commands |> Seq.append [ cmd ] }
 
-    member __.Yield (mount : MountParameters) =
-        _state <- { _state with Mounts = _state.Mounts |> Seq.append [ mount ] }
+    [<CustomOperation "cmds">]
+    member __.Commands (state : RunInstruction, cmds : string seq) =
+        { state with Commands = state.Commands |> Seq.append cmds }
 
-    member __.Yield (network : NetworkType) =
-        _state <- { _state with Network = Some network }
+    [<CustomOperation "mount">]
+    member __.Mount (state : RunInstruction, mount : MountParameters) =
+        { state with Mounts = state.Mounts |> Seq.append [ mount ] }
 
-    member __.Yield (security : SecurityType) =
-        _state <- { _state with Security = Some security }
+    [<CustomOperation "network">]
+    member __.Network (state : RunInstruction, network : NetworkType) =
+        { state with Network = Some network }
 
-    member __.Combine (_, _) = ()
+    [<CustomOperation "security">]
+    member __.Security (state : RunInstruction, security : SecurityType) =
+        { state with Security = Some security }
 
-    member __.Delay (f) = f()
-        
-    member __.Run (_) = _state |> Run |> Instruction
+    member __.Run (state) = state |> Run |> Instruction
 
 
 and OnbuildInstruction = { Instruction : Entity }

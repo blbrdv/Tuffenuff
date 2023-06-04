@@ -43,16 +43,12 @@ ENTRYPOINT [ "mybin" ]"""
             let img = % "IMAGE"
             let externalDf = df [
                 from img [ alias "build" ]
-                !> [ """apt-get install \
+                !> """apt-get install \
         wget \
-        somebloatware;""" ]
+        somebloatware;"""
                 workdir "/etc"
                 !@ [ keep ] "https://git.example.com/some/thing.git" "."
-                ~~ (
-                    run {
-                        bind "asd" 
-                        "make install" 
-                    })
+                ~~ (!> "make install")
             ]
 
             let expected = """# multi-stage text
@@ -60,12 +56,14 @@ ARG USERNAME="nonroot"
 ARG IMAGE="ubuntu:14.04"
 
 FROM ${IMAGE} AS build
-RUN apt-get install \
+RUN \
+    apt-get install \
         wget \
         somebloatware;
 WORKDIR "/etc"
 ADD --keep-git-dir=true https://git.example.com/some/thing.git .
-ONBUILD RUN make install
+ONBUILD RUN \
+    make install
 
 FROM ${IMAGE}
 COPY --from=build /etc /app

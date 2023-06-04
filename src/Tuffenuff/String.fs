@@ -22,7 +22,10 @@ let quote value =
 let print name value = sprintf "%s %s" name value
 
 
-let printKV key value = sprintf "%s=%s" key (quote value)
+let printKV key value = sprintf "%s=%s" key value
+
+
+let printKVQ key value = printKV key (quote value)
 
 
 let printList list =

@@ -15,7 +15,11 @@ let tests =
             <| "Instruction and argument should be printed separately"
         
         testCase "printKV test" <| fun _ ->
-            Expect.equal (printKV "key.name" "somevalue") "key.name=\"somevalue\""
+            Expect.equal (printKV "key.name" "somevalue") "key.name=somevalue"
+            <| "Key-Value print should be prettified"
+        
+        testCase "printKVQ test" <| fun _ ->
+            Expect.equal (printKVQ "key.name" "somevalue") "key.name=\"somevalue\""
             <| "Key-Value print should be prettified"
         
         testCase "printList seq test" <| fun _ ->

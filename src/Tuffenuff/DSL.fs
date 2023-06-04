@@ -16,7 +16,7 @@ let render df =
 
         | List l -> print l.Name (printList l.Elements)
 
-        | KeyValue kv -> print kv.Name (printKV kv.Key kv.Value)
+        | KeyValue kv -> print kv.Name (printKVQ kv.Key kv.Value)
 
         | KeyValueList l ->
             str {
@@ -24,7 +24,7 @@ let render df =
                 " "
                 l.Elements 
                 |> Seq.map (fun e -> 
-                    printKV e.Key e.Value)
+                    printKVQ e.Key e.Value)
                 |> String.concat eol_slash
             }
 
@@ -37,36 +37,45 @@ let render df =
                     sprintf " AS %s" f.Name.Value
             }
 
-        | Run r -> ""
-            // str {
-            //     "RUN "
+        | Run r ->
+            let mutable result = 
+                r.Mounts
+                |> Seq.map (
+                    fun m ->
+                        m.Params
+                        |> Seq.map (fun p -> printKV p.Key p.Value)
+                        |> Seq.append [ 
+                            printKV "type" (m.Name.ToString().ToLower()) 
+                        ]
+                        |> String.concat ","
+                        |> sprintf "--mount=%s"
+                )
+            
+            if r.Network.IsSome then do 
+                let value =
+                    (nameof r.Network.Value).ToLower()
+                    |> sprintf "--network=%s"
+                
+                result <-
+                    result
+                    |> Seq.append [ value ]
+            
+            if r.Security.IsSome then do 
+                let value =
+                    (nameof r.Network.Value).ToLower()
+                    |> sprintf "--security=%s"
+                
+                result <-
+                    result
+                    |> Seq.append [ value ]
 
-            //     let flags = 
-            //         seq {
-            //             for flag in r.Flags do
-            //                 match flag with
-            //                 | Mount m ->
-            //                     m.Params
-            //                     |> Seq.map (fun kv -> kv.Value |> Some |> printParameter kv.Key)
-            //                     |> Seq.append (seq [m.Name])
-            //                     |> String.concat ","
-            //                     |> sprintf "--mount=type=%s"
+            result <- 
+                result
+                |> Seq.append r.Commands
 
-            //                 | Network n -> 
-            //                     printParameter "network"( Some (n.ToString().ToLower()))
-
-            //                 | Security s -> 
-            //                     printParameter "security"( Some (s.ToString().ToLower()))
-            //         }
-            //         |> String.concat eol_slash
-
-            //     let commands = r.Commands |> String.concat eol_slash
-
-            //     seq {
-            //         flags
-            //         commands
-            //     } |> String.concat eol_slash                    
-            // }
+            result
+            |> String.concat eol_slash
+            |> sprintf "RUN%s%s" eol_slash
 
         | Add a -> 
             str {

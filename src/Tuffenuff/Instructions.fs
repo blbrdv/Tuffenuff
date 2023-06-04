@@ -76,7 +76,7 @@ let sandboxSecurity = Sandbox
 
 let run = RunInstructionBuilder ()
 
-let ( !> ) (commands : string seq) = run { commands }
+let ( !> ) command = run { cmd command }
 
 let cmd elements = List { Name = "CMD"; Elements = elements } |> Instruction
 
