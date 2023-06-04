@@ -11,7 +11,8 @@ let tests =
         testCase "hello-world test" <| fun _ ->
             let expected = """FROM scratch
 COPY hello /
-CMD /hello"""
+CMD /hello
+"""
             let actual = render <| df [
                 fresh
                 cp [] "hello" "/"
@@ -28,7 +29,8 @@ CMD /hello"""
 
 FROM alpine:latest
 INCLUDE+ Dockerfile.common
-ENTRYPOINT [ "mybin" ]"""
+ENTRYPOINT [ "mybin" ]
+"""
             let actual = render <| df [
                 syntax "edrevo/dockerfile-plus"
                 br
@@ -76,7 +78,8 @@ USER ${USERNAME}
 HEALTCHECK --interval=3s \
     CMD hc.bash
 ENTRYPOINT [ "/bin/foobar" ]
-CMD server"""
+CMD server
+"""
             let actual = render <| df [
                 !/ "multi-stage text"
                 arg "USERNAME" "nonroot"
