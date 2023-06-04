@@ -43,12 +43,16 @@ ENTRYPOINT [ "mybin" ]"""
             let img = % "IMAGE"
             let externalDf = df [
                 from img [ alias "build" ]
-                !> """apt-get install \
+                !> [ """apt-get install \
         wget \
-        somebloatware;"""
+        somebloatware;""" ]
                 workdir "/etc"
                 !@ [ keep ] "https://git.example.com/some/thing.git" "."
-                ~~ (run [] [ "make install" ])
+                ~~ (
+                    run {
+                        bind "asd" 
+                        "make install" 
+                    })
             ]
 
             let expected = """# multi-stage text
