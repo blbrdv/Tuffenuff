@@ -21,6 +21,7 @@ CMD /hello
 
             Expect.equal actual expected errorMessage
 
+
         testCase "custom syntax test" <| fun _ ->
             let incl path = 
                 plain (sprintf "INCLUDE+ %s" path)
@@ -40,6 +41,7 @@ ENTRYPOINT [ "mybin" ]
             ]
 
             Expect.equal actual expected errorMessage
+
 
         testCase "multi-stage test" <| fun _ ->
             let img = % "IMAGE"
