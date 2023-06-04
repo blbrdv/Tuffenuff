@@ -32,3 +32,6 @@ bld/
 *.nuget.targets
 
 .fake
+
+# examples
+examples/Dockerfile.*
