@@ -128,14 +128,15 @@ let render df =
     
     r df
     |> trim
+    |> sprintf "%s%s"
+    <| eol
 
 
-let toFile path text =
-    use stream = FileInfo(path).Create()
-    stream.Write text
+let toFile (path : string) (text : string) =
+    File.AppendAllText(path, text)
 
 
-let fromFile path =
+let fromFile (path : string) =
     seq {
         for line in File.ReadLines(path) do
             plain line
