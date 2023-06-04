@@ -18,7 +18,7 @@ CMD /hello"""
                 cmd [ "/hello" ]
             ]
 
-            Expect.equal expected actual errorMessage
+            Expect.equal actual expected errorMessage
 
         testCase "custom syntax test" <| fun _ ->
             let incl path = 
@@ -37,7 +37,7 @@ ENTRYPOINT [ "mybin" ]"""
                 entry [| "mybin" |]
             ]
 
-            Expect.equal expected actual errorMessage
+            Expect.equal actual expected errorMessage
 
         testCase "multi-stage test" <| fun _ ->
             let img = % "IMAGE"
@@ -97,5 +97,5 @@ CMD server"""
                 cmd [ "server" ]
             ]
 
-            Expect.equal expected actual errorMessage
+            Expect.equal actual expected errorMessage
     ]
