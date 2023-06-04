@@ -38,7 +38,7 @@ Target.create "Clean" (fun _ ->  Shell.deleteDirs buildDirs)
 Target.create "Build" (fun _ -> DotNet.build id projFile)
 
 Target.create "RunTests" (fun _ -> 
-    DotNet.test (fun opt -> { opt with Configuration = DotNet.BuildConfiguration.Release }) 
+    DotNet.test (fun opt -> opt)
     <| projTestFile
 )
 

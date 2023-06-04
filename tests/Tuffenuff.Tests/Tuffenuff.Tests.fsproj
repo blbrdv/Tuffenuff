@@ -20,9 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Tuffenuff\Tuffenuff.fsproj">
-      <HintPath>..\Release\netstandard2.0\MyLibrary.dll</HintPath>
-    </ProjectReference>
+    <ProjectReference Include="..\..\src\Tuffenuff\Tuffenuff.fsproj" />
   </ItemGroup>
 
 </Project>
