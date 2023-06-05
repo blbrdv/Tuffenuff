@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Compile Include="String.fs" />
+    <Compile Include="Collection.fs" />
     <Compile Include="Domain.fs" />
     <Compile Include="Instructions.fs" />
     <Compile Include="DSL.fs" />
