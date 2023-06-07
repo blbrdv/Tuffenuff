@@ -3,6 +3,7 @@ module Tuffenuff.Instructions
 
 open System
 open Tuffenuff.Domain
+open Tuffenuff.Collections
 
 
 let dockerfile (entities : Entity seq) = entities
@@ -48,41 +49,11 @@ let from image ps =
 
 let fresh = from "scratch" []
 
-let bindParams target = BindParametersBuilder (target)
-
-let bind target = bindParams target {()}
-
-let cacheParams target = CacheParametersBuilder (target)
-
-let cache target = cacheParams target {()}
-
-let tmpfsParams target = TmpfsParametersBuilder (target)
-
-let tmpfs target = tmpfsParams target {()}
-
-let secret = SecretParametersBuilder ()
-
-let ssh = SshParametersBuilder ()
-
-let defaultNetwork = Def
-
-let noNetwork = Absent
-
-let hostNetwork = Host
-
-let noSecurity = Insecure
-
-let sandboxSecurity = Sandbox
-
-let run = RunInstructionBuilder ()
-
-let ( !> ) command = run { cmd command }
-
-let cmd elements = List { Name = "CMD"; Elements = elements } |> Instruction
+let cmd elements = List { Name = "CMD"; Elements = Arguments elements } |> Instruction
 
 let labels ps = KeyValueList { Name = "LABEL"; Elements = ps } |> Instruction
 
-let label key value = [ (key, value) ] |> Map.ofSeq |> labels
+let label key value = [ (key, value) ] |> Map.ofSeq |> Parameters |> labels
 
 [<Obsolete("MAINTAINER instruction is deprecated, use LABEL instead.")>]
 let maintainer name = Simple { Name = "MAINTAINER"; Value = name } |> Instruction
@@ -93,7 +64,7 @@ let expose elements = List { Name = "EXPOSE"; Elements = elements } |> Instructi
 
 let envs ps = KeyValueList { Name = "ENV"; Elements = ps } |> Instruction
 
-let env key value = [ (key, value) ] |> Map.ofSeq |> envs
+let env key value = [ (key, value) ] |> Map.ofSeq |> Parameters |> envs
 
 let from_ = Source
 
@@ -147,7 +118,7 @@ let add ps args =
         Checksum = checksum;
         KeepGitDir = keepGitDir;
         Link = link;
-        Elements = args
+        Elements = Arguments args
     }
     |> Instruction
 
@@ -187,13 +158,13 @@ let copy ps args =
         Chown = chown;
         Chmod = chmod;
         Link = link;
-        Elements = args
+        Elements = Arguments args
     }
     |> Instruction
 
 let cp ps src dst = [ src; dst ] |> copy ps
 
-let entrypoint elements = List { Name = "ENTRYPOINT"; Elements = elements } |> Instruction
+let entrypoint elements = List { Name = "ENTRYPOINT"; Elements = Arguments elements } |> Instruction
 
 let entry = entrypoint
 
@@ -211,7 +182,7 @@ let workdir value = SimpleQuoted { Name = "WORKDIR"; Value = value } |> Instruct
 
 let args ps = KeyValueList { Name = "ARG"; Elements = ps } |> Instruction
 
-let arg key value = [ (key, value) ] |> Map.ofSeq |> args
+let arg key value = [ (key, value) ] |> Map.ofSeq |> Parameters |> args
 
 let usearg key = Simple { Name = "ARG"; Value = key } |> Instruction
 
@@ -275,7 +246,7 @@ let healthchech ps commands =
         Timeout = timeout; 
         StartPeriod = startPeriod; 
         Retries = retries; 
-        Instructions = commands 
+        Instructions = Arguments commands
     }
     |> Instruction
 

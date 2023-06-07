@@ -2,6 +2,7 @@ module Tests.DSL
 
 open Expecto
 open Tuffenuff
+open Tuffenuff.Domain
 
 [<Tests>]
 let tests =

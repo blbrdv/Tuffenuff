@@ -14,7 +14,7 @@ let render df =
 
         | SimpleQuoted s -> print s.Name (quote s.Value)
 
-        | List l -> print l.Name (printList l.Elements)
+        | List l -> print l.Name (printList l.Elements.Collection)
 
         | KeyValue kv -> print kv.Name (printKVQ kv.Key kv.Value)
 
@@ -71,7 +71,7 @@ let render df =
 
             result <- 
                 result
-                |> Seq.append r.Commands
+                |> Seq.append r.Arguments
 
             result
             |> String.concat eol_slash
@@ -87,7 +87,7 @@ let render df =
                 printParameter "chown" a.Chown
                 printParameter "checksum" a.Checksum
                 " "
-                printList a.Elements
+                printList a.Elements.Collection
             }
 
         | Copy cp -> 
@@ -98,7 +98,7 @@ let render df =
                 printParameter "chmod" cp.Chmod
                 printParameter "chown" cp.Chown
                 " "
-                printList cp.Elements
+                printList cp.Elements.Collection
             }
 
         | Healthcheck hc -> 
@@ -108,7 +108,7 @@ let render df =
                 printParameter "timeout" hc.Timeout
                 printParameter "start-period" hc.StartPeriod
                 printParameter "retries" hc.Retries
-                sprintf "%sCMD %s" eol_slash (printList hc.Instructions)
+                sprintf "%sCMD %s" eol_slash (printList hc.Instructions.Collection)
             }
 
         | Onbuild onb -> 

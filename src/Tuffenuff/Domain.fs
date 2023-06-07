@@ -1,6 +1,6 @@
 module Tuffenuff.Domain
 
-open System.Collections.Generic
+open Tuffenuff.Collections
 
 
 //---------------------------------------------------------------------------------------
@@ -8,22 +8,16 @@ open System.Collections.Generic
 //---------------------------------------------------------------------------------------
 
 
-type List = IEnumerable<string>
-
-
-type KVList = Map<string, string>
-
-
 type SimpleInstruction = { Name : string; Value : string }    
 
 
-type ListInstruction = { Name : string; Elements : List }
+type ListInstruction = { Name : string; Elements : Arguments }
 
 
 type KVInstruction = { Name : string; Key : string; Value : string }
 
 
-type KVListInstruction = { Name : string; Elements : KVList }
+type KVListInstruction = { Name : string; Elements : Parameters }
 
 
 type FromParameter =
@@ -49,7 +43,7 @@ type AddInstruction = {
     Checksum : string option;
     KeepGitDir : bool;
     Link : bool;
-    Elements : List 
+    Elements : Arguments
 }
 
 
@@ -58,7 +52,7 @@ type CopyInstruction = {
     Chown : string option; 
     Chmod : string option;
     Link : bool;
-    Elements : List 
+    Elements : Arguments
 }
 
 
@@ -74,7 +68,7 @@ type HealthcheckInstruction = {
     Timeout : string option;
     StartPeriod : string option;
     Retries : int option;
-    Instructions : List
+    Instructions : Arguments
 }
 
 
@@ -100,18 +94,18 @@ type MountType =
 type MountParameters = 
     {
         Name : MountType;
-        Params : Map<string, string>
+        Params : Parameters
     }
     with
-        static member Create(name, list) =
-            { Name = name; Params = Map.ofList(list) }
+        static member Create(name, key, value) =
+            { Name = name; Params = Dict [ key, value ] }
         static member Create(name) =
-            { Name = name; Params = Map.empty }
+            { Name = name; Params = Dict.empty }
 
 
 type NetworkType =
-    | Def    // Default
-    | Absent // None
+    | DefaultNetwork
+    | NoneNetwok
     | Host
     
 
@@ -122,18 +116,18 @@ type SecurityType =
 
 type RunInstruction =
     {
-        Mounts : MountParameters seq
+        Mounts : Collection<MountParameters>
         Network : NetworkType option
         Security : SecurityType option
-        Commands : List
+        Arguments : Arguments
     }
     with
         static member Create() =
             {
-                Mounts = Seq.empty;
+                Mounts = Collection.empty;
                 Network = None;
                 Security = None;
-                Commands = Seq.empty;
+                Arguments = Collection.empty;
             }
 
 
@@ -143,165 +137,159 @@ type RunInstruction =
 
 
 type BindParametersBuilder (target) =
-    let mutable _state = MountParameters.Create(Bind, [ "target", target ])
+    member __.Zero() = MountParameters.Create(Bind, "target", target)
 
-    member __.Yield (_) = ()
+    member this.Yield (_) = this.Zero()
 
     [<CustomOperation("source")>]
-    member __.Source (_, value) = 
-        _state <- { _state with Params = _state.Params.Add("source", value) }
+    member __.Source (state, value) = 
+        { state with Params = state.Params.Add("source", value) }
 
     [<CustomOperation("from")>]
-    member __.From (_, value) = 
-        _state <- { _state with Params = _state.Params.Add("from", value) }
+    member __.From (state, value) = 
+        { state with Params = state.Params.Add("from", value) }
 
     [<CustomOperation("rw")>]
-    member __.RW (_, value : bool) = 
-        _state <- { _state with Params = _state.Params.Add("rw", value.ToString().ToLower()) }
-
-    member __.Zero() = _state
+    member __.RW (state, value : bool) = 
+        { state with Params = state.Params.Add("rw", value.ToString().ToLower()) }
 
     member __.Combine (_, _) = ()
 
     member __.Delay (f) = f()
         
-    member __.Run (_) = _state
+    member __.Run (state) = state
 
 
 type CacheParametersBuilder (target) =
-    let mutable _state = MountParameters.Create(Cache, [ "target", target ])
+    member __.Zero() = MountParameters.Create(Cache, "target", target)
 
-    member __.Yield (_) = ()
+    member this.Yield (_) = this.Zero()
 
     [<CustomOperation("id")>]
-    member __.Id (_, value) = 
-        _state <- { _state with Params = _state.Params.Add("id", value) }
+    member __.Id (state, value) = 
+        { state with Params = state.Params.Add("id", value) }
 
     [<CustomOperation("ro")>]
-    member __.RO (_, value : bool) = 
-        _state <- { _state with Params = _state.Params.Add("ro", value.ToString().ToLower()) }
+    member __.RO (state, value : bool) = 
+        { state with Params = state.Params.Add("ro", value.ToString().ToLower()) }
 
     [<CustomOperation("sharing")>]
-    member __.Sharing (_, value : SharingType) = 
-        _state <- { _state with Params = _state.Params.Add("sharing", (nameof value).ToLower()) }
+    member __.Sharing (state, value : SharingType) = 
+        { state with Params = state.Params.Add("sharing", value.ToString().ToLower()) }
 
     [<CustomOperation("source")>]
-    member __.Source (_, value) =
-        _state <- { _state with Params = _state.Params.Add("source", value) }
+    member __.Source (state, value) =
+        { state with Params = state.Params.Add("source", value) }
 
     [<CustomOperation("from")>]
-    member __.From (_, value) =
-        _state <- { _state with Params = _state.Params.Add("from", value) }
+    member __.From (state, value) =
+        { state with Params = state.Params.Add("from", value) }
 
     [<CustomOperation("mode")>]
-    member __.Mode (_, value) =
-        _state <- { _state with Params = _state.Params.Add("mode", value) }
+    member __.Mode (state, value) =
+        { state with Params = state.Params.Add("mode", value) }
 
     [<CustomOperation("UID")>]
-    member __.UID (_, value : int) = 
-        _state <- { _state with Params = _state.Params.Add("UID", value.ToString()) }
+    member __.UID (state, value : int) = 
+        { state with Params = state.Params.Add("UID", value.ToString()) }
 
     [<CustomOperation("GID")>]
-    member __.GID (_, value : int) = 
-        _state <- { _state with Params = _state.Params.Add("GID", value.ToString()) }
-
-    member __.Zero() = _state
+    member __.GID (state, value : int) = 
+        { state with Params = state.Params.Add("GID", value.ToString()) }
 
     member __.Combine (_, _) = ()
 
     member __.Delay (f) = f()
         
-    member __.Run (_) = _state
+    member __.Run (state) = state
 
 
 type TmpfsParametersBuilder (target) =
-    let mutable _state = MountParameters.Create(Tmpfs, [ "target", target ])
+    member __.Zero() = MountParameters.Create(Tmpfs, "target", target)
 
-    member __.Yield (_) = ()
+    member this.Yield (_) = this.Zero()
 
     [<CustomOperation("size")>]
-    member __.Size (_, value : int) =
-        _state <- { _state with Params = _state.Params.Add("size", value.ToString()) }
-
-    member __.Zero() = _state
+    member __.Size (state, value : int) =
+        { state with Params = state.Params.Add("size", value.ToString()) }
 
     member __.Combine (_, _) = ()
 
     member __.Delay (f) = f()
         
-    member __.Run (_) = _state
+    member __.Run (state) = state
 
 
 type SecretParametersBuilder () =
-    let mutable _state = MountParameters.Create(Secret)
+    member __.Zero() = MountParameters.Create(Secret)
 
-    member __.Yield (_) = ()
+    member this.Yield (_) = this.Zero()
 
     [<CustomOperation("id")>]
-    member __.Id (_, value) =
-        _state <- { _state with Params = _state.Params.Add("id", value) }
+    member __.Id (state, value) =
+        { state with Params = state.Params.Add("id", value) }
 
     [<CustomOperation("target")>]
-    member __.Target (_, value) =
-        _state <- { _state with Params = _state.Params.Add("target", value) }
+    member __.Target (state, value) =
+        { state with Params = state.Params.Add("target", value) }
 
     [<CustomOperation("required")>]
-    member __.Required (_, value : bool) =
-        _state <- { _state with Params = _state.Params.Add("required", value.ToString().ToLower()) }
+    member __.Required (state, value : bool) =
+        { state with Params = state.Params.Add("required", value.ToString().ToLower()) }
 
     [<CustomOperation("mode")>]
-    member __.Mode (_, value) =
-        _state <- { _state with Params = _state.Params.Add("mode", value) }
+    member __.Mode (state, value) =
+        { state with Params = state.Params.Add("mode", value) }
 
     [<CustomOperation("UID")>]
-    member __.UID (_, value : int) =
-        _state <- { _state with Params = _state.Params.Add("UID", value.ToString()) }
+    member __.UID (state, value : int) =
+        { state with Params = state.Params.Add("UID", value.ToString()) }
 
     [<CustomOperation("GID")>]
-    member __.GID (_, value : int) =
-        _state <- { _state with Params = _state.Params.Add("GID", value.ToString()) }
+    member __.GID (state, value : int) =
+        { state with Params = state.Params.Add("GID", value.ToString()) }
 
     member __.Combine (_, _) = ()
 
     member __.Delay (f) = f()
         
-    member __.Run (_) = _state
+    member __.Run (state) = state
 
 
 type SshParametersBuilder () =
-    let mutable _state = MountParameters.Create(Ssh)
+    member __.Zero() = MountParameters.Create(Ssh)
 
-    member __.Yield (_) = ()
+    member this.Yield (_) = this.Zero()
 
     [<CustomOperation("id")>]
-    member __.Id (_, value) =
-        _state <- { _state with Params = _state.Params.Add("id", value) }
+    member __.Id (state, value) =
+        { state with Params = state.Params.Add("id", value) }
 
     [<CustomOperation("target")>]
-    member __.Target (_, value) =
-        _state <- { _state with Params = _state.Params.Add("target", value) }
+    member __.Target (state, value) =
+        { state with Params = state.Params.Add("target", value) }
 
     [<CustomOperation("required")>]
-    member __.Required (_, value : bool) =
-        _state <- { _state with Params = _state.Params.Add("required", value.ToString().ToLower()) }
+    member __.Required (state, value : bool) =
+        { state with Params = state.Params.Add("required", value.ToString().ToLower()) }
 
     [<CustomOperation("mode")>]
-    member __.Mode (_, value) =
-        _state <- { _state with Params = _state.Params.Add("mode", value) }
+    member __.Mode (state, value) =
+        { state with Params = state.Params.Add("mode", value) }
 
     [<CustomOperation("UID")>]
-    member __.UID (_, value : int) =
-        _state <- { _state with Params = _state.Params.Add("UID", value.ToString()) }
+    member __.UID (state, value : int) =
+        { state with Params = state.Params.Add("UID", value.ToString()) }
 
     [<CustomOperation("GID")>]
-    member __.GID (_, value : int) =
-        _state <- { _state with Params = _state.Params.Add("GID", value.ToString()) }
+    member __.GID (state, value : int) =
+        { state with Params = state.Params.Add("GID", value.ToString()) }
 
     member __.Combine (_, _) = ()
 
     member __.Delay (f) = f()
         
-    member __.Run (_) = _state
+    member __.Run (state) = state
 
 
 //---------------------------------------------------------------------------------------
@@ -309,7 +297,7 @@ type SshParametersBuilder () =
 //---------------------------------------------------------------------------------------
 
 
-type Instruction =
+type InstructionType =
     | Simple of SimpleInstruction
     | SimpleQuoted of SimpleInstruction
     | List of ListInstruction
@@ -322,21 +310,31 @@ type Instruction =
     | Onbuild of OnbuildInstruction
     | Healthcheck of HealthcheckInstruction
 
-and RunInstructionBuilder () =
+
+and OnbuildInstruction = { Instruction : Entity }
+
+
+and Entity = 
+    | Plain of string
+    | Instruction of InstructionType
+    | Subpart of Entity seq
+
+
+type RunInstructionBuilder () =
 
     member __.Yield _ = RunInstruction.Create()
 
     [<CustomOperation "cmd">]
     member __.Command (state : RunInstruction, cmd : string) =
-        { state with Commands = state.Commands |> Seq.append [ cmd ] }
+        { state with Arguments = state.Arguments.Add(cmd) }
 
     [<CustomOperation "cmds">]
-    member __.Commands (state : RunInstruction, cmds : string seq) =
-        { state with Commands = state.Commands |> Seq.append cmds }
+    member __.Arguments (state : RunInstruction, cmds : string seq) =
+        { state with Arguments = state.Arguments.Append(Arguments cmds) }
 
     [<CustomOperation "mount">]
     member __.Mount (state : RunInstruction, mount : MountParameters) =
-        { state with Mounts = state.Mounts |> Seq.append [ mount ] }
+        { state with Mounts = state.Mounts.Add(mount) }
 
     [<CustomOperation "network">]
     member __.Network (state : RunInstruction, network : NetworkType) =
@@ -348,11 +346,22 @@ and RunInstructionBuilder () =
 
     member __.Run (state) = state |> Run |> Instruction
 
+let bindParams target = BindParametersBuilder (target)
 
-and OnbuildInstruction = { Instruction : Entity }
+let bind target = bindParams target {()}
 
+let cacheParams target = CacheParametersBuilder (target)
 
-and Entity = 
-    | Plain of string
-    | Instruction of Instruction
-    | Subpart of Entity seq
+let cache target = cacheParams target {()}
+
+let tmpfsParams target = TmpfsParametersBuilder (target)
+
+let tmpfs target = tmpfsParams target {()}
+
+let secret = SecretParametersBuilder ()
+
+let ssh = SshParametersBuilder ()
+
+let run = RunInstructionBuilder ()
+
+let ( !> ) command = run { cmd command }
