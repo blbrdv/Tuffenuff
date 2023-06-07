@@ -7,3 +7,35 @@
 [![Nuget version](https://img.shields.io/nuget/v/Tuffenuff?style=flat-square)](https://www.nuget.org/packages/Tuffenuff/)
 
 > The goal of this project is to make it simple to generate dockerfiles using a F# DSL by offering complete syntax support and the ability to create dockerfile from multiple parts.
+
+## Usage
+
+Simple "Hello, World!":
+
+```f#
+#r "nuget: Tuffenuff"
+
+open System.IO
+open Tuffenuff
+
+df [
+    fresh
+    cp [] "hello" "/"
+    cmd [ "/hello" ]
+]
+|> render
+|> toFile (Path.Combine(__SOURCE_DIRECTORY__, "Dockerfile"))
+```
+
+will create `Dockerfile` with following content:
+
+```Dockerfile
+FROM scratch
+COPY hello /
+CMD /hello
+```
+
+For more examples see:
+- [Examples](examples/)
+- [Tests](tests/Tuffenuff.Tests/)
+- Docs (not yet)

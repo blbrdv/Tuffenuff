@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Collection.fs" />
     <Compile Include="String.fs" />
+    <Compile Include="Run.fs" />
     <Compile Include="DSL.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
@@ -18,7 +20,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
     <PackageReference Update="FSharp.Core" Version="6.*" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\Tuffenuff\Tuffenuff.fsproj" />
   </ItemGroup>
+
 </Project>
