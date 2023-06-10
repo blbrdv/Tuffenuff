@@ -34,6 +34,10 @@ For more examples see:
 - [Tests](https://github.com/blbrdv/Tuffenuff/tree/main/tests/Tuffenuff.Tests/)
 - Docs (not yet)
 
+## Release notes
+
+See [release page](https://github.com/blbrdv/Tuffenuff/releases).
+
 ## License
 
 MIT License
