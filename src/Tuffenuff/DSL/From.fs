@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Tuffenuff.Instructions.From
+module Tuffenuff.DSL.From
 
 open Tuffenuff.Domain.Types
 

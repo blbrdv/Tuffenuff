@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Tuffenuff.Instructions.Run
+module Tuffenuff.DSL.Run
 
 open Tuffenuff.Domain.Run
 

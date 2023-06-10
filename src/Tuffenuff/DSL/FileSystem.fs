@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Tuffenuff.Instructions.FileSystem
+module Tuffenuff.DSL.FileSystem
 
 open Tuffenuff.Domain.Collections
 open Tuffenuff.Domain.Types

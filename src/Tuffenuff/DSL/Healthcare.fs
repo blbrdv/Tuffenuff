@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Tuffenuff.Instructions.Healthcare
+module Tuffenuff.DSL.Healthcare
 
 open Tuffenuff.Domain.Collections
 open Tuffenuff.Domain.Types

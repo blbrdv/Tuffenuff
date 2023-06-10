@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Tuffenuff.Instructions.Comments
+module Tuffenuff.DSL.Comments
 
 open Tuffenuff.Domain.Types
 

@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Tuffenuff.Instructions.Meta
+module Tuffenuff.DSL.Meta
 
 open System
 open Tuffenuff.Domain.Collections

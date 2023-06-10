@@ -33,15 +33,15 @@
     <Compile Include="Domain/Collections.fs" />
     <Compile Include="Domain/Types.fs" />
     <Compile Include="Domain/Run.fs" />
-    <Compile Include="Instructions/Comments.fs" />
-    <Compile Include="Instructions/Configuration.fs" />
-    <Compile Include="Instructions/FileSystem.fs" />
-    <Compile Include="Instructions/From.fs" />
-    <Compile Include="Instructions/Healthcare.fs" />
-    <Compile Include="Instructions/Meta.fs" />
-    <Compile Include="Instructions/Run.fs" />
-    <Compile Include="Instructions/Variables.fs" />
-    <Compile Include="DSL.fs" />
+    <Compile Include="DSL/Comments.fs" />
+    <Compile Include="DSL/Configuration.fs" />
+    <Compile Include="DSL/FileSystem.fs" />
+    <Compile Include="DSL/From.fs" />
+    <Compile Include="DSL/Healthcare.fs" />
+    <Compile Include="DSL/Meta.fs" />
+    <Compile Include="DSL/Run.fs" />
+    <Compile Include="DSL/Variables.fs" />
+    <Compile Include="Tuffenuff.fs" />
   </ItemGroup>
 
   <ItemGroup>

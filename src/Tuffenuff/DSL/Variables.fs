@@ -1,5 +1,6 @@
 [<AutoOpen>]
-module Tuffenuff.Instructions.Variables
+[<CompilationRepresentationAttribute(CompilationRepresentationFlags.ModuleSuffix)>]
+module Tuffenuff.DSL.Variables
 
 open Tuffenuff.Domain.Collections
 open Tuffenuff.Domain.Types
