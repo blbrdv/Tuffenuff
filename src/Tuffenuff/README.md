@@ -29,10 +29,11 @@ COPY hello /
 CMD /hello
 ```
 
-For more examples see:
-- [Examples](https://github.com/blbrdv/Tuffenuff/tree/main/examples)
-- [Tests](https://github.com/blbrdv/Tuffenuff/tree/main/tests/Tuffenuff.Tests/)
-- Docs (not yet)
+For more see [examples](https://github.com/blbrdv/Tuffenuff/tree/main/examples):
+
+## Documentation
+
+**WIP**
 
 ## Release notes
 
