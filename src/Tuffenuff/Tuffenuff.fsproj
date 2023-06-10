@@ -23,6 +23,8 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>dsl;dockerfile</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/blbrdv/Tuffenuff</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
