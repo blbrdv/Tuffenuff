@@ -2,6 +2,7 @@ module Tests.String
 
 open Expecto
 open Tuffenuff.String
+open Tuffenuff.StringCE
 
 [<Tests>]
 let tests =

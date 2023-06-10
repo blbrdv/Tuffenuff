@@ -1,9 +1,9 @@
 module Tests.Run
 
 open Expecto
-open Tuffenuff
-open Tuffenuff.Domain
-open Tuffenuff.Collections
+open Tuffenuff.DSL
+open Tuffenuff.Domain.Types
+open Tuffenuff.Domain.Collections
 
 [<Tests>]
 let tests =
