@@ -1,11 +1,23 @@
 [<AutoOpen>]
 module Tuffenuff.DSL
 
-open System
 open System.IO
-open Tuffenuff.Domain
+open Tuffenuff.Domain.Types
 open Tuffenuff.String
+open Tuffenuff.StringCE
 
+
+let dockerfile (entities : Entity seq) = entities
+
+let df = dockerfile
+
+let plain = Plain
+
+let br = plain ""
+
+let part = Subpart
+
+let ( !& ) = part
 
 let render df = 
     let rec renderInstruction instr =

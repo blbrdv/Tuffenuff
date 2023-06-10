@@ -29,9 +29,18 @@
 
   <ItemGroup>
     <Compile Include="String.fs" />
-    <Compile Include="Collections.fs" />
-    <Compile Include="Domain.fs" />
-    <Compile Include="Instructions.fs" />
+    <Compile Include="StringCE.fs" />
+    <Compile Include="Domain/Collections.fs" />
+    <Compile Include="Domain/Types.fs" />
+    <Compile Include="Domain/Run.fs" />
+    <Compile Include="Instructions/Comments.fs" />
+    <Compile Include="Instructions/Configuration.fs" />
+    <Compile Include="Instructions/FileSystem.fs" />
+    <Compile Include="Instructions/From.fs" />
+    <Compile Include="Instructions/Healthcare.fs" />
+    <Compile Include="Instructions/Meta.fs" />
+    <Compile Include="Instructions/Run.fs" />
+    <Compile Include="Instructions/Variables.fs" />
     <Compile Include="DSL.fs" />
   </ItemGroup>
 

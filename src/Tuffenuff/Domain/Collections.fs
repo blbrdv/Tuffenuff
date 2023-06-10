@@ -1,4 +1,4 @@
-module Tuffenuff.Collections
+module Tuffenuff.Domain.Collections
 
 open System.Collections.ObjectModel
 open System.Collections.Generic
