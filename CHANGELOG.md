@@ -28,6 +28,6 @@
 
 Initial release.
 
-[0.0.3-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.3-alpha
+[0.0.3-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.3-beta
 [0.0.2-alpha]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.2-alpha
 [0.0.1-alpha]: https://www.nuget.org/packages/Tuffenuff/0.0.1-alpha
