@@ -22,7 +22,7 @@ open Fake.Core.TargetOperators
 /////////////////////////////////////////////////////////////////////////////////////////
 
 let projName = "Tuffenuff"
-let testProjName = sprintf "%s.Tests" projName
+let testProjName = sprintf "%s.UnitTests" projName
 let projDir = "src" @@ projName
 let projFile = projDir @@ (sprintf "%s.fsproj" projName)
 let packageFile = projDir @@ "**/*.nupkg"
