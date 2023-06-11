@@ -2,7 +2,8 @@
 
 ## How to run
 
-To run examples use `dotnet fsi <filename>.fsx` command.
+1. Build project with `dotnet fake run build.fsx -t Release`
+2. Execute example `dotnet fsi <filename>.fsx`
 
 This will create `Dockerfile.<filename>` file in same directory.
 
