@@ -39,14 +39,6 @@ type HealthcheckBuilder (cmds) =
 
     member this.Yield (_) = this.Zero()
 
-    [<CustomOperation "cmd">]
-    member __.Command (state : HealthcheckInstruction, cmd : string) =
-        { state with Instructions = state.Instructions.Add(cmd) }
-
-    [<CustomOperation "cmds">]
-    member __.Arguments (state : HealthcheckInstruction, cmds : string seq) =
-        { state with Instructions = state.Instructions.Append(Arguments cmds) }
-
     [<CustomOperation("interval")>]
     member __.Interval (state : HealthcheckInstruction, value : string) = 
         { state with Options = state.Options.Add("interval", value) }
