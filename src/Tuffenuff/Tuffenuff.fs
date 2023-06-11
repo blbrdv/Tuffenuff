@@ -58,43 +58,26 @@ module Dockerfile =
                         sprintf " AS %s" f.Name.Value
                 }
 
-            | Run r ->
-                let mutable result = 
-                    r.Mounts
-                    |> Seq.map (
-                        fun m ->
-                            m.Params
-                            |> Seq.map (fun p -> printKV p.Key p.Value)
-                            |> Seq.append [ 
-                                printKV "type" (m.Name.ToString().ToLower()) 
-                            ]
-                            |> String.concat ","
-                            |> sprintf "--mount=%s"
-                    )
-                
-                if r.Network.IsSome then do 
-                    let value =
-                        (nameof r.Network.Value).ToLower()
-                        |> sprintf "--network=%s"
-                    
-                    result <-
-                        result
-                        |> Seq.append [ value ]
-                
-                if r.Security.IsSome then do 
-                    let value =
-                        (nameof r.Network.Value).ToLower()
-                        |> sprintf "--security=%s"
-                    
-                    result <-
-                        result
-                        |> Seq.append [ value ]
+            | Run r ->            
+                seq {
+                    for mount in r.Mounts do
+                        mount.Params
+                        |> Seq.map (fun p -> printKV p.Key p.Value)
+                        |> Seq.append [ 
+                            printKV "type" (mount.Name.ToString().ToLower()) 
+                        ]
+                        |> String.concat ","
+                        |> sprintf "--mount=%s"
 
-                result <- 
-                    result
-                    |> Seq.append r.Arguments
+                    if r.Network.IsSome then 
+                        sprintf "--network=%s" ((nameof r.Network.Value).ToLower())
 
-                result
+                    if r.Security.IsSome then
+                        sprintf "--security=%s" ((nameof r.Network.Value).ToLower())
+
+                    for arg in r.Arguments do
+                        arg
+                }
                 |> String.concat eol_slash
                 |> sprintf "RUN%s%s" eol_slash
 
