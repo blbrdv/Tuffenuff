@@ -56,18 +56,8 @@ type CopyInstruction = {
 }
 
 
-type HealthcheckParameter =
-    | Interval of string 
-    | Timeout of string
-    | StartPeriod of string
-    | Retries of int
-
-
 type HealthcheckInstruction = { 
-    Interval : string option; 
-    Timeout : string option;
-    StartPeriod : string option;
-    Retries : int option;
+    Options : Parameters
     Instructions : Arguments
 }
 

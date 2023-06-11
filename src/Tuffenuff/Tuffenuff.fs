@@ -106,14 +106,14 @@ module Dockerfile =
                 }
 
             | Healthcheck hc -> 
-                str {
+                seq { 
                     "HEALTCHECK"
-                    printParameter "interval" hc.Interval
-                    printParameter "timeout" hc.Timeout
-                    printParameter "start-period" hc.StartPeriod
-                    printParameter "retries" hc.Retries
-                    sprintf "%sCMD %s" eol_slash (printList hc.Instructions.Collection)
+                    for opt in hc.Options do
+                        printParameter opt.Key (Some opt.Value)
+                    "CMD"
+                    printList hc.Instructions.Collection
                 }
+                |> String.concat " "
 
             | Onbuild onb -> 
                 seq { onb.Instruction }
