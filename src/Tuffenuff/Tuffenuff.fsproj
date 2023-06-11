@@ -32,8 +32,7 @@
     <Compile Include="StringCE.fs" />
     <Compile Include="Domain/Collections.fs" />
     <Compile Include="Domain/Types.fs" />
-    <Compile Include="Domain/Run.fs" />
-    <Compile Include="Domain/Healthcheck.fs" />
+    <Compile Include="Domain/CE.fs" />
     <Compile Include="DSL/Comments.fs" />
     <Compile Include="DSL/Configuration.fs" />
     <Compile Include="DSL/FileSystem.fs" />

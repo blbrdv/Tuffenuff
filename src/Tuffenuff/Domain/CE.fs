@@ -1,7 +1,46 @@
-module Tuffenuff.Domain.Run
+module Tuffenuff.Domain.CE
 
 open Tuffenuff.Domain.Types
 open Tuffenuff.Domain.Collections
+
+
+type HealthcheckBuilder () =
+    member __.Yield (_) = HealthcheckInstruction.Create()
+
+    [<CustomOperation "cmd">]
+    member __.Command (state, cmd : string) =
+        { state with Instructions = state.Instructions.Add(cmd) }
+
+    [<CustomOperation "cmds">]
+    member __.Arguments (state, cmds : string seq) =
+        { state with Instructions = state.Instructions.Append(Arguments cmds) }
+
+    [<CustomOperation("interval")>]
+    member __.Interval (state, value) = 
+        { state with Options = state.Options.Add("interval", value) }
+
+    [<CustomOperation("timeout")>]
+    member __.Timeout (state, value) = 
+        { state with Options = state.Options.Add("timeout", value) }
+
+    [<CustomOperation("period")>]
+    member __.StartPeriod (state, value) = 
+        { state with Options = state.Options.Add("start-period", value) }
+
+    [<CustomOperation("retries")>]
+    member __.Retries (state , value : int) = 
+        { state with Options = state.Options.Add("retries", value.ToString())  }
+
+    member __.Combine (_, _) = ()
+
+    member __.Delay (f) = f()
+        
+    member __.Run (state) = state |> Healthcheck |> Instruction
+
+
+//---------------------------------------------------------------------------------------
+// RUN types
+//---------------------------------------------------------------------------------------
 
 
 type BindParametersBuilder (target) =

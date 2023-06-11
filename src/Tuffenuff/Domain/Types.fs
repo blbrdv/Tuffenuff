@@ -56,10 +56,14 @@ type CopyInstruction = {
 }
 
 
-type HealthcheckInstruction = { 
-    Options : Parameters
-    Instructions : Arguments
-}
+type HealthcheckInstruction = 
+    { 
+        Options : Parameters
+        Instructions : Arguments
+    }
+    with
+        static member Create() =
+            { Options = Parameters []; Instructions = Arguments [] }
 
 
 //---------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 [<AutoOpen>]
 module Tuffenuff.DSL.Run
 
-open Tuffenuff.Domain.Run
+open Tuffenuff.Domain.CE
 
 
 let bindParams target = BindParametersBuilder (target)

@@ -51,14 +51,13 @@ let tests =
                 |> Instruction
 
             let actual = 
-                healthcheck 
-                    (options {
-                        interval "1s"
-                        timeout "2s"
-                        period "3s"
-                        retries 5
-                    }) 
-                    [ "curl -f http://localhost/ || exit 1" ]
+                healthcheck {
+                    interval "1s"
+                    timeout "2s"
+                    period "3s"
+                    retries 5
+                    cmd "curl -f http://localhost/ || exit 1"
+                }
             
             Expect.equal actual expected "Healthcheck must be with options"
     ]
