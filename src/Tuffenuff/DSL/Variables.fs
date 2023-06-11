@@ -1,5 +1,4 @@
 [<AutoOpen>]
-[<CompilationRepresentationAttribute(CompilationRepresentationFlags.ModuleSuffix)>]
 module Tuffenuff.DSL.Variables
 
 open Tuffenuff.Domain.Collections
