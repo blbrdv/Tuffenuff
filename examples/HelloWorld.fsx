@@ -6,7 +6,7 @@ open Tuffenuff.DSL
 
 df [
     !/ "Simple Hello World dockerfile"
-    from "alpine:3.18" []
+    from "alpine:3.18"
     br
     cmd [| "echo"; "'Hello world'" |]
 ]

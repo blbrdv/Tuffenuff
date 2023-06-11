@@ -20,12 +20,15 @@ type KVInstruction = { Name : string; Key : string; Value : string }
 type KVListInstruction = { Name : string; Elements : Parameters }
 
 
-type FromParameter =
-    | As of string
-    | Platform of string
-
-
-type FromInstruction = { Image : string; Name : string option; Platform : string option }
+type FromInstruction = 
+    { 
+        Image : string; 
+        Name : string option; 
+        Platform : string option 
+    }
+    with
+        static member Create(image) =
+            { Image = image; Name = None; Platform = None }
 
 
 type InsertParameter =
@@ -62,8 +65,8 @@ type HealthcheckInstruction =
         Instructions : Arguments
     }
     with
-        static member Create() =
-            { Options = Parameters []; Instructions = Arguments [] }
+        static member Create(cmds) =
+            { Options = Parameters []; Instructions = Arguments cmds }
 
 
 //---------------------------------------------------------------------------------------

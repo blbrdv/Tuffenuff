@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Include="Collection.fs" />
     <Compile Include="String.fs" />
+    <Compile Include="From.fs" />
     <Compile Include="Run.fs" />
     <Compile Include="Healthcheck.fs" />
     <Compile Include="Main.fs" />

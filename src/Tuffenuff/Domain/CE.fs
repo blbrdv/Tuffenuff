@@ -4,31 +4,63 @@ open Tuffenuff.Domain.Types
 open Tuffenuff.Domain.Collections
 
 
-type HealthcheckBuilder () =
-    member __.Yield (_) = HealthcheckInstruction.Create()
+//---------------------------------------------------------------------------------------
+// FROM
+//---------------------------------------------------------------------------------------
+
+
+type FromBuilder (image) =
+    member __.Zero () = FromInstruction.Create(image)
+
+    member this.Yield (_) = this.Zero()
+
+    [<CustomOperation("alias")>]
+    member __.Alias (state : FromInstruction, value : string) = 
+        { state with Name = Some value }
+
+    [<CustomOperation("platform")>]
+    member __.Platform (state : FromInstruction, value : string) = 
+        { state with Platform = Some value }
+
+    member __.Combine (_, _) = ()
+
+    member __.Delay (f) = f()
+        
+    member __.Run (state) = state |> From |> Instruction
+
+
+//---------------------------------------------------------------------------------------
+// HEALTHCHECK
+//---------------------------------------------------------------------------------------
+
+
+type HealthcheckBuilder (cmds) =
+    member __.Zero () = HealthcheckInstruction.Create(cmds)
+
+    member this.Yield (_) = this.Zero()
 
     [<CustomOperation "cmd">]
-    member __.Command (state, cmd : string) =
+    member __.Command (state : HealthcheckInstruction, cmd : string) =
         { state with Instructions = state.Instructions.Add(cmd) }
 
     [<CustomOperation "cmds">]
-    member __.Arguments (state, cmds : string seq) =
+    member __.Arguments (state : HealthcheckInstruction, cmds : string seq) =
         { state with Instructions = state.Instructions.Append(Arguments cmds) }
 
     [<CustomOperation("interval")>]
-    member __.Interval (state, value) = 
+    member __.Interval (state : HealthcheckInstruction, value : string) = 
         { state with Options = state.Options.Add("interval", value) }
 
     [<CustomOperation("timeout")>]
-    member __.Timeout (state, value) = 
+    member __.Timeout (state : HealthcheckInstruction, value : string) = 
         { state with Options = state.Options.Add("timeout", value) }
 
     [<CustomOperation("period")>]
-    member __.StartPeriod (state, value) = 
+    member __.StartPeriod (state : HealthcheckInstruction, value : string) = 
         { state with Options = state.Options.Add("start-period", value) }
 
     [<CustomOperation("retries")>]
-    member __.Retries (state , value : int) = 
+    member __.Retries (state : HealthcheckInstruction, value : int) = 
         { state with Options = state.Options.Add("retries", value.ToString())  }
 
     member __.Combine (_, _) = ()
@@ -39,7 +71,7 @@ type HealthcheckBuilder () =
 
 
 //---------------------------------------------------------------------------------------
-// RUN types
+// RUN
 //---------------------------------------------------------------------------------------
 
 

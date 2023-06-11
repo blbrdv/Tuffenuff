@@ -15,7 +15,7 @@ let testFuncs =
     |> Seq.mapi (fun index instr ->
         let func = fun value () ->
             Expect.equal instr value "Healthcheck must be disabled"
-        ($"{index} disable healthcheck test", func)
+        ($"Test-{index} disable healthcheck", func)
     )
 
 
@@ -25,12 +25,7 @@ let tests =
     |> List.ofSeq
     |> List.append [
         testCase "healthcheck w/o options test"  <| fun () ->
-            let expected = 
-                Healthcheck { 
-                    Options = Dict.empty; 
-                    Instructions = Arguments [ "curl -f http://localhost/ || exit 1" ]
-                }
-                |> Instruction
+            let expected = HealthcheckInstruction.Create([ "curl -f http://localhost/ || exit 1" ])
 
             let actual = hc [ "curl -f http://localhost/ || exit 1" ]
             
@@ -51,13 +46,14 @@ let tests =
                 |> Instruction
 
             let actual = 
-                healthcheck {
-                    interval "1s"
-                    timeout "2s"
-                    period "3s"
-                    retries 5
-                    cmd "curl -f http://localhost/ || exit 1"
-                }
+                healthcheck 
+                    [ "curl -f http://localhost/ || exit 1" ] 
+                    {
+                        interval "1s"
+                        timeout "2s"
+                        period "3s"
+                        retries 5
+                    }
             
             Expect.equal actual expected "Healthcheck must be with options"
     ]

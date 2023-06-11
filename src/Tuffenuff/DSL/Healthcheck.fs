@@ -1,14 +1,13 @@
 [<AutoOpen>]
 module Tuffenuff.DSL.Healthcheck
 
-open Tuffenuff.Domain.Collections
 open Tuffenuff.Domain.Types
 open Tuffenuff.Domain.CE
 
 
-let healthcheck = HealthcheckBuilder ()
+let healthcheck cmds = HealthcheckBuilder (cmds)
 
-let hc commands = healthcheck { cmds commands }
+let hc commands = HealthcheckInstruction.Create(commands)
 
 let disableHealthcheck = Simple { Name = "HEALTHCHECK"; Value = "NONE" } |> Instruction
 
