@@ -37,7 +37,7 @@
     <Compile Include="DSL/Configuration.fs" />
     <Compile Include="DSL/FileSystem.fs" />
     <Compile Include="DSL/From.fs" />
-    <Compile Include="DSL/Healthcare.fs" />
+    <Compile Include="DSL/Healthcheck.fs" />
     <Compile Include="DSL/Meta.fs" />
     <Compile Include="DSL/Run.fs" />
     <Compile Include="DSL/Variables.fs" />

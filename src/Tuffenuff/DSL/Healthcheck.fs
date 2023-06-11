@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Tuffenuff.DSL.Healthcare
+module Tuffenuff.DSL.Healthcheck
 
 open Tuffenuff.Domain.Collections
 open Tuffenuff.Domain.Types
@@ -15,7 +15,7 @@ let start = StartPeriod
 
 let retries = Retries
 
-let healthchech ps commands = 
+let healthcheck ps commands = 
     let interval = 
         ps
         |> Seq.tryFindBack (function
@@ -61,7 +61,7 @@ let healthchech ps commands =
     }
     |> Instruction
 
-let hc = healthchech
+let hc = healthcheck
 
 let disableHealthcheck = Simple { Name = "HEALTHCHECK"; Value = "NONE" } |> Instruction
 
