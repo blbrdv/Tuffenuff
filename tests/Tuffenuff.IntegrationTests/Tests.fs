@@ -49,7 +49,7 @@ let fsi path =
 
 let testFuncs =
     Directory.GetFiles(
-        Path.GetFullPath(Path.Combine(__SOURCE_DIRECTORY__, @"..\..\examples"))
+        Path.GetFullPath(Path.Combine(__SOURCE_DIRECTORY__, "..", "..", "examples"))
     )
     |> Seq.where (fun file -> file.EndsWith(".fsx") && not (file.Contains("part")))
     |> Seq.map (fun file ->
