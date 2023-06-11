@@ -5,24 +5,25 @@ open Tuffenuff.DSL
 open Tuffenuff.Domain.Types
 open Tuffenuff.Domain.Collections
 
+
+let disabledHC = 
+    Simple { Name = "HEALTHCHECK"; Value = "NONE" } 
+    |> Instruction
+
+let testFuncs =
+    [ disableHealthcheck; healthcheckNone; disableHc; hcNone ]
+    |> Seq.mapi (fun index instr ->
+        let func = fun value () ->
+            Expect.equal instr value "Healthcheck must be disabled"
+        ($"{index} disable healthcheck test", func)
+    )
+
+
 [<Tests>]
 let tests =
-    testList "HEALTHCHECK instruction tests" [
-        testCase "disable healthcheck test" <| fun () ->
-            let expected = 
-                Simple { Name = "HEALTHCHECK"; Value = "NONE" } 
-                |> Instruction
-
-            let actual1 = disableHealthcheck
-            let actual2 = healthcheckNone
-            let actual3 = disableHc
-            let actual4 = hcNone
-            
-            Expect.equal actual1 expected "Healthcheck must be disabled"
-            Expect.equal actual2 expected "Healthcheck must be disabled"
-            Expect.equal actual3 expected "Healthcheck must be disabled"
-            Expect.equal actual4 expected "Healthcheck must be disabled"
-
+    testParam disabledHC testFuncs
+    |> List.ofSeq
+    |> List.append [
         testCase "healthcheck w/o options test"  <| fun () ->
             let expected = 
                 Healthcheck { 
@@ -61,3 +62,4 @@ let tests =
             
             Expect.equal actual expected "Healthcheck must be with options"
     ]
+    |> testList "HEALTHCHECK instruction tests"
