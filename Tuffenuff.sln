@@ -5,7 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tuffenuff", "src\Tuffenuff\Tuffenuff.fsproj", "{F5B89EEF-A76B-41CD-B539-211811FFF3D6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D0CA3953-0995-4952-8798-618568C87A58}"
+EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tuffenuff.UnitTests", "tests\Tuffenuff.UnitTests\Tuffenuff.UnitTests.fsproj", "{28291213-AF0F-4155-B325-6AF37E7573C8}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tuffenuff.IntegrationTests", "tests\Tuffenuff.IntegrationTests\Tuffenuff.IntegrationTests.fsproj", "{8E83F7C8-F7EF-47E7-AB8E-95F1687A0F05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +28,13 @@ Global
 		{28291213-AF0F-4155-B325-6AF37E7573C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28291213-AF0F-4155-B325-6AF37E7573C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28291213-AF0F-4155-B325-6AF37E7573C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E83F7C8-F7EF-47E7-AB8E-95F1687A0F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E83F7C8-F7EF-47E7-AB8E-95F1687A0F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E83F7C8-F7EF-47E7-AB8E-95F1687A0F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E83F7C8-F7EF-47E7-AB8E-95F1687A0F05}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8E83F7C8-F7EF-47E7-AB8E-95F1687A0F05} = {D0CA3953-0995-4952-8798-618568C87A58}
+		{28291213-AF0F-4155-B325-6AF37E7573C8} = {D0CA3953-0995-4952-8798-618568C87A58}
 	EndGlobalSection
 EndGlobal

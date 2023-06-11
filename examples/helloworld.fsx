@@ -2,11 +2,13 @@
 
 open System.IO
 open Tuffenuff
+open Tuffenuff.DSL
 
 df [
-    fresh
-    cp [] "hello" "/"
-    cmd [ "/hello" ]
+    !/ "Simple Hello World dockerfile"
+    from "alpine:3.18" []
+    br
+    cmd [| "echo"; "'Hello world'" |]
 ]
-|> render
-|> toFile (Path.Combine(__SOURCE_DIRECTORY__, "Dockerfile.helloworld"))
+|> Dockerfile.render
+|> Dockerfile.toFile (Path.Combine(__SOURCE_DIRECTORY__, "Dockerfile.HelloWorld"))
