@@ -1,51 +1,16 @@
 module Tests.Integration
 
-open System.Diagnostics
-open System.Threading.Tasks
 open System.IO
 open Expecto
+open Fli
 
-
-type CommandResult = { 
-  ExitCode: int; 
-  StandardOutput: string;
-  StandardError: string 
-}
-
-// https://alexn.org/blog/2020/12/06/execute-shell-command-in-fsharp/
-let executeCommand executable args =
-    async {
-        let startInfo = ProcessStartInfo()
-        startInfo.FileName <- executable
-        startInfo.RedirectStandardOutput <- true
-        startInfo.RedirectStandardError <- true
-        startInfo.UseShellExecute <- false
-        startInfo.CreateNoWindow <- true
-
-        for a in args do
-            startInfo.ArgumentList.Add(a)
-
-        use p = new Process()
-        p.StartInfo <- startInfo
-        p.Start() |> ignore
-
-        let outTask = Task.WhenAll([|
-            p.StandardOutput.ReadToEndAsync();
-            p.StandardError.ReadToEndAsync()
-        |])
-
-        do! p.WaitForExitAsync() |> Async.AwaitTask
-        let! out = outTask |> Async.AwaitTask
-        return {
-            ExitCode = p.ExitCode;
-            StandardOutput = out.[0];
-            StandardError = out.[1]
-        }
-    }
 
 let fsi path = 
-    executeCommand "dotnet" [ "fsi"; path ]
-    |> Async.RunSynchronously
+    cli {
+        Exec "dotnet"
+        Arguments [ "fsi"; path ]
+    }
+    |> Command.execute
 
 let testFuncs =
     Directory.GetFiles(
@@ -60,9 +25,8 @@ let testFuncs =
             let resultName = $"Dockerfile.{filename}"
 
             let result = fsi file
-
             Expect.isTrue (result.ExitCode = 0)
-            <| $"Example executed with error:\n{result.StandardError}"
+            <| $"Example executed with error:\n{Output.toError result}\n"
 
             let actual =
                 File.ReadAllText(Path.Combine(examplesPath, resultName))

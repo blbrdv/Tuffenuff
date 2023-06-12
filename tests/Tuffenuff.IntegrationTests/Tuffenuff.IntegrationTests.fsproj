@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
     <PackageReference Include="expecto.xunit" Version="0.2.1" />
     <PackageReference Update="FSharp.Core" Version="6.*" />
+    <PackageReference Include="Fli" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
