@@ -5,13 +5,6 @@ open Expecto
 open Fli
 
 
-let fsi path = 
-    cli {
-        Exec "dotnet"
-        Arguments [ "fsi"; path ]
-    }
-    |> Command.execute
-
 let testFuncs =
     Directory.GetFiles(
         Path.GetFullPath(Path.Combine(__SOURCE_DIRECTORY__, "..", "..", "examples"))
@@ -24,7 +17,13 @@ let testFuncs =
             let examplesPath = Path.GetDirectoryName(file)
             let resultName = $"Dockerfile.{filename}"
 
-            let result = fsi file
+            let result = 
+                cli {
+                    Exec "dotnet"
+                    Arguments [ "fsi"; file ]
+                }
+                |> Command.execute 
+
             Expect.isTrue (result.ExitCode = 0)
             <| $"Example executed with error:\n{Output.toError result}\n"
 
