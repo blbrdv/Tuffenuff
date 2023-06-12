@@ -35,3 +35,6 @@ bld/
 
 # examples
 examples/Dockerfile.*
+
+# experiments
+xtest.fsx
