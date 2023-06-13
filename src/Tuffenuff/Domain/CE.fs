@@ -14,7 +14,7 @@ type FromBuilder (image) =
 
     member this.Yield (_) = this.Zero()
 
-    [<CustomOperation("alias")>]
+    [<CustomOperation("as'")>]
     member __.Alias (state : FromInstruction, value : string) = 
         { state with Name = Some value }
 
@@ -35,9 +35,7 @@ type FromBuilder (image) =
 
 
 type HealthcheckBuilder (cmds) =
-    member __.Zero () = HealthcheckInstruction.Create(cmds)
-
-    member this.Yield (_) = this.Zero()
+    member __.Yield (_) = HealthcheckInstruction.Create(cmds)
 
     [<CustomOperation("interval")>]
     member __.Interval (state : HealthcheckInstruction, value : string) = 
@@ -53,7 +51,7 @@ type HealthcheckBuilder (cmds) =
 
     [<CustomOperation("retries")>]
     member __.Retries (state : HealthcheckInstruction, value : int) = 
-        { state with Options = state.Options.Add("retries", value.ToString())  }
+        { state with Options = state.Options.Add("retries", string value)  }
 
     member __.Combine (_, _) = ()
 

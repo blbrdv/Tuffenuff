@@ -25,9 +25,9 @@ let tests =
     |> List.ofSeq
     |> List.append [
         testCase "healthcheck w/o options test"  <| fun () ->
-            let expected = HealthcheckInstruction.Create([ "curl -f http://localhost/ || exit 1" ])
+            let expected = HealthcheckInstruction.Create("curl -f http://localhost/ || exit 1")
 
-            let actual = hc [ "curl -f http://localhost/ || exit 1" ]
+            let actual = hc "curl -f http://localhost/ || exit 1"
             
             Expect.equal actual expected "Healthcheck must be w/o options"
 

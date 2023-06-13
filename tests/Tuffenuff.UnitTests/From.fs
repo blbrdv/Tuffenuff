@@ -3,7 +3,6 @@ module Tests.From
 open Expecto
 open Tuffenuff.DSL
 open Tuffenuff.Domain.Types
-open Tuffenuff.Domain.Collections
 
 
 [<Tests>]
@@ -55,8 +54,8 @@ let tests =
                 |> Instruction
 
             let actual = 
-                fromOpts "python:latest" {
-                    alias "test"
+                based "python:latest" {
+                    as' "test"
                     platform "linux/amd64"
                 }
 

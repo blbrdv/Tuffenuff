@@ -1,5 +1,7 @@
 module Tuffenuff.Domain.Types
 
+open System
+open System.Collections.Generic
 open Tuffenuff.Domain.Collections
 
 
@@ -66,7 +68,15 @@ type HealthcheckInstruction =
     }
     with
         static member Create(cmds) =
-            { Options = Parameters []; Instructions = Arguments cmds }
+            let instr =
+                match box (cmds) with
+                | :? string as s -> Arguments [ s ]
+                | :? IEnumerable<string> as ls -> Arguments ls
+                | _ -> raise (ArgumentException("Invalid argument type"))
+            { 
+                Options = Parameters []; 
+                Instructions = instr
+            }
 
 
 //---------------------------------------------------------------------------------------
