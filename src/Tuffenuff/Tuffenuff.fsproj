@@ -43,6 +43,7 @@
     <Compile Include="DSL/OpenContainers.fs" />
     <Compile Include="DSL/Run.fs" />
     <Compile Include="DSL/Variables.fs" />
+    <Compile Include="DSL/GlobalArgs.fs" />
     <Compile Include="Tuffenuff.fs" />
   </ItemGroup>
 
