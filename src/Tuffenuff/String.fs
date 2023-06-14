@@ -9,8 +9,7 @@ let eol = Environment.NewLine
 let eol_slash = sprintf " \\%s    " eol
 
 
-let quote value =
-    sprintf "%c%s%c" '"' (string value) '"'
+let quote value = sprintf "%c%s%c" '"' (string value) '"'
 
 
 let print name value = sprintf "%s %s" name value
@@ -23,21 +22,18 @@ let printKVQ key value = printKV key (quote value)
 
 
 let printList list =
-    if (list :> obj) :? string[] then 
+    if (list :> obj) :? string[] then
         list |> Seq.map quote |> String.concat ", " |> sprintf "[ %s ]"
     else
         list |> String.concat " "
 
 
 let printFlag name value =
-    if value then 
-        sprintf " --%s" name 
-    else 
-        ""
+    if value then sprintf " --%s" name else ""
 
 
 let printParameter<'T> name (value : 'T option) =
-    if value.IsSome then 
+    if value.IsSome then
         sprintf " --%s=%s" name (string value.Value)
     else
         ""
@@ -50,10 +46,10 @@ let printParameterQ<'T> name (value : 'T option) =
     |> printParameter name
 
 
-let trim (text : string) = text.TrimStart(eol.ToCharArray())
+let trim (text : string) = text.TrimStart (eol.ToCharArray ())
 
 
 let variable = sprintf "${%s}"
 
 
-let ( ~% ) = variable
+let (~%) = variable

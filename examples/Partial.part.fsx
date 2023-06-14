@@ -4,8 +4,7 @@ open Tuffenuff
 open Tuffenuff.DSL
 
 let echoMaessage () =
-    dockerfile
-        [
-            !/ "this is from 'Partial.part.fsx'"
-            !> """echo 'echo "Shalom!"' > /etc/profile.d/welcome.sh"""
-        ]
+    df [
+        !/ "this is from 'Partial.part.fsx'"
+        !> """echo 'echo "Shalom!"' > /etc/profile.d/welcome.sh"""
+    ]

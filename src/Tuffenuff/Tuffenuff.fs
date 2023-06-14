@@ -22,13 +22,13 @@ let br = plain ""
 let part = Subpart
 
 
-let ( !& ) = part
+let (!&) = part
 
 
 [<RequireQualifiedAccess>]
 module Dockerfile =
 
-    let render df = 
+    let render df =
         let rec renderInstruction instr =
             match instr with
             | Simple s -> print s.Name s.Value
@@ -43,9 +43,9 @@ module Dockerfile =
                 str {
                     l.Name
                     " "
-                    l.Elements 
-                    |> Seq.map (fun e -> 
-                        printKVQ e.Key e.Value)
+
+                    l.Elements
+                    |> Seq.map (fun e -> printKVQ e.Key e.Value)
                     |> String.concat eol_slash
                 }
 
@@ -54,26 +54,27 @@ module Dockerfile =
                     "FROM"
                     printParameterQ "platform" f.Platform
                     sprintf " %s" f.Image
-                    if f.Name.IsSome then 
+
+                    if f.Name.IsSome then
                         sprintf " AS %s" f.Name.Value
                 }
 
-            | Run r ->            
+            | Run r ->
                 seq {
                     for mount in r.Mounts do
                         mount.Params
                         |> Seq.map (fun p -> printKV p.Key p.Value)
-                        |> Seq.append [ 
-                            printKV "type" (mount.Name.ToString().ToLower()) 
+                        |> Seq.append [
+                            printKV "type" (mount.Name.ToString().ToLower ())
                         ]
                         |> String.concat ","
                         |> sprintf "--mount=%s"
 
-                    if r.Network.IsSome then 
-                        sprintf "--network=%s" ((nameof r.Network.Value).ToLower())
+                    if r.Network.IsSome then
+                        sprintf "--network=%s" ((nameof r.Network.Value).ToLower ())
 
                     if r.Security.IsSome then
-                        sprintf "--security=%s" ((nameof r.Network.Value).ToLower())
+                        sprintf "--security=%s" ((nameof r.Network.Value).ToLower ())
 
                     for arg in r.Arguments do
                         arg
@@ -81,12 +82,14 @@ module Dockerfile =
                 |> String.concat eol_slash
                 |> sprintf "RUN%s%s" eol_slash
 
-            | Add a -> 
+            | Add a ->
                 str {
                     "ADD"
                     printFlag "link" a.Link
+
                     if a.KeepGitDir then
                         sprintf " --keep-git-dir=true"
+
                     printParameter "chmod" a.Chmod
                     printParameter "chown" a.Chown
                     printParameter "checksum" a.Checksum
@@ -94,7 +97,7 @@ module Dockerfile =
                     printList a.Elements.Collection
                 }
 
-            | Copy cp -> 
+            | Copy cp ->
                 str {
                     "COPY"
                     printFlag "link" cp.Link
@@ -105,20 +108,19 @@ module Dockerfile =
                     printList cp.Elements.Collection
                 }
 
-            | Healthcheck hc -> 
-                seq { 
+            | Healthcheck hc ->
+                seq {
                     "HEALTCHECK"
+
                     for opt in hc.Options do
                         printParameter opt.Key (Some opt.Value)
+
                     "CMD"
                     printList hc.Instructions.Collection
                 }
                 |> String.concat " "
 
-            | Onbuild onb -> 
-                seq { onb.Instruction }
-                |> r
-                |> sprintf "ONBUILD %s"
+            | Onbuild onb -> seq { onb.Instruction } |> r |> sprintf "ONBUILD %s"
 
         and r sub =
             sub
@@ -129,19 +131,15 @@ module Dockerfile =
                 | Subpart s -> r s |> trim
             )
             |> String.concat eol
-        
-        r df
-        |> trim
-        |> sprintf "%s%s"
-        <| eol
+
+        r df |> trim |> sprintf "%s%s" <| eol
 
 
-    let toFile (path : string) (text : string) =
-        File.WriteAllText(path, text)
+    let toFile (path : string) (text : string) = File.WriteAllText (path, text)
 
 
     let fromFile (path : string) =
         seq {
-            for line in File.ReadLines(path) do
+            for line in File.ReadLines (path) do
                 plain line
         }

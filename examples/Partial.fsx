@@ -11,14 +11,13 @@ let part1 = echoMaessage ()
 let part2 =
     Dockerfile.fromFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.part"))
 
-dockerfile
-    [
-        !/ "Partial dockerfile"
-        from "ubuntu:latest"
-        br
-        !&part1
-        br
-        !&part2
-    ]
+df [
+    !/ "Partial dockerfile"
+    from "ubuntu:latest"
+    br
+    !&part1
+    br
+    !&part2
+]
 |> Dockerfile.render
 |> Dockerfile.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.Partial"))

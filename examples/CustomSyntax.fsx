@@ -8,15 +8,14 @@ open Tuffenuff.Domain.Types
 let (!+) (name : string) =
     Simple { Name = "INCLUDE" ; Value = name } |> Instruction
 
-dockerfile
-    [
-        syntax "bergkvist/includeimage"
-        !/ "Custom syntax example"
-        from "alpine:3.12"
-        br
-        !+ "python:3.8.3-alpine3.12"
-        br
-        cmd [ "python" ]
-    ]
+df [
+    syntax "bergkvist/includeimage"
+    !/ "Custom syntax example"
+    from "alpine:3.12"
+    br
+    !+ "python:3.8.3-alpine3.12"
+    br
+    cmd [ "python" ]
+]
 |> Dockerfile.render
 |> Dockerfile.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.CustomSyntax"))
