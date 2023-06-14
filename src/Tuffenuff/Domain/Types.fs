@@ -33,32 +33,44 @@ type FromInstruction =
             { Image = image; Name = None; Platform = None }
 
 
-type InsertParameter =
-    | Source of string
-    | Chown of string
-    | Chmod of string
-    | Checksum of string
-    | KeepGitDir
-    | Link
+type AddInstruction = 
+    { 
+        Chown : string option; 
+        Chmod : string option; 
+        Checksum : string option;
+        KeepGitDir : bool;
+        Link : bool;
+        Elements : Arguments
+    }
+    with
+        static member Create (elements) =
+            {
+                Chown = None;
+                Chmod = None;
+                Checksum = None;
+                KeepGitDir = false;
+                Link = false;
+                Elements = Arguments elements
+            }
 
 
-type AddInstruction = { 
-    Chown : string option; 
-    Chmod : string option; 
-    Checksum : string option;
-    KeepGitDir : bool;
-    Link : bool;
-    Elements : Arguments
-}
-
-
-type CopyInstruction = { 
-    From : string option
-    Chown : string option; 
-    Chmod : string option;
-    Link : bool;
-    Elements : Arguments
-}
+type CopyInstruction = 
+    { 
+        From : string option
+        Chown : string option; 
+        Chmod : string option;
+        Link : bool;
+        Elements : Arguments
+    }
+    with
+        static member Create (elements) =
+            {
+                From = None;
+                Chown = None;
+                Chmod = None;
+                Link = false;
+                Elements = Arguments elements
+            }
 
 
 type HealthcheckInstruction = 

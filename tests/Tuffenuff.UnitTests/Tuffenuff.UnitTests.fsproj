@@ -10,8 +10,10 @@
     <Compile Include="Collection.fs" />
     <Compile Include="String.fs" />
     <Compile Include="From.fs" />
-    <Compile Include="Run.fs" />
+    <Compile Include="Add.fs" />
+    <Compile Include="Copy.fs" />
     <Compile Include="Healthcheck.fs" />
+    <Compile Include="Run.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
 

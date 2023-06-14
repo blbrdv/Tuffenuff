@@ -14,10 +14,9 @@ df [
     br
     from "elixir:1.14-alpine"
     workdir "/app"
-    copy [ from_ "repo" ] [ 
-        "/docker_examples/elixir/hello.exs"
-        "." 
-    ]
+    copyOpts [ "/docker_examples/elixir/hello.exs"; "." ] {
+        from' "repo"
+    }
     cmd [| "elixir"; "hello.exs" |]
 ]
 |> Dockerfile.render

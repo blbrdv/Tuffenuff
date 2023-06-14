@@ -30,6 +30,76 @@ type FromBuilder (image) =
 
 
 //---------------------------------------------------------------------------------------
+// COPY
+//---------------------------------------------------------------------------------------
+
+
+type AddBuilder (image) =
+    member __.Zero () = AddInstruction.Create(image)
+
+    member this.Yield (_) = this.Zero()
+
+    [<CustomOperation("chown")>]
+    member __.Chown (state : AddInstruction, value : string) = 
+        { state with Chown = Some value }
+
+    [<CustomOperation("chmod")>]
+    member __.Chmod (state : AddInstruction, value : string) = 
+        { state with Chmod = Some value }
+
+    [<CustomOperation("checksum")>]
+    member __.Checksum (state : AddInstruction, value : string) = 
+        { state with Checksum = Some value }
+
+    [<CustomOperation("keepGitDir")>]
+    member __.KeepGitDir (state : AddInstruction) = 
+        { state with KeepGitDir = true }
+
+    [<CustomOperation("link")>]
+    member __.Link (state : AddInstruction) = 
+        { state with Link = true }
+
+    member __.Combine (_, _) = ()
+
+    member __.Delay (f) = f()
+        
+    member __.Run (state) = state |> Add |> Instruction
+
+
+//---------------------------------------------------------------------------------------
+// COPY
+//---------------------------------------------------------------------------------------
+
+
+type CopyBuilder (image) =
+    member __.Zero () = CopyInstruction.Create(image)
+
+    member this.Yield (_) = this.Zero()
+
+    [<CustomOperation("from'")>]
+    member __.From (state : CopyInstruction, value : string) = 
+        { state with From = Some value }
+
+    [<CustomOperation("chown")>]
+    member __.Chown (state : CopyInstruction, value : string) = 
+        { state with Chown = Some value }
+
+    [<CustomOperation("chmod")>]
+    member __.Chmod (state : CopyInstruction, value : string) = 
+        { state with Chmod = Some value }
+    
+    [<CustomOperation("link")>]
+    member __.Link (state : CopyInstruction) = 
+        { state with Link = true }
+
+    member __.Combine (_, _) = ()
+
+    member __.Delay (f) = f()
+        
+    member __.Run (state) = state |> Copy |> Instruction
+
+
+//---------------------------------------------------------------------------------------
 // HEALTHCHECK
 //---------------------------------------------------------------------------------------
 
