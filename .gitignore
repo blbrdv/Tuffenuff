@@ -31,6 +31,7 @@ bld/
 *.nuget.props
 *.nuget.targets
 
+# FAKE
 .fake
 
 # examples
