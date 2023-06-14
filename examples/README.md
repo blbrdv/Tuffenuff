@@ -11,6 +11,23 @@ This will create `Dockerfile.<filename>` file in same directory.
 
 ## Description
 
-### HelloWorld.fsx
+### `HelloWorld.fsx`
 
-Simple Hello World dockerfile
+Simple Hello World dockerfile.
+
+### `CustomSyntax.fsx`
+
+Example using `INCLUDE` custom syntax.
+
+See [bergkvist/includeimage](https://github.com/bergkvist/includeimage) 
+for more info.
+
+### `Partial.fsx`
+
+Example that combine parts from other files:
+- `Partial.part.fsx`
+- `Dockerfile.part`
+
+### `ElixirApp.fsx`
+
+Simple 'Hello World' Elixir app.

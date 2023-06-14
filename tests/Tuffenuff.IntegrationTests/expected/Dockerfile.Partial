@@ -1,0 +1,9 @@
+# Partial dockerfile
+FROM ubuntu:latest
+
+# this is from 'Partial.part.fsx'
+RUN \
+    echo 'echo "Shalom!"' > /etc/profile.d/welcome.sh
+
+# this is from 'Dockerfile.part'
+ENTRYPOINT [ "/bin/bash", "-l" ]
