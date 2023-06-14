@@ -1,6 +1,18 @@
 # Changelog
 [![Common Changelog](https://common-changelog.org/badge.svg)](https://common-changelog.org)
 
+
+## [0.0.4-beta] - 2023-06-15
+
+### Added
+
+- More examples
+
+### Changed
+
+- Changed building function of `FROM`, `ADD`, `COPY`, `HEALTHCARE` instruction to CE
+
+
 ## [0.0.3-beta] - 2023-06-04
 
 ### Added
@@ -13,6 +25,7 @@
 - Changed building function of `RUN` instruction to CE
 - Changed project license from `WTFPL` to `MIT`
 
+
 ## [0.0.2-alpha] - 2023-05-31
 
 ### Added
@@ -24,10 +37,13 @@
 
 - Removed line break auto insert for `FROM` instruction
 
+
 ## [0.0.1-alpha] - 2023-05-30
 
 Initial release.
 
-[0.0.3-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.3-alpha
+
+[0.0.3-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.3-beta
+[0.0.3-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.3-beta
 [0.0.2-alpha]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.2-alpha
 [0.0.1-alpha]: https://www.nuget.org/packages/Tuffenuff/0.0.1-alpha

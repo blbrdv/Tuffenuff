@@ -1,7 +1,7 @@
 module Tests.Collection
 
 open Expecto
-open Tuffenuff.Collections
+open Tuffenuff.Domain.Collections
 
 [<Tests>]
 let tests =

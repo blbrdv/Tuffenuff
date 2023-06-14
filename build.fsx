@@ -22,11 +22,11 @@ open Fake.Core.TargetOperators
 /////////////////////////////////////////////////////////////////////////////////////////
 
 let projName = "Tuffenuff"
-let testProjName = sprintf "%s.Tests" projName
+let testProjNames = sprintf "%s.*Tests" projName
 let projDir = "src" @@ projName
 let projFile = projDir @@ (sprintf "%s.fsproj" projName)
 let packageFile = projDir @@ "**/*.nupkg"
-let projTestFile = "tests" @@ testProjName @@ (sprintf "%s.fsproj" testProjName)
+let projTestFiles = "tests" @@ testProjNames @@ (sprintf "%s.fsproj" testProjNames)
 let buildDirs = !! "**/bin" ++ "**/obj"
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -38,8 +38,10 @@ Target.create "Clean" (fun _ ->  Shell.deleteDirs buildDirs)
 Target.create "Build" (fun _ -> DotNet.build id projFile)
 
 Target.create "RunTests" (fun _ -> 
-    DotNet.test (fun opt -> { opt with Logger = Some "console;verbosity=detailed" })
-    <| projTestFile
+    !! projTestFiles
+    |> Seq.iter (
+        DotNet.test (fun opt -> { opt with Logger = Some "console;verbosity=detailed" })
+    )
 )
 
 Target.create "Release" (fun _ ->

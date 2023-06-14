@@ -1,138 +1,137 @@
-module Tuffenuff.Domain
+module Tuffenuff.Domain.CE
 
-open Tuffenuff.Collections
-
-
-//---------------------------------------------------------------------------------------
-// Base types
-//---------------------------------------------------------------------------------------
-
-
-type SimpleInstruction = { Name : string; Value : string }    
-
-
-type ListInstruction = { Name : string; Elements : Arguments }
-
-
-type KVInstruction = { Name : string; Key : string; Value : string }
-
-
-type KVListInstruction = { Name : string; Elements : Parameters }
-
-
-type FromParameter =
-    | As of string
-    | Platform of string
-
-
-type FromInstruction = { Image : string; Name : string option; Platform : string option }
-
-
-type InsertParameter =
-    | Source of string
-    | Chown of string
-    | Chmod of string
-    | Checksum of string
-    | KeepGitDir
-    | Link
-
-
-type AddInstruction = { 
-    Chown : string option; 
-    Chmod : string option; 
-    Checksum : string option;
-    KeepGitDir : bool;
-    Link : bool;
-    Elements : Arguments
-}
-
-
-type CopyInstruction = { 
-    From : string option
-    Chown : string option; 
-    Chmod : string option;
-    Link : bool;
-    Elements : Arguments
-}
-
-
-type HealthcheckParameter =
-    | Interval of string 
-    | Timeout of string
-    | StartPeriod of string
-    | Retries of int
-
-
-type HealthcheckInstruction = { 
-    Interval : string option; 
-    Timeout : string option;
-    StartPeriod : string option;
-    Retries : int option;
-    Instructions : Arguments
-}
+open Tuffenuff.Domain.Types
+open Tuffenuff.Domain.Collections
 
 
 //---------------------------------------------------------------------------------------
-// RUN types
+// FROM
 //---------------------------------------------------------------------------------------
 
 
-type SharingType =
-    | Shared
-    | Private
-    | Locked
+type FromBuilder (image) =
+    member __.Zero () = FromInstruction.Create(image)
+
+    member this.Yield (_) = this.Zero()
+
+    [<CustomOperation("as'")>]
+    member __.Alias (state : FromInstruction, value : string) = 
+        { state with Name = Some value }
+
+    [<CustomOperation("platform")>]
+    member __.Platform (state : FromInstruction, value : string) = 
+        { state with Platform = Some value }
+
+    member __.Combine (_, _) = ()
+
+    member __.Delay (f) = f()
+        
+    member __.Run (state) = state |> From |> Instruction
 
 
-type MountType = 
-    | Bind
-    | Cache
-    | Tmpfs
-    | Secret
-    | Ssh
+//---------------------------------------------------------------------------------------
+// COPY
+//---------------------------------------------------------------------------------------
 
 
-type MountParameters = 
-    {
-        Name : MountType;
-        Params : Parameters
-    }
-    with
-        static member Create(name, key, value) =
-            { Name = name; Params = Dict [ key, value ] }
-        static member Create(name) =
-            { Name = name; Params = Dict.empty }
+type AddBuilder (image) =
+    member __.Zero () = AddInstruction.Create(image)
+
+    member this.Yield (_) = this.Zero()
+
+    [<CustomOperation("chown")>]
+    member __.Chown (state : AddInstruction, value : string) = 
+        { state with Chown = Some value }
+
+    [<CustomOperation("chmod")>]
+    member __.Chmod (state : AddInstruction, value : string) = 
+        { state with Chmod = Some value }
+
+    [<CustomOperation("checksum")>]
+    member __.Checksum (state : AddInstruction, value : string) = 
+        { state with Checksum = Some value }
+
+    [<CustomOperation("keepGitDir")>]
+    member __.KeepGitDir (state : AddInstruction) = 
+        { state with KeepGitDir = true }
+
+    [<CustomOperation("link")>]
+    member __.Link (state : AddInstruction) = 
+        { state with Link = true }
+
+    member __.Combine (_, _) = ()
+
+    member __.Delay (f) = f()
+        
+    member __.Run (state) = state |> Add |> Instruction
 
 
-type NetworkType =
-    | DefaultNetwork
-    | NoneNetwok
-    | Host
+//---------------------------------------------------------------------------------------
+// COPY
+//---------------------------------------------------------------------------------------
+
+
+type CopyBuilder (image) =
+    member __.Zero () = CopyInstruction.Create(image)
+
+    member this.Yield (_) = this.Zero()
+
+    [<CustomOperation("from'")>]
+    member __.From (state : CopyInstruction, value : string) = 
+        { state with From = Some value }
+
+    [<CustomOperation("chown")>]
+    member __.Chown (state : CopyInstruction, value : string) = 
+        { state with Chown = Some value }
+
+    [<CustomOperation("chmod")>]
+    member __.Chmod (state : CopyInstruction, value : string) = 
+        { state with Chmod = Some value }
     
+    [<CustomOperation("link")>]
+    member __.Link (state : CopyInstruction) = 
+        { state with Link = true }
 
-type SecurityType =
-    | Insecure
-    | Sandbox
-    
+    member __.Combine (_, _) = ()
 
-type RunInstruction =
-    {
-        Mounts : Collection<MountParameters>
-        Network : NetworkType option
-        Security : SecurityType option
-        Arguments : Arguments
-    }
-    with
-        static member Create() =
-            {
-                Mounts = Collection.empty;
-                Network = None;
-                Security = None;
-                Arguments = Collection.empty;
-            }
+    member __.Delay (f) = f()
+        
+    member __.Run (state) = state |> Copy |> Instruction
 
 
 //---------------------------------------------------------------------------------------
-// Computation Expressions
+// HEALTHCHECK
+//---------------------------------------------------------------------------------------
+
+
+type HealthcheckBuilder (cmds) =
+    member __.Yield (_) = HealthcheckInstruction.Create(cmds)
+
+    [<CustomOperation("interval")>]
+    member __.Interval (state : HealthcheckInstruction, value : string) = 
+        { state with Options = state.Options.Add("interval", value) }
+
+    [<CustomOperation("timeout")>]
+    member __.Timeout (state : HealthcheckInstruction, value : string) = 
+        { state with Options = state.Options.Add("timeout", value) }
+
+    [<CustomOperation("period")>]
+    member __.StartPeriod (state : HealthcheckInstruction, value : string) = 
+        { state with Options = state.Options.Add("start-period", value) }
+
+    [<CustomOperation("retries")>]
+    member __.Retries (state : HealthcheckInstruction, value : int) = 
+        { state with Options = state.Options.Add("retries", string value)  }
+
+    member __.Combine (_, _) = ()
+
+    member __.Delay (f) = f()
+        
+    member __.Run (state) = state |> Healthcheck |> Instruction
+
+
+//---------------------------------------------------------------------------------------
+// RUN
 //---------------------------------------------------------------------------------------
 
 
@@ -292,34 +291,6 @@ type SshParametersBuilder () =
     member __.Run (state) = state
 
 
-//---------------------------------------------------------------------------------------
-// Entity types
-//---------------------------------------------------------------------------------------
-
-
-type InstructionType =
-    | Simple of SimpleInstruction
-    | SimpleQuoted of SimpleInstruction
-    | List of ListInstruction
-    | KeyValue of KVInstruction
-    | KeyValueList of KVListInstruction
-    | From of FromInstruction
-    | Run of RunInstruction
-    | Add of AddInstruction
-    | Copy of CopyInstruction
-    | Onbuild of OnbuildInstruction
-    | Healthcheck of HealthcheckInstruction
-
-
-and OnbuildInstruction = { Instruction : Entity }
-
-
-and Entity = 
-    | Plain of string
-    | Instruction of InstructionType
-    | Subpart of Entity seq
-
-
 type RunInstructionBuilder () =
 
     member __.Yield _ = RunInstruction.Create()
@@ -345,23 +316,3 @@ type RunInstructionBuilder () =
         { state with Security = Some security }
 
     member __.Run (state) = state |> Run |> Instruction
-
-let bindParams target = BindParametersBuilder (target)
-
-let bind target = bindParams target {()}
-
-let cacheParams target = CacheParametersBuilder (target)
-
-let cache target = cacheParams target {()}
-
-let tmpfsParams target = TmpfsParametersBuilder (target)
-
-let tmpfs target = tmpfsParams target {()}
-
-let secret = SecretParametersBuilder ()
-
-let ssh = SshParametersBuilder ()
-
-let run = RunInstructionBuilder ()
-
-let ( !> ) command = run { cmd command }

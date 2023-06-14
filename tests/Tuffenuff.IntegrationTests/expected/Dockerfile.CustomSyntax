@@ -1,0 +1,7 @@
+# syntax=bergkvist/includeimage
+# Custom syntax example
+FROM alpine:3.12
+
+INCLUDE python:3.8.3-alpine3.12
+
+CMD python

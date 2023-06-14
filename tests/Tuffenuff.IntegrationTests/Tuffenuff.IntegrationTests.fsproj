@@ -7,18 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Collection.fs" />
-    <Compile Include="String.fs" />
-    <Compile Include="Run.fs" />
-    <Compile Include="DSL.fs" />
+    <Compile Include="Tests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Expecto" Version="9.*" />
+    <Content Include="expected/Dockerfile.*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Expecto" Version="9.0" />
     <PackageReference Include="YoloDev.Expecto.TestSdk" Version="0.*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageReference Include="expecto.xunit" Version="0.2.1" />
     <PackageReference Update="FSharp.Core" Version="6.*" />
+    <PackageReference Include="Fli" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>

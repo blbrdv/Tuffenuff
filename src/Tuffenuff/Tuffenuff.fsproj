@@ -10,7 +10,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>
     <Product>Tuffenuff</Product>
-    <Version>0.0.3-beta</Version>
+    <Version>0.0.4-beta</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>false</IncludeSymbols>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -23,14 +23,25 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>dsl;dockerfile</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/blbrdv/Tuffenuff</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="String.fs" />
-    <Compile Include="Collections.fs" />
-    <Compile Include="Domain.fs" />
-    <Compile Include="Instructions.fs" />
-    <Compile Include="DSL.fs" />
+    <Compile Include="StringCE.fs" />
+    <Compile Include="Domain/Collections.fs" />
+    <Compile Include="Domain/Types.fs" />
+    <Compile Include="Domain/CE.fs" />
+    <Compile Include="DSL/Comments.fs" />
+    <Compile Include="DSL/Configuration.fs" />
+    <Compile Include="DSL/FileSystem.fs" />
+    <Compile Include="DSL/From.fs" />
+    <Compile Include="DSL/Healthcheck.fs" />
+    <Compile Include="DSL/Meta.fs" />
+    <Compile Include="DSL/Run.fs" />
+    <Compile Include="DSL/Variables.fs" />
+    <Compile Include="Tuffenuff.fs" />
   </ItemGroup>
 
   <ItemGroup>
