@@ -1,2 +1,6 @@
+# experiments
 xtest.fsx
+
+# FAKE
 .fake
+build.fsx
