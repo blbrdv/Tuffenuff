@@ -4,7 +4,23 @@ on:
   pull_request:
 
 jobs:
+  codestyle-check:
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-dotnet@v3
+      with:
+        global-json-file: global.json
+
+    - name: Restore tools
+      run: dotnet tool restore
+
+    - name: Codestyle check
+      run: dotnet fake run build.fsx -t CodestyleCheck
+
   build-and-tests:
+    needs: codestyle-check
+
     strategy:
       fail-fast: false
       matrix:
