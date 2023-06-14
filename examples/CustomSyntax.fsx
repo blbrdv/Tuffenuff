@@ -5,7 +5,8 @@ open Tuffenuff
 open Tuffenuff.DSL
 open Tuffenuff.Domain.Types
 
-let ( !+ ) (name : string) = Simple { Name = "INCLUDE" ; Value = name } |> Instruction
+let (!+) (name : string) =
+    Simple { Name = "INCLUDE" ; Value = name } |> Instruction
 
 df [
     syntax "bergkvist/includeimage"
@@ -17,4 +18,4 @@ df [
     cmd [ "python" ]
 ]
 |> Dockerfile.render
-|> Dockerfile.toFile (Path.Combine(__SOURCE_DIRECTORY__, "Dockerfile.CustomSyntax"))
+|> Dockerfile.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.CustomSyntax"))

@@ -8,7 +8,7 @@ df [
     !/ "Simple Hello World dockerfile"
     from "alpine:3.18"
     br
-    cmd [| "echo"; "'Hello world'" |]
+    cmd [| "echo" ; "'Hello world'" |]
 ]
 |> Dockerfile.render
-|> Dockerfile.toFile (Path.Combine(__SOURCE_DIRECTORY__, "Dockerfile.HelloWorld"))
+|> Dockerfile.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.HelloWorld"))

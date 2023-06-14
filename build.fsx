@@ -33,14 +33,35 @@ let buildDirs = !! "**/bin" ++ "**/obj"
 
 Target.initEnvironment ()
 
-Target.create "Clean" (fun _ ->  Shell.deleteDirs buildDirs)
+Target.create "CodestyleCheck" (fun _ ->
+    let result =
+        DotNet.exec id "fantomas" "--recurse --check ."
+    
+    if result.ExitCode = 0 then
+        Trace.log "No files need formatting"
+    elif result.ExitCode = 99 then
+        failwith "Some files need formatting, check output for more info"
+    else
+        Trace.logf "Errors while formatting: %A" result.Errors
+)
+
+Target.create "CodestyleFormat" (fun _ -> 
+    DotNet.exec id "fantomas" "."
+    |> ignore
+)
+
+Target.create "Clean" (fun _ -> Shell.deleteDirs buildDirs)
 
 Target.create "Build" (fun _ -> DotNet.build id projFile)
 
 Target.create "RunTests" (fun _ -> 
     !! projTestFiles
     |> Seq.iter (
-        DotNet.test (fun opt -> { opt with Logger = Some "console;verbosity=detailed" })
+        DotNet.test (fun opt -> 
+            { opt with 
+                Logger = Some "console;verbosity=detailed" 
+            }
+        )
     )
 )
 

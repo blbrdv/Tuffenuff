@@ -7,9 +7,16 @@ open Tuffenuff.Domain.CE
 
 let healthcheck cmds = HealthcheckBuilder (cmds)
 
-let hc commands = HealthcheckInstruction.Create(commands)
+let hc commands =
+    HealthcheckInstruction.Create (commands)
 
-let disableHealthcheck = Simple { Name = "HEALTHCHECK"; Value = "NONE" } |> Instruction
+let disableHealthcheck =
+    Simple
+        {
+            Name = "HEALTHCHECK"
+            Value = "NONE"
+        }
+    |> Instruction
 
 let healthcheckNone = disableHealthcheck
 

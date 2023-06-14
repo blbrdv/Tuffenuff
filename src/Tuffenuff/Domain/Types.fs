@@ -10,85 +10,100 @@ open Tuffenuff.Domain.Collections
 //---------------------------------------------------------------------------------------
 
 
-type SimpleInstruction = { Name : string; Value : string }    
+type SimpleInstruction = { Name : string ; Value : string }
 
 
-type ListInstruction = { Name : string; Elements : Arguments }
+type ListInstruction =
+    { Name : string ; Elements : Arguments }
 
 
-type KVInstruction = { Name : string; Key : string; Value : string }
-
-
-type KVListInstruction = { Name : string; Elements : Parameters }
-
-
-type FromInstruction = 
-    { 
-        Image : string; 
-        Name : string option; 
-        Platform : string option 
+type KVInstruction =
+    {
+        Name : string
+        Key : string
+        Value : string
     }
-    with
-        static member Create(image) =
-            { Image = image; Name = None; Platform = None }
 
 
-type AddInstruction = 
-    { 
-        Chown : string option; 
-        Chmod : string option; 
-        Checksum : string option;
-        KeepGitDir : bool;
-        Link : bool;
+type KVListInstruction =
+    {
+        Name : string
+        Elements : Parameters
+    }
+
+
+type FromInstruction =
+    {
+        Image : string
+        Name : string option
+        Platform : string option
+    }
+
+    static member Create (image) =
+        {
+            Image = image
+            Name = None
+            Platform = None
+        }
+
+
+type AddInstruction =
+    {
+        Chown : string option
+        Chmod : string option
+        Checksum : string option
+        KeepGitDir : bool
+        Link : bool
         Elements : Arguments
     }
-    with
-        static member Create (elements) =
-            {
-                Chown = None;
-                Chmod = None;
-                Checksum = None;
-                KeepGitDir = false;
-                Link = false;
-                Elements = Arguments elements
-            }
+
+    static member Create (elements) =
+        {
+            Chown = None
+            Chmod = None
+            Checksum = None
+            KeepGitDir = false
+            Link = false
+            Elements = Arguments elements
+        }
 
 
-type CopyInstruction = 
-    { 
+type CopyInstruction =
+    {
         From : string option
-        Chown : string option; 
-        Chmod : string option;
-        Link : bool;
+        Chown : string option
+        Chmod : string option
+        Link : bool
         Elements : Arguments
     }
-    with
-        static member Create (elements) =
-            {
-                From = None;
-                Chown = None;
-                Chmod = None;
-                Link = false;
-                Elements = Arguments elements
-            }
+
+    static member Create (elements) =
+        {
+            From = None
+            Chown = None
+            Chmod = None
+            Link = false
+            Elements = Arguments elements
+        }
 
 
-type HealthcheckInstruction = 
-    { 
+type HealthcheckInstruction =
+    {
         Options : Parameters
         Instructions : Arguments
     }
-    with
-        static member Create(cmds) =
-            let instr =
-                match box (cmds) with
-                | :? string as s -> Arguments [ s ]
-                | :? IEnumerable<string> as ls -> Arguments ls
-                | _ -> raise (ArgumentException("Invalid argument type"))
-            { 
-                Options = Parameters []; 
-                Instructions = instr
-            }
+
+    static member Create (cmds) =
+        let instr =
+            match box (cmds) with
+            | :? string as s -> Arguments [ s ]
+            | :? IEnumerable<string> as ls -> Arguments ls
+            | _ -> raise (ArgumentException ("Invalid argument type"))
+
+        {
+            Options = Parameters []
+            Instructions = instr
+        }
 
 
 //---------------------------------------------------------------------------------------
@@ -102,7 +117,7 @@ type SharingType =
     | Locked
 
 
-type MountType = 
+type MountType =
     | Bind
     | Cache
     | Tmpfs
@@ -110,28 +125,31 @@ type MountType =
     | Ssh
 
 
-type MountParameters = 
+type MountParameters =
     {
-        Name : MountType;
+        Name : MountType
         Params : Parameters
     }
-    with
-        static member Create(name, key, value) =
-            { Name = name; Params = Dict [ key, value ] }
-        static member Create(name) =
-            { Name = name; Params = Dict.empty }
+
+    static member Create (name, key, value) =
+        {
+            Name = name
+            Params = Dict [ key, value ]
+        }
+
+    static member Create (name) = { Name = name ; Params = Dict.empty }
 
 
 type NetworkType =
     | DefaultNetwork
     | NoneNetwok
     | Host
-    
+
 
 type SecurityType =
     | Insecure
     | Sandbox
-    
+
 
 type RunInstruction =
     {
@@ -140,14 +158,14 @@ type RunInstruction =
         Security : SecurityType option
         Arguments : Arguments
     }
-    with
-        static member Create() =
-            {
-                Mounts = Collection.empty;
-                Network = None;
-                Security = None;
-                Arguments = Collection.empty;
-            }
+
+    static member Create () =
+        {
+            Mounts = Collection.empty
+            Network = None
+            Security = None
+            Arguments = Collection.empty
+        }
 
 
 //---------------------------------------------------------------------------------------
@@ -172,12 +190,7 @@ type InstructionType =
 and OnbuildInstruction = { Instruction : Entity }
 
 
-and Entity = 
+and Entity =
     | Plain of string
     | Instruction of InstructionType
     | Subpart of Entity seq
-
-
-
-
-

@@ -11,8 +11,9 @@ let tests =
         let errorMessage = "Records must be equals"
 
 
-        testCase "short syntax test" <| fun _ ->
-            let expected = 
+        testCase "short syntax test"
+        <| fun _ ->
+            let expected =
                 {
                     Mounts = Collection.empty
                     Network = None
@@ -25,20 +26,21 @@ let tests =
             let actual = !> "exit 0"
 
             Expect.equal actual expected errorMessage
-        
 
-        testCase "multiple commands test" <| fun _ ->
-            let expected = 
+
+        testCase "multiple commands test"
+        <| fun _ ->
+            let expected =
                 {
                     Mounts = Collection.empty
                     Network = None
                     Security = None
-                    Arguments = Arguments [ "make test"; "exit 0" ]
+                    Arguments = Arguments [ "make test" ; "exit 0" ]
                 }
                 |> Run
                 |> Instruction
 
-            let actual = 
+            let actual =
                 run {
                     cmd "make test"
                     cmd "exit 0"
@@ -47,27 +49,26 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "seq commands test" <| fun _ ->
-            let expected = 
+        testCase "seq commands test"
+        <| fun _ ->
+            let expected =
                 {
                     Mounts = Collection.empty
                     Network = None
                     Security = None
-                    Arguments = Arguments [ "apt-get install wget"; "exit 0" ]
+                    Arguments = Arguments [ "apt-get install wget" ; "exit 0" ]
                 }
                 |> Run
                 |> Instruction
 
-            let actual = 
-                run {
-                    cmds [ "apt-get install wget"; "exit 0" ]
-                }
+            let actual = run { cmds [ "apt-get install wget" ; "exit 0" ] }
 
             Expect.equal actual expected errorMessage
 
 
-        testCase "bind default mount test" <| fun _ ->
-            let expected = 
+        testCase "bind default mount test"
+        <| fun _ ->
+            let expected =
                 {
                     Name = Bind
                     Params = Dict [ "target", "/" ]
@@ -78,19 +79,21 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "bind full mount test" <| fun _ ->
-            let expected = 
+        testCase "bind full mount test"
+        <| fun _ ->
+            let expected =
                 {
                     Name = Bind
-                    Params = Dict [ 
-                        "target", "/"
-                        "source", "/"
-                        "from", "/etc"
-                        "rw", "true"
-                    ]
+                    Params =
+                        Dict [
+                            "target", "/"
+                            "source", "/"
+                            "from", "/etc"
+                            "rw", "true"
+                        ]
                 }
 
-            let actual = 
+            let actual =
                 bindParams "/" {
                     source "/"
                     from "/etc"
@@ -100,8 +103,9 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "cache default mount test" <| fun _ ->
-            let expected = 
+        testCase "cache default mount test"
+        <| fun _ ->
+            let expected =
                 {
                     Name = Cache
                     Params = Dict [ "target", "/" ]
@@ -112,24 +116,26 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "cache full mount test" <| fun _ ->
-            let expected = 
+        testCase "cache full mount test"
+        <| fun _ ->
+            let expected =
                 {
                     Name = Cache
-                    Params = Dict [ 
-                        "target", "/"
-                        "id", "app"
-                        "ro", "true"
-                        "sharing", "private"
-                        "source", "/"
-                        "from", "/etc/.cache"
-                        "UID", "1"
-                        "mode", "0755"
-                        "GID", "2"
-                    ]
+                    Params =
+                        Dict [
+                            "target", "/"
+                            "id", "app"
+                            "ro", "true"
+                            "sharing", "private"
+                            "source", "/"
+                            "from", "/etc/.cache"
+                            "UID", "1"
+                            "mode", "0755"
+                            "GID", "2"
+                        ]
                 }
 
-            let actual = 
+            let actual =
                 cacheParams "/" {
                     source "/"
                     id "app"
@@ -145,8 +151,9 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "tmpfs default mount test" <| fun _ ->
-            let expected = 
+        testCase "tmpfs default mount test"
+        <| fun _ ->
+            let expected =
                 {
                     Name = Tmpfs
                     Params = Dict [ "target", "/" ]
@@ -157,39 +164,36 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "tmpfs full mount test" <| fun _ ->
-            let expected = 
+        testCase "tmpfs full mount test"
+        <| fun _ ->
+            let expected =
                 {
                     Name = Tmpfs
-                    Params = Dict [ 
-                        "target", "/"
-                        "size", "1"
-                    ]
+                    Params = Dict [ "target", "/" ; "size", "1" ]
                 }
 
-            let actual = 
-                tmpfsParams "/" {
-                    size 1
-                }
+            let actual = tmpfsParams "/" { size 1 }
 
             Expect.equal actual expected errorMessage
 
 
-        testCase "secret mount test" <| fun _ ->
-            let expected = 
+        testCase "secret mount test"
+        <| fun _ ->
+            let expected =
                 {
                     Name = Secret
-                    Params = Dict [ 
-                        "target", "/"
-                        "id", "app"
-                        "required", "true"
-                        "mode", "0400"
-                        "UID", "1"
-                        "GID", "2"
-                    ]
+                    Params =
+                        Dict [
+                            "target", "/"
+                            "id", "app"
+                            "required", "true"
+                            "mode", "0400"
+                            "UID", "1"
+                            "GID", "2"
+                        ]
                 }
 
-            let actual = 
+            let actual =
                 secret {
                     id "app"
                     target "/"
@@ -202,21 +206,23 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "ssh mount test" <| fun _ ->
-            let expected = 
+        testCase "ssh mount test"
+        <| fun _ ->
+            let expected =
                 {
                     Name = Ssh
-                    Params = Dict [ 
-                        "target", "/"
-                        "id", "app"
-                        "required", "true"
-                        "mode", "0600"
-                        "UID", "1"
-                        "GID", "2"
-                    ]
+                    Params =
+                        Dict [
+                            "target", "/"
+                            "id", "app"
+                            "required", "true"
+                            "mode", "0600"
+                            "UID", "1"
+                            "GID", "2"
+                        ]
                 }
 
-            let actual = 
+            let actual =
                 ssh {
                     id "app"
                     target "/"
@@ -229,8 +235,9 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "network test" <| fun _ ->
-            let expected = 
+        testCase "network test"
+        <| fun _ ->
+            let expected =
                 {
                     Mounts = Collection.empty
                     Network = Some DefaultNetwork
@@ -240,7 +247,7 @@ let tests =
                 |> Run
                 |> Instruction
 
-            let actual = 
+            let actual =
                 run {
                     network DefaultNetwork
                     cmd "exit 0"
@@ -249,8 +256,9 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "security test" <| fun _ ->
-            let expected = 
+        testCase "security test"
+        <| fun _ ->
+            let expected =
                 {
                     Mounts = Collection.empty
                     Network = None
@@ -260,7 +268,7 @@ let tests =
                 |> Run
                 |> Instruction
 
-            let actual = 
+            let actual =
                 run {
                     security Sandbox
                     cmd "exit 0"
@@ -269,48 +277,45 @@ let tests =
             Expect.equal actual expected errorMessage
 
 
-        testCase "averything at once test" <| fun _ ->
-            let expected = 
+        testCase "averything at once test"
+        <| fun _ ->
+            let expected =
                 {
-                    Mounts = Collection [
-                        {
-                            Name = Cache
-                            Params = Dict [
-                                "target", "/var/cache/apt"
-                                "sharing", "locked"
-                            ]
-                        }
-                        {
-                            Name = Cache
-                            Params = Dict [
-                                "target", "/var/lib/apt"
-                                "sharing", "locked"
-                            ]
-                        }
-                    ]
+                    Mounts =
+                        Collection [
+                            {
+                                Name = Cache
+                                Params =
+                                    Dict [
+                                        "target", "/var/cache/apt"
+                                        "sharing", "locked"
+                                    ]
+                            }
+                            {
+                                Name = Cache
+                                Params =
+                                    Dict [
+                                        "target", "/var/lib/apt"
+                                        "sharing", "locked"
+                                    ]
+                            }
+                        ]
                     Network = Some NoneNetwok
                     Security = Some Insecure
-                    Arguments = Arguments [ 
-                        "make tests"
-                        "apt-get install wget"
-                        "exit 0" 
-                    ]
+                    Arguments =
+                        Arguments [ "make tests" ; "apt-get install wget" ; "exit 0" ]
                 }
                 |> Run
                 |> Instruction
 
-            let actual = 
+            let actual =
                 run {
-                    mount (cacheParams "/var/cache/apt" {
-                        sharing Locked
-                    })
-                    mount (cacheParams "/var/lib/apt" {
-                        sharing Locked
-                    })
+                    mount (cacheParams "/var/cache/apt" { sharing Locked })
+                    mount (cacheParams "/var/lib/apt" { sharing Locked })
                     network NoneNetwok
                     security Insecure
                     cmd "make tests"
-                    cmds [ "apt-get install wget"; "exit 0" ]
+                    cmds [ "apt-get install wget" ; "exit 0" ]
                 }
 
             Expect.equal actual expected errorMessage

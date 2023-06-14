@@ -13,9 +13,10 @@ open System.IO
 open Tuffenuff
 
 df [
-    fresh
-    cp [] "hello" "/"
-    cmd [ "/hello" ]
+    !/ "Simple Hello World dockerfile"
+    from "alpine:3.18"
+    br
+    cmd [| "echo" ; "'Hello world'" |]
 ]
 |> render
 |> toFile (Path.Combine(__SOURCE_DIRECTORY__, "Dockerfile"))
@@ -24,9 +25,10 @@ df [
 will create `Dockerfile` with following content:
 
 ```Dockerfile
-FROM scratch
-COPY hello /
-CMD /hello
+# Simple Hello World dockerfile
+FROM alpine:3.18
+
+CMD [ "echo", "'Hello world'" ]
 ```
 
 For more see [examples](https://github.com/blbrdv/Tuffenuff/tree/main/examples):
