@@ -39,6 +39,8 @@
     <Compile Include="DSL/From.fs" />
     <Compile Include="DSL/Healthcheck.fs" />
     <Compile Include="DSL/Meta.fs" />
+    <Compile Include="DSL/LabelSchema.fs" />
+    <Compile Include="DSL/OpenContainers.fs" />
     <Compile Include="DSL/Run.fs" />
     <Compile Include="DSL/Variables.fs" />
     <Compile Include="Tuffenuff.fs" />
