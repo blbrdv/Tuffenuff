@@ -34,6 +34,7 @@
     <Compile Include="Domain/Types.fs" />
     <Compile Include="Domain/CE.fs" />
     <Compile Include="DSL/Comments.fs" />
+    <Compile Include="DSL/DockerfileSyntax.fs" />
     <Compile Include="DSL/Configuration.fs" />
     <Compile Include="DSL/FileSystem.fs" />
     <Compile Include="DSL/From.fs" />
