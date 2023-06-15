@@ -2,6 +2,16 @@
 [![Common Changelog](https://common-changelog.org/badge.svg)](https://common-changelog.org)
 
 
+## [0.1.0] - 2023-06-15
+
+### Added
+
+- Added pre-defined elements:
+   - `LabelSchema` and `OpenContainers` labels
+   - Dockerfile version syntax comments
+   - Global ARGs
+
+
 ## [0.0.4-beta] - 2023-06-15
 
 ### Added
@@ -43,7 +53,8 @@
 Initial release.
 
 
-[0.0.3-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.3-beta
+[0.1.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.1.0
+[0.0.4-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.4-beta
 [0.0.3-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.3-beta
 [0.0.2-alpha]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.2-alpha
 [0.0.1-alpha]: https://www.nuget.org/packages/Tuffenuff/0.0.1-alpha
