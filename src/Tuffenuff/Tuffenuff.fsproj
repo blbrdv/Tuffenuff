@@ -10,7 +10,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>
     <Product>Tuffenuff</Product>
-    <Version>0.0.4-beta</Version>
+    <Version>0.1.0</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>false</IncludeSymbols>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -34,13 +34,17 @@
     <Compile Include="Domain/Types.fs" />
     <Compile Include="Domain/CE.fs" />
     <Compile Include="DSL/Comments.fs" />
+    <Compile Include="DSL/DockerfileSyntax.fs" />
     <Compile Include="DSL/Configuration.fs" />
     <Compile Include="DSL/FileSystem.fs" />
     <Compile Include="DSL/From.fs" />
     <Compile Include="DSL/Healthcheck.fs" />
     <Compile Include="DSL/Meta.fs" />
+    <Compile Include="DSL/LabelSchema.fs" />
+    <Compile Include="DSL/OpenContainers.fs" />
     <Compile Include="DSL/Run.fs" />
     <Compile Include="DSL/Variables.fs" />
+    <Compile Include="DSL/GlobalArgs.fs" />
     <Compile Include="Tuffenuff.fs" />
   </ItemGroup>
 
