@@ -1,4 +1,4 @@
-<img align="left" width="80" height="80" src="imgs/logo.png" alt="logo">
+<img align="left" width="80" height="57" src="imgs/logo.png" alt="logo">
 
 # Tuffenuff
 
