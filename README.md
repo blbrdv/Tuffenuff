@@ -41,7 +41,7 @@ CMD [ "echo", "'Hello world'" ]
 
 For more see [examples](examples/).
 
-## Build
+## Local development
 
 1. Install DotNet SDK version [6.0.x](https://dotnet.microsoft.com/download/dotnet/6.0)
 2. Run `dotnet tool restore`
@@ -53,3 +53,7 @@ For more see [examples](examples/).
     - `RunTests`
 
 See `build.fsx` source code for more info.
+
+### Scripts
+
+`Scripts` directory contains useful fsx files for code generation.
