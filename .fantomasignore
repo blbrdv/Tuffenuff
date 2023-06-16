@@ -4,3 +4,6 @@ xtest.fsx
 # FAKE
 .fake
 build.fsx
+
+# scripts
+scripts
