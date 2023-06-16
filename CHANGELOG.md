@@ -2,6 +2,13 @@
 [![Common Changelog](https://common-changelog.org/badge.svg)](https://common-changelog.org)
 
 
+## [0.1.1] - 2023-06-16
+
+### Changed
+
+- Updated pre-defined dockerfile version syntax comments
+
+
 ## [0.1.0] - 2023-06-15
 
 ### Added
@@ -53,6 +60,7 @@
 Initial release.
 
 
+[0.1.1]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.1.1
 [0.1.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.1.0
 [0.0.4-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.4-beta
 [0.0.3-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.3-beta
