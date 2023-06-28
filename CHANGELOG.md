@@ -2,6 +2,13 @@
 [![Common Changelog](https://common-changelog.org/badge.svg)](https://common-changelog.org)
 
 
+## [0.2.0] - 2023-06-29
+
+### Changed
+
+- Completely reworked DSL syntax ([#13](https://github.com/blbrdv/Tuffenuff/issues/13))
+
+
 ## [0.1.1] - 2023-06-16
 
 ### Changed
@@ -60,6 +67,7 @@
 Initial release.
 
 
+[0.2.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.2.0
 [0.1.1]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.1.1
 [0.1.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.1.0
 [0.0.4-beta]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.0.4-beta

@@ -10,7 +10,8 @@
 
 ## Usage
 
-⚠️ **WARNING**: project in the early stages of development, the API can change a lot!
+> **Warning**
+> This project in the early stages of development, the API can change a lot!
 
 Simple "Hello, World!":
 
