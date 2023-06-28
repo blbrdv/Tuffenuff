@@ -30,21 +30,11 @@
   <ItemGroup>
     <Compile Include="String.fs" />
     <Compile Include="StringCE.fs" />
-    <Compile Include="Domain/Collections.fs" />
-    <Compile Include="Domain/Types.fs" />
-    <Compile Include="Domain/CE.fs" />
-    <Compile Include="DSL/Comments.fs" />
-    <Compile Include="DSL/DockerfileSyntax.fs" />
-    <Compile Include="DSL/Configuration.fs" />
-    <Compile Include="DSL/FileSystem.fs" />
-    <Compile Include="DSL/From.fs" />
-    <Compile Include="DSL/Healthcheck.fs" />
-    <Compile Include="DSL/Meta.fs" />
-    <Compile Include="DSL/LabelSchema.fs" />
-    <Compile Include="DSL/OpenContainers.fs" />
-    <Compile Include="DSL/Run.fs" />
-    <Compile Include="DSL/Variables.fs" />
-    <Compile Include="DSL/GlobalArgs.fs" />
+    <Compile Include="Domain/Entity.fs" />
+    <Compile Include="Domain/DSL.fs" />
+    <Compile Include="Domain/Image.fs" />
+    <Compile Include="Domain/ImageCE.fs" />
+    <Compile Include="Image.fs" />
     <Compile Include="Tuffenuff.fs" />
   </ItemGroup>
 

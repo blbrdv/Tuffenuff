@@ -3,21 +3,21 @@
 
 open System.IO
 open Tuffenuff
-open Tuffenuff.DSL
+open Tuffenuff.Domain.ImageCE
 open Partial.part
 
 let part1 = echoMaessage ()
 
 let part2 =
-    Dockerfile.fromFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.part"))
+    Image.fromFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.part"))
 
-df [
-    !/ "Partial dockerfile"
-    from "ubuntu:latest"
-    br
-    !&part1
-    br
-    !&part2
-]
-|> Dockerfile.render
-|> Dockerfile.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.Partial"))
+image {
+    cmt "Partial dockerfile"
+    FROM "ubuntu:latest"
+    ___
+    incl part1
+    ___
+    incl part2
+}
+|> Image.render
+|> Image.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.Partial"))

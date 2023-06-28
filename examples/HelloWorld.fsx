@@ -2,13 +2,13 @@
 
 open System.IO
 open Tuffenuff
-open Tuffenuff.DSL
+open Tuffenuff.Domain.ImageCE
 
-df [
-    !/ "Simple Hello World dockerfile"
-    from "alpine:3.18"
-    br
-    cmd [| "echo" ; "'Hello world'" |]
-]
-|> Dockerfile.render
-|> Dockerfile.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.HelloWorld"))
+image {
+    cmt "Simple Hello World dockerfile"
+    FROM "alpine:3.18"
+    ___
+    CMD [| "echo" ; "'Hello world'" |]
+}
+|> Image.render
+|> Image.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.HelloWorld"))

@@ -1,10 +1,10 @@
 #r @"../src/Tuffenuff/bin/Release/netstandard2.0/Tuffenuff.dll"
 
 open Tuffenuff
-open Tuffenuff.DSL
+open Tuffenuff.Domain.ImageCE
 
 let echoMaessage () =
-    df [
-        !/ "this is from 'Partial.part.fsx'"
-        !> """echo 'echo "Shalom!"' > /etc/profile.d/welcome.sh"""
-    ]
+    stage {
+        cmt "this is from 'Partial.part.fsx'"
+        RUN ["""echo 'echo "Shalom!"' > /etc/profile.d/welcome.sh"""]
+    }
