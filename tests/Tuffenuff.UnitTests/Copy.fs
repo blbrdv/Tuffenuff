@@ -44,7 +44,7 @@ let tests =
                 |> Instruction
 
             let actual =
-                copyOpts [ "/a" ; "/b" ] {
+                copyParams [ "/a" ; "/b" ] {
                     from' "builder"
                     chown "myuser:mygroup"
                     chmod "644"

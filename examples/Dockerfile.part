@@ -1,2 +1,2 @@
 # this is from 'Dockerfile.part'
-ENTRYPOINT [ "/bin/bash", "-l" ]
+entrypoint [ "/bin/bash", "-l" ]

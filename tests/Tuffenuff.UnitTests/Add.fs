@@ -11,15 +11,6 @@ let tests =
         let errorMessage = "Records must be equals"
 
 
-        testCase "short syntax test"
-        <| fun _ ->
-            let expected = AddInstruction.Create ([ "/a" ; "/b" ]) |> Add |> Instruction
-
-            let actual = !@ "/a" "/b"
-
-            Expect.equal actual expected errorMessage
-
-
         testCase "multiple sources test"
         <| fun _ ->
             let expected =

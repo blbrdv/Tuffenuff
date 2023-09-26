@@ -6,9 +6,8 @@ open Tuffenuff.Domain.ImageCE
 
 image {
     cmt "Simple Hello World dockerfile"
-    FROM "alpine:3.18"
-    ___
-    CMD [| "echo" ; "'Hello world'" |]
+    from "alpine:3.18"
+    
+    cmd [| "echo" ; "'Hello world'" |]
 }
-|> Image.render
 |> Image.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.HelloWorld"))

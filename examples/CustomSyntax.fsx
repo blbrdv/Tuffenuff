@@ -6,23 +6,23 @@ open Tuffenuff.Domain.ImageCE
 open Tuffenuff.Domain.Image
 open Tuffenuff.Domain.Entity
 
-type IImageContext<'self> with
-    [<CustomOperation("INCLUDE")>]
-    member __.CustomInclude(context : IImageContext<'a>, name : string) =
+type ImageBuilder with
+    [<CustomOperation("include")>]
+    member __.CustomInclude(context : Image, name : string) =
         { Name = "INCLUDE" ; Value = name } 
         |> Simple
         |> Instruction
         |> context.Add
-    
+
 
 image {
     syntax "bergkvist/includeimage"
+
     cmt "Custom syntax example"
-    FROM "alpine:3.12"
-    ___
-    INCLUDE "python:3.8.3-alpine3.12"
-    ___
-    CMD [ "python" ]
+    from "alpine:3.12"
+    
+    include "python:3.8.3-alpine3.12"
+    
+    cmd [ "python" ]
 }
-|> Image.render
 |> Image.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.CustomSyntax"))

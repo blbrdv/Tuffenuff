@@ -11,23 +11,6 @@ let tests =
         let errorMessage = "Records must be equals"
 
 
-        testCase "short syntax test"
-        <| fun _ ->
-            let expected =
-                {
-                    Mounts = Collection.empty
-                    Network = None
-                    Security = None
-                    Arguments = Arguments [ "exit 0" ]
-                }
-                |> Run
-                |> Instruction
-
-            let actual = !> "exit 0"
-
-            Expect.equal actual expected errorMessage
-
-
         testCase "multiple commands test"
         <| fun _ ->
             let expected =

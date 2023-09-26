@@ -6,5 +6,5 @@ open Tuffenuff.Domain.ImageCE
 let echoMaessage () =
     stage {
         cmt "this is from 'Partial.part.fsx'"
-        RUN ["""echo 'echo "Shalom!"' > /etc/profile.d/welcome.sh"""]
+        run ["""echo 'echo "Shalom!"' > /etc/profile.d/welcome.sh"""]
     }

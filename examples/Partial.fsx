@@ -13,11 +13,10 @@ let part2 =
 
 image {
     cmt "Partial dockerfile"
-    FROM "ubuntu:latest"
-    ___
+    from "ubuntu:latest"
+    
     incl part1
-    ___
+    
     incl part2
 }
-|> Image.render
 |> Image.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.Partial"))

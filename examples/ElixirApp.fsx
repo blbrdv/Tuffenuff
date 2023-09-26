@@ -6,17 +6,15 @@ open Tuffenuff.Domain.ImageCE
 
 image {
     cmt "Hello World Elexir dockerfile"
+    stage "bitnami/git:latest" "repo"
+    workdir "/"
+    run ["git clone https://github.com/rjNemo/docker_examples.git"]
 
-    FROM "bitnami/git:latest" AS "repo"
-    WORKDIR "/"
-    RUN ["git clone https://github.com/rjNemo/docker_examples.git"]
-
-    ___
-    FROM "elixir:1.14-alpine"
-    WORKDIR "/app"
-    COPY [ "/docker_examples/elixir/hello.exs" ; "." ] 
-    FROM "repo"
-    CMD [| "elixir" ; "hello.exs" |]
+    from "elixir:1.14-alpine"
+    workdir "/app"
+    copy [ "/docker_examples/elixir/hello.exs" ; "." ] 
+    
+    from "repo"
+    cmd [| "elixir" ; "hello.exs" |]
 }
-|> Image.render
 |> Image.toFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.ElixirApp"))
