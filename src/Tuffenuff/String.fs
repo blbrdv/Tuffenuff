@@ -12,7 +12,7 @@ let eol_slash = sprintf " \\%s    " eol
 let quote value = sprintf "%c%s%c" '"' (string value) '"'
 
 
-let print name value = sprintf "%s %s" name value
+let print name value = sprintf "%s %s%s" name value eol
 
 
 let printKV key value = sprintf "%s=%s" key value

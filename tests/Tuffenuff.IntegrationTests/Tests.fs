@@ -11,7 +11,7 @@ let testFuncs =
     )
     |> Seq.where (fun file -> file.EndsWith (".fsx") && not (file.Contains ("part")))
     |> Seq.map (fun file ->
-        let filename = Path.GetFileName(file).Split ('.')[0]
+        let filename = (Path.GetFileName(file).Split ('.'))[0]
 
         testCase $"'{filename}' test"
         <| fun () ->
