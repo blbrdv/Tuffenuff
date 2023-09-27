@@ -31,7 +31,11 @@ module Dockerfile =
     let render df =
         let rec renderInstruction instr =
             match instr with
-            | Simple s -> print s.Name s.Value
+            | Simple s -> 
+                if s.Name = "#" then
+                    sprintf "%s %s" s.Name s.Value
+                else
+                    print s.Name s.Value
 
             | SimpleQuoted s -> print s.Name (quote s.Value)
 
@@ -47,6 +51,8 @@ module Dockerfile =
                     l.Elements
                     |> Seq.map (fun e -> printKVQ e.Key e.Value)
                     |> String.concat eol_slash
+
+                    eol
                 }
 
             | From f ->
@@ -57,6 +63,8 @@ module Dockerfile =
 
                     if f.Name.IsSome then
                         sprintf " AS %s" f.Name.Value
+
+                    eol
                 }
 
             | Run r ->
@@ -80,7 +88,7 @@ module Dockerfile =
                         arg
                 }
                 |> String.concat eol_slash
-                |> sprintf "RUN%s%s" eol_slash
+                |> sprintf "RUN%s%s%s" eol_slash <| eol
 
             | Add a ->
                 str {
@@ -95,6 +103,8 @@ module Dockerfile =
                     printParameter "checksum" a.Checksum
                     " "
                     printList a.Elements.Collection
+                        
+                    eol
                 }
 
             | Copy cp ->
@@ -106,21 +116,26 @@ module Dockerfile =
                     printParameter "chown" cp.Chown
                     " "
                     printList cp.Elements.Collection
+                        
+                    eol
                 }
 
             | Healthcheck hc ->
-                seq {
-                    "HEALTCHECK"
+                let hcstr = 
+                    seq {
+                        "HEALTCHECK"
 
-                    for opt in hc.Options do
-                        printParameter opt.Key (Some opt.Value)
+                        for opt in hc.Options do
+                            printParameter opt.Key (Some opt.Value)
 
-                    "CMD"
-                    printList hc.Instructions.Collection
-                }
-                |> String.concat " "
+                        "CMD"
+                        printList hc.Instructions.Collection
+                    }
+                    |> String.concat " "
 
-            | Onbuild onb -> seq { onb.Instruction } |> r |> sprintf "ONBUILD %s"
+                hcstr + eol
+
+            | Onbuild onb -> seq { onb.Instruction } |> r |> sprintf "ONBUILD %s\n"
 
         and r sub =
             sub
@@ -132,7 +147,7 @@ module Dockerfile =
             )
             |> String.concat eol
 
-        r df |> trim |> sprintf "%s%s" <| eol
+        r df |> trim
 
 
     let toFile (path : string) (text : string) = File.WriteAllText (path, text)

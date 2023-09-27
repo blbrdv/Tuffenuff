@@ -39,4 +39,4 @@ examples/Dockerfile.*
 !examples/Dockerfile.part
 
 # experiments
-x*.fsx
+x*

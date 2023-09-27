@@ -14,9 +14,7 @@ let part2 =
 df [
     !/ "Partial dockerfile"
     from "ubuntu:latest"
-    br
     !&part1
-    br
     !&part2
 ]
 |> Dockerfile.render

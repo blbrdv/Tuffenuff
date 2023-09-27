@@ -1,10 +1,15 @@
 # Hello World Elexir dockerfile
 FROM bitnami/git:latest AS repo
+
 WORKDIR "/"
+
 RUN \
     git clone https://github.com/rjNemo/docker_examples.git
 
 FROM elixir:1.14-alpine
+
 WORKDIR "/app"
+
 COPY --from=repo /docker_examples/elixir/hello.exs .
+
 CMD [ "elixir", "hello.exs" ]

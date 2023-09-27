@@ -15,7 +15,7 @@ let tests =
 
         testCase "print test"
         <| fun _ ->
-            Expect.equal (print "INSTRUCTION" "argument") "INSTRUCTION argument"
+            Expect.equal (print "INSTRUCTION" "argument") (sprintf "INSTRUCTION argument%s" eol)
             <| "Instruction and argument should be printed separately"
 
 

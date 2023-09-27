@@ -11,7 +11,6 @@ df [
     workdir "/"
     !> "git clone https://github.com/rjNemo/docker_examples.git"
 
-    br
     from "elixir:1.14-alpine"
     workdir "/app"
     copyOpts [ "/docker_examples/elixir/hello.exs" ; "." ] { from' "repo" }
