@@ -12,9 +12,9 @@ df [
     syntax "bergkvist/includeimage"
     !/ "Custom syntax example"
     from "alpine:3.12"
-    
+
     !+ "python:3.8.3-alpine3.12"
-    
+
     cmd [ "python" ]
 ]
 |> Dockerfile.render

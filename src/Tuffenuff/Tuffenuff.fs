@@ -31,7 +31,7 @@ module Dockerfile =
     let render df =
         let rec renderInstruction instr =
             match instr with
-            | Simple s -> 
+            | Simple s ->
                 if s.Name = "#" then
                     sprintf "%s %s" s.Name s.Value
                 else
@@ -88,7 +88,8 @@ module Dockerfile =
                         arg
                 }
                 |> String.concat eol_slash
-                |> sprintf "RUN%s%s%s" eol_slash <| eol
+                |> sprintf "RUN%s%s%s" eol_slash
+                <| eol
 
             | Add a ->
                 str {
@@ -103,7 +104,7 @@ module Dockerfile =
                     printParameter "checksum" a.Checksum
                     " "
                     printList a.Elements.Collection
-                        
+
                     eol
                 }
 
@@ -116,12 +117,12 @@ module Dockerfile =
                     printParameter "chown" cp.Chown
                     " "
                     printList cp.Elements.Collection
-                        
+
                     eol
                 }
 
             | Healthcheck hc ->
-                let hcstr = 
+                let hcstr =
                     seq {
                         "HEALTCHECK"
 
