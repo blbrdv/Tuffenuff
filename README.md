@@ -6,11 +6,9 @@
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blbrdv/Tuffenuff/release.yaml?style=flat-square)](https://github.com/blbrdv/Tuffenuff/actions?query=branch%3Arelease)
 [![Nuget version](https://img.shields.io/nuget/v/Tuffenuff?style=flat-square)](https://www.nuget.org/packages/Tuffenuff/)
 
-> The goal of this project is to make it simple to generate dockerfiles using a F# DSL by offering complete syntax support and the ability to create dockerfile from multiple parts.
+Simple F# DSL for generating dockerfiles.
 
 ## Usage
-
-⚠️ **WARNING**: project in the early stages of development, the API can change a lot!
 
 Simple "Hello, World!":
 
@@ -23,7 +21,6 @@ open Tuffenuff
 df [
     !/ "Simple Hello World dockerfile"
     from "alpine:3.18"
-    br
     cmd [| "echo" ; "'Hello world'" |]
 ]
 |> render
@@ -53,7 +50,3 @@ For more see [examples](examples/).
     - `RunTests`
 
 See `build.fsx` source code for more info.
-
-### Scripts
-
-`Scripts` directory contains useful fsx files for code generation.
