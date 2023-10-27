@@ -1,4 +1,4 @@
-#r @"../src/Tuffenuff/bin/Release/netstandard2.0/Tuffenuff.dll"
+#r "nuget: Tuffenuff"
 
 open Tuffenuff
 open Tuffenuff.DSL
