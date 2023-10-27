@@ -15,6 +15,6 @@ let (!/) = comment
 /// image</summary>
 let syntax value = !/(sprintf "syntax=%s" value)
 
-/// <summary>Sets the character used to escape characters in a Dockerfile. Default is 
+/// <summary>Sets the character used to escape characters in a Dockerfile. Default is
 /// <c>\</c></summary>
 let escape value = !/(sprintf "escape=%c" value)
