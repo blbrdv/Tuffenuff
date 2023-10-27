@@ -1,5 +1,11 @@
 # Changelog
-[![Common Changelog](https://common-changelog.org/badge.svg)](https://common-changelog.org)
+
+## [1.0.0] - 2023-10-27
+
+### Added
+
+- Functions summary
+
 
 ## [0.2.0] - 2023-09-27
 
@@ -66,6 +72,7 @@
 Initial release.
 
 
+[1.0.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v1.0.0
 [0.2.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.2.0
 [0.1.1]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.1.1
 [0.1.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.1.0
