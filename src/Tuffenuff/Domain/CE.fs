@@ -351,28 +351,33 @@ type RunInstructionBuilder() =
 
     member __.Yield _ = RunInstruction.Create ()
 
+    /// <summary>Sets command to run.</summary>
     [<CustomOperation "cmd">]
     member __.Command (state : RunInstruction, cmd : string) =
         { state with
             Arguments = state.Arguments.Add (cmd)
         }
 
+    /// <summary>Sets commands to run.</summary>
     [<CustomOperation "cmds">]
     member __.Arguments (state : RunInstruction, cmds : string seq) =
         { state with
             Arguments = state.Arguments.Append (Arguments cmds)
         }
 
+    /// <summary>Sets mount for the container.</summary>
     [<CustomOperation "mount">]
     member __.Mount (state : RunInstruction, mount : MountParameters) =
         { state with
             Mounts = state.Mounts.Add (mount)
         }
 
+    /// <summary>Specify the network mode for the container.</summary>
     [<CustomOperation "network">]
     member __.Network (state : RunInstruction, network : NetworkType) =
         { state with Network = Some network }
 
+    /// <summary>Specify the security mode for the container.</summary>
     [<CustomOperation "security">]
     member __.Security (state : RunInstruction, security : SecurityType) =
         { state with Security = Some security }
