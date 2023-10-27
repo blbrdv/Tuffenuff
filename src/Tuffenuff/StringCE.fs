@@ -4,10 +4,10 @@ module Tuffenuff.StringCE
 open System.Text
 
 
-type internal StringBuffer = StringBuilder -> unit
+type StringBuffer = StringBuilder -> unit
 
 
-type internal StringBufferBuilder() =
+type StringBufferBuilder() =
     member inline __.Yield (txt : string) =
         fun (b : StringBuilder) -> Printf.bprintf b "%s" txt
 
@@ -48,10 +48,10 @@ type internal StringBufferBuilder() =
         b.ToString ()
 
 
-let internal str = new StringBufferBuilder ()
+let str = new StringBufferBuilder ()
 
 
-type internal StringBufferBuilder with
+type StringBufferBuilder with
 
     member inline __.Yield (b : byte) =
         fun (sb : StringBuilder) -> Printf.bprintf sb "%02x " b
