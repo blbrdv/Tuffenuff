@@ -31,11 +31,7 @@ FROM alpine:3.18
 CMD [ "echo", "'Hello world'" ]
 ```
 
-For more see [examples](https://github.com/blbrdv/Tuffenuff/tree/main/examples):
-
-## Documentation
-
-**WIP**
+For more see [examples](https://github.com/blbrdv/Tuffenuff/tree/main/examples).
 
 ## Release notes
 
