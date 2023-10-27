@@ -4,6 +4,8 @@ module Tuffenuff.DSL.Comments
 open Tuffenuff.Domain.Types
 
 
+/// <summary>Comment for providing information about the Dockerfile or explaining the
+/// purpose of individual instructions.</summary>
 let comment text =
     Simple { Name = "#" ; Value = text } |> Instruction
 
