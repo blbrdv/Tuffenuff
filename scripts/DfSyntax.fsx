@@ -8,7 +8,6 @@
 
 module DockerHub =
     open FsHttp
-    open FsHttp.CSharp
 
 
     type Tag = 
@@ -29,7 +28,7 @@ module DockerHub =
             GET url
         }
         |> Request.send
-        |> Response.AssertOk
+        |> Response.assert2xx
         |> Response.deserializeJson<Page>
 
 
