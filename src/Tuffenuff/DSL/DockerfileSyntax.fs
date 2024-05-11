@@ -10,6 +10,36 @@ let v1_labs = syntax "docker/dockerfile:1-labs"
 ///<summary><c>1-experimental</c> version of docker syntax</summary>
 let v1_experimental = syntax "docker/dockerfile:1-experimental"
 
+///<summary><c>1.7-labs</c> version of docker syntax</summary>
+let v1_7_labs = syntax "docker/dockerfile:1.7-labs"
+
+///<summary><c>1.7.1-labs</c> version of docker syntax</summary>
+let v1_7_1_labs = syntax "docker/dockerfile:1.7.1-labs"
+
+///<summary><c>1.7.1</c> version of docker syntax</summary>
+let v1_7_1 = syntax "docker/dockerfile:1.7.1"
+
+///<summary><c>1.7.0-labs</c> version of docker syntax</summary>
+let v1_7_0_labs = syntax "docker/dockerfile:1.7.0-labs"
+
+///<summary><c>1.7.0</c> version of docker syntax</summary>
+let v1_7_0 = syntax "docker/dockerfile:1.7.0"
+
+///<summary><c>1.7</c> version of docker syntax</summary>
+let v1_7 = syntax "docker/dockerfile:1.7"
+
+///<summary><c>1.6-labs</c> version of docker syntax</summary>
+let v1_6_labs = syntax "docker/dockerfile:1.6-labs"
+
+///<summary><c>1.6.0-labs</c> version of docker syntax</summary>
+let v1_6_0_labs = syntax "docker/dockerfile:1.6.0-labs"
+
+///<summary><c>1.6.0</c> version of docker syntax</summary>
+let v1_6_0 = syntax "docker/dockerfile:1.6.0"
+
+///<summary><c>1.6</c> version of docker syntax</summary>
+let v1_6 = syntax "docker/dockerfile:1.6"
+
 ///<summary><c>1.5-labs</c> version of docker syntax</summary>
 let v1_5_labs = syntax "docker/dockerfile:1.5-labs"
 
