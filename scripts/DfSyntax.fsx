@@ -3,18 +3,194 @@
     https://hub.docker.com/r/docker/dockerfile/tags
 *)
 
-#r "nuget: FsHttp"
+#r "nuget: FsHttp, 15.0.1"
+#r "nuget: FParsec, 1.1.1"
 
+open System.Text
+let (!>) (str: StringBuilder) (text : string) = str.Append(text) |> ignore
+
+module Version =
+        
+    type SemVer =
+        struct
+            val Major: uint8
+            val Minor: uint8 option
+            val Patch: uint8 option
+            val Prerelease: string option
+            val Name: string
+            val Raw: string
+            
+            new (value: uint8 * (uint8 * uint8 option) option * string option) =
+                let maj, rest, pre = value
+                
+                let mutable min: uint8 option = None
+                let mutable pat: uint8 option = None
+                
+                let name = StringBuilder($"v{maj}")
+                let raw = StringBuilder(maj.ToString())
+                
+                match rest with
+                | Some (m, p) ->
+                    min <- Some m
+                    !> name $"_{m}"
+                    !> raw $".{m}"
+                    
+                    match p with
+                    | Some v ->
+                        pat <- Some v
+                        !> name $"_{v}"
+                        !> raw $".{v}"
+                    | None -> ()
+                    
+                | None -> ()
+                
+                if pre.IsSome then
+                    !> name $"_{pre.Value}"
+                    !> raw $"-{pre.Value}"
+                
+                {
+                    Major = maj;
+                    Minor = min;
+                    Patch = pat;
+                    Prerelease = pre;
+                    Name = name.ToString();
+                    Raw = raw.ToString()
+                }
+        end
+    
+    type Version =
+        | Tag of string
+        | Value of SemVer
+        
+        member this.AsName() =
+            match this with
+            | Tag t -> t
+            | Value v -> v.Name
+        
+        member this.AsRaw() =
+            match this with
+            | Tag t -> t
+            | Value v -> v.Raw
+    
+    module private Parsing =
+        open FParsec
+        
+        let parseNumber = puint8 <?> "Number (unsigned)"
+        let parseNumberPart =
+            pchar '.' >>.
+            parseNumber
+        
+        let parseTag = many1Chars asciiLetter <?> "Tag (ascii word)"
+        
+        let parseLabel =
+            pchar '-' >>.
+            parseTag
+            
+        let parseMajor =
+            parseNumber <?> "Major version"
+            
+        let parseMinor =
+            parseNumberPart <?> "Minor version"
+            
+        let parsePatch =
+            parseNumberPart <?> "Patch version"
+            
+        let parseRest =
+            (opt (
+                parseMinor .>>.
+                opt parsePatch
+            ))
+            
+        let parsePrerelease =
+            (opt parseLabel <?> "Label (ascii word)")
+            
+        let parseSemVer =
+            pipe3
+                parseMajor
+                parseRest
+                parsePrerelease
+                (fun a b c -> (a, b, c))
+        
+        let parseVersion: Parser<Version, _> =
+            (
+                attempt parseTag <?> "Tag (ascii word)"
+                >>= (fun x -> x |> Tag |> preturn)
+            ) <|>
+            (
+                parseSemVer <?> "SemVer"
+                >>= (fun x -> x |> SemVer |> Value |> preturn)
+            )
+            .>> eof
+            
+        exception ParsingException of string
+            
+        let parse (value : string) =
+            match runParserOnString parseVersion () "docker image name" value with
+            | ParserResult.Success(result, _, _) -> result
+            | ParserResult.Failure(err, _, _) ->
+                eprintfn $"ParsingException: %s{err}"
+                raise (ParsingException(err))
+            
+    module private Sorting =
+        open System
+        
+        let sortMaj (a: uint8, b: uint8) =
+            if a > b then
+                -1
+            elif a < b then
+                1
+            else
+                0
+            
+        let sortVer (a: uint8 option, b: uint8 option) (prev: int) =
+            if prev = 0 then
+                match (a, b) with
+                | Some av, Some bv -> sortMaj (av, bv)
+                | Some _, None -> -1
+                | None, Some _ -> 1
+                | _ -> 0
+            else
+                prev
+                
+        let sortString (a: string, b: string) =
+            String.Compare(a,b) * -1
+        
+        let sortPre (a: string option, b: string option) (prev: int) =
+            if prev = 0 then
+                match (a, b) with
+                | Some av, Some bv -> sortString (av, bv)
+                | Some _, None -> -1
+                | None, Some _ -> 1
+                | _ -> 0
+            else
+                prev
+        
+        let sort (a: SemVer, b: SemVer) =
+            sortMaj (a.Major, b.Major)
+            |> sortVer (a.Minor, b.Minor)
+            |> sortVer (a.Patch, b.Patch)
+            |> sortPre (a.Prerelease, b.Prerelease)
+            
+    let parse (str : string) = Parsing.parse str
+    
+    let sort (a: Version) (b: Version) =
+        match (a, b) with
+        | Tag at, Tag bt -> Sorting.sortString(at, bt)
+        | Value av, Value bv -> Sorting.sort(av, bv)
+        | Tag _, _ -> -1
+        | _, Tag _ -> 1
 
 module DockerHub =
     open FsHttp
-
+    open System.Text.Json.Serialization
+    open Version
 
     type Tag = 
         {
             Name : string
+            [<JsonPropertyName "content_type">]
+            ContentType : string
         }
-
 
     type Page = 
         {
@@ -22,8 +198,7 @@ module DockerHub =
             Results : Tag seq
         }
 
-
-    let get (url) =
+    let get url =
         http {
             GET url
         }
@@ -31,17 +206,19 @@ module DockerHub =
         |> Response.assert2xx
         |> Response.deserializeJson<Page>
 
-
     let getAllTags() =
         let mutable result = Seq.empty
         let page = "https://hub.docker.com/v2/namespaces/docker/repositories/dockerfile/tags?page=1"
 
-        let rec getTags(url) =
-            let data = get(url)
+        let rec getTags url =
+            let data = get url
 
             result <- 
                 data.Results
-                |> Seq.map (fun tag -> tag.Name)
+                |> Seq.filter (fun tag ->
+                    (not ("latest".Equals(tag.Name)))
+                    && "image".Equals(tag.ContentType)
+                )
                 |> Seq.append result
 
             if data.Next.IsSome then
@@ -50,44 +227,31 @@ module DockerHub =
         getTags(page)
 
         result
-
+        |> Seq.map (fun tag -> parse tag.Name)
+        |> Seq.sortWith sort
+        |> Seq.readonly
 
 module Codegen =
-    open System.Text
-
-
-    let genModule(values) =
+    open Version
+    
+    let genModule (values : Version seq) =
         let str = StringBuilder()
-        let (!>) (text : string) = str.Append(text) |> ignore
 
-        !> "(*\n    Generated with 'scripts/DfSyntax.fsx'\n*)\n"
-        !> "module Tuffenuff.DSL.Dockerfile\n\n"
+        !> str "(*\n    Generated with 'scripts/DfSyntax.fsx'\n*)\n"
+        !> str "module Tuffenuff.DSL.Dockerfile\n\n"
 
         values
-        |> Seq.iter (fun (key, value) ->
-            !> $"\n///<summary><c>{value}</c> version of docker syntax</summary>"
-            !> $"\nlet {key} = syntax \"docker/dockerfile:{value}\"\n"
+        |> Seq.iter (fun version ->
+            !> str $"\n///<summary><c>{version.AsRaw()}</c> version of docker syntax</summary>"
+            !> str $"\nlet {version.AsName()} = syntax \"docker/dockerfile:{version.AsRaw()}\"\n"
         )
 
         str.ToString()
 
-
-open System
-
-let result = 
+let fileContent =
     DockerHub.getAllTags()
-    |> Seq.where (fun tag -> tag <> "latest")
-    |> Seq.map (fun tag -> 
-        let name = 
-            if (tag |> Seq.exists Char.IsDigit) then
-                "v" + tag
-                    .Replace(".", "_")
-                    .Replace("-", "_")
-            else
-                tag
-        (name, tag)
-    )
-    |> Seq.sortByDescending (fun (k, _) -> k)
     |> Codegen.genModule
-
-printfn "%s" result
+    
+printfn "---------"
+printfn $"%s{fileContent}"
+printfn "---------"
