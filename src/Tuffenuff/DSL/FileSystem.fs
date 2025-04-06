@@ -24,7 +24,7 @@ let workdir value =
 
 /// <summary>Copies files, directories, or remote file URLs from the source to the
 /// destination in the container.</summary>
-let addOpts args = AddBuilder (args)
+let addOpts args = AddBuilder args
 
 /// <summary>Copies files, directories, or remote file URLs from the source to the
 /// destination in the container.</summary>
@@ -38,7 +38,7 @@ let (!@) src dst =
 
 /// <summary>Copies files or directories from the source to the destination in the
 /// container.</summary>
-let copyOpts args = CopyBuilder (args)
+let copyOpts args = CopyBuilder args
 
 /// <summary>Copies files or directories from the source to the destination in the
 /// container.</summary>

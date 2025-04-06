@@ -6,16 +6,16 @@ open System
 let eol = Environment.NewLine
 
 
-let eol_slash = sprintf " \\%s    " eol
+let eol_slash = $" \\%s{eol}    "
 
 
-let quote value = sprintf "%c%s%c" '"' (string value) '"'
+let quote value = $"%c{'"'}%s{string value}%c{'"'}"
 
 
-let print name value = sprintf "%s %s%s" name value eol
+let print name value = $"%s{name} %s{value}%s{eol}"
 
 
-let printKV key value = sprintf "%s=%s" key value
+let printKV key value = $"%s{key}=%s{value}"
 
 
 let printKVQ key value = printKV key (quote value)
@@ -29,14 +29,14 @@ let printList list =
 
 
 let printFlag name value =
-    if value then sprintf " --%s" name else ""
+    if value then $" --%s{name}" else ""
 
 
 let printParameter<'T> name (value : 'T option) =
     if value.IsSome then
-        sprintf " --%s=%s" name (string value.Value)
+        $" --%s{name}=%s{string value.Value}"
     else
-        ""
+        String.Empty
 
 
 let printParameterQ<'T> name (value : 'T option) =

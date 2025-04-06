@@ -24,4 +24,4 @@ let buildOS = usearg "BUILDOS"
 let buildArch = usearg "BUILDARCH"
 
 /// <summary>Variant component of <c>BUILDPLATFORM</c>.</summary>
-let buildVarian = usearg "BUILDVARIANT"
+let buildVariant = usearg "BUILDVARIANT"

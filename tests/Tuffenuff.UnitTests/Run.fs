@@ -300,7 +300,7 @@ let tests =
                                     ]
                             }
                         ]
-                    Network = Some NoneNetwok
+                    Network = Some NoneNetwork
                     Security = Some Insecure
                     Arguments =
                         Arguments [ "make tests" ; "apt-get install wget" ; "exit 0" ]
@@ -312,7 +312,7 @@ let tests =
                 run {
                     mount (cacheParams "/var/cache/apt" { sharing Locked })
                     mount (cacheParams "/var/lib/apt" { sharing Locked })
-                    network NoneNetwok
+                    network NoneNetwork
                     security Insecure
                     cmd "make tests"
                     cmds [ "apt-get install wget" ; "exit 0" ]

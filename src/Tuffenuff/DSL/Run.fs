@@ -7,7 +7,7 @@ open Tuffenuff.Domain.CE
 
 /// <summary>Mount a file or directory from the host machine into the container.
 /// </summary>
-let bindParams target = BindParametersBuilder (target)
+let bindParams target = BindParametersBuilder target
 
 /// <summary>Mount a file or directory from the host machine into the container.
 /// </summary>
@@ -16,7 +16,7 @@ let bind target =
 
 /// <summary>Cache files or directories between builds, which can speed up the build
 /// process.</summary>
-let cacheParams target = CacheParametersBuilder (target)
+let cacheParams target = CacheParametersBuilder target
 
 /// <summary>Cache files or directories between builds, which can speed up the build
 /// process.</summary>
@@ -25,7 +25,7 @@ let cache target =
 
 /// <summary>Create a temporary file system in memory, which can be used to store
 /// temporary files or directories.</summary>
-let tmpfsParams target = TmpfsParametersBuilder (target)
+let tmpfsParams target = TmpfsParametersBuilder target
 
 /// <summary>Create a temporary file system in memory, which can be used to store
 /// temporary files or directories.</summary>

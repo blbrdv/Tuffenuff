@@ -1,10 +1,18 @@
 # Changelog
 
+## [1.1.0] - 2025-04-06
+
+### Added
+
+- New Docker syntax
+
+
 ## [1.0.1] - 2024-05-11
 
 ### Added
 
 - New Docker syntax versions
+
 
 ## [1.0.0] - 2023-10-27
 
@@ -78,6 +86,7 @@
 Initial release.
 
 
+[1.1.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v1.1.0
 [1.0.1]: https://github.com/blbrdv/Tuffenuff/releases/tag/v1.0.1
 [1.0.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v1.0.0
 [0.2.0]: https://github.com/blbrdv/Tuffenuff/releases/tag/v0.2.0

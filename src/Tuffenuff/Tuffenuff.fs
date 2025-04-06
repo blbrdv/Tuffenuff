@@ -16,7 +16,7 @@ let df = dockerfile
 let plain = Plain
 
 
-let br = plain ""
+let br = plain System.String.Empty
 
 
 let part = Subpart
@@ -27,13 +27,15 @@ let (!&) = part
 
 [<RequireQualifiedAccess>]
 module Dockerfile =
+    
+    let private ws = " "
 
     let render df =
         let rec renderInstruction instr =
             match instr with
             | Simple s ->
                 if s.Name = "#" then
-                    sprintf "%s %s" s.Name s.Value
+                    $"%s{s.Name} %s{s.Value}"
                 else
                     print s.Name s.Value
 
@@ -46,7 +48,7 @@ module Dockerfile =
             | KeyValueList l ->
                 str {
                     l.Name
-                    " "
+                    ws
 
                     l.Elements
                     |> Seq.map (fun e -> printKVQ e.Key e.Value)
@@ -59,10 +61,10 @@ module Dockerfile =
                 str {
                     "FROM"
                     printParameterQ "platform" f.Platform
-                    sprintf " %s" f.Image
+                    $" %s{f.Image}"
 
                     if f.Name.IsSome then
-                        sprintf " AS %s" f.Name.Value
+                        $" AS %s{f.Name.Value}"
 
                     eol
                 }
@@ -79,10 +81,10 @@ module Dockerfile =
                         |> sprintf "--mount=%s"
 
                     if r.Network.IsSome then
-                        sprintf "--network=%s" ((nameof r.Network.Value).ToLower ())
+                        $"--network=%s{(nameof r.Network.Value).ToLower ()}"
 
                     if r.Security.IsSome then
-                        sprintf "--security=%s" ((nameof r.Network.Value).ToLower ())
+                        $"--security=%s{(nameof r.Network.Value).ToLower ()}"
 
                     for arg in r.Arguments do
                         arg
@@ -97,12 +99,12 @@ module Dockerfile =
                     printFlag "link" a.Link
 
                     if a.KeepGitDir then
-                        sprintf " --keep-git-dir=true"
+                        " --keep-git-dir=true"
 
                     printParameter "chmod" a.Chmod
                     printParameter "chown" a.Chown
                     printParameter "checksum" a.Checksum
-                    " "
+                    ws
                     printList a.Elements.Collection
 
                     eol
@@ -115,7 +117,7 @@ module Dockerfile =
                     printParameter "from" cp.From
                     printParameter "chmod" cp.Chmod
                     printParameter "chown" cp.Chown
-                    " "
+                    ws
                     printList cp.Elements.Collection
 
                     eol
@@ -132,7 +134,7 @@ module Dockerfile =
                         "CMD"
                         printList hc.Instructions.Collection
                     }
-                    |> String.concat " "
+                    |> String.concat ws
 
                 hcstr + eol
 
@@ -156,6 +158,6 @@ module Dockerfile =
 
     let fromFile (path : string) =
         seq {
-            for line in File.ReadLines (path) do
+            for line in File.ReadLines path do
                 plain line
         }

@@ -24,7 +24,7 @@ let documentation (value : string) =
 let source (value : string) =
     label "org.opencontainers.image.source" value
 
-/// <summary>Version of the packaged software.</remarks>
+/// <summary>Version of the packaged software.</summary>
 /// <remarks>The version MAY match a label or tag in the source code repository version
 /// MAY be Semantic versioning-compatible </remarks>
 let version (value : string) =

@@ -7,10 +7,10 @@ open System.Linq
 
 type Collection<'T>(elements : IEnumerable<'T>) =
 
-    member __.Collection = elements
+    member _.Collection = elements
 
 
-    interface System.Collections.Generic.IEnumerable<'T> with
+    interface IEnumerable<'T> with
         member this.GetEnumerator () = this.Collection.GetEnumerator ()
 
 
@@ -24,18 +24,18 @@ type Collection<'T>(elements : IEnumerable<'T>) =
         | _ -> false
 
 
-    override __.GetHashCode () = elements.GetHashCode ()
+    override _.GetHashCode () = elements.GetHashCode ()
 
 
-    member __.Append (coll2 : Collection<'T>) = Seq.append elements coll2 |> Collection
+    member _.Append (coll2 : Collection<'T>) = Seq.append elements coll2 |> Collection
 
-    member __.Add (element : 'T) = elements.Append (element) |> Collection
+    member _.Add (element : 'T) = elements.Append element |> Collection
 
 
 [<RequireQualifiedAccess>]
 module Collection =
 
-    let empty<'T> = Collection<'T> (Seq.empty)
+    let empty<'T> = Collection<'T> Seq.empty
 
 
 type Arguments = Collection<string>
@@ -60,26 +60,26 @@ type Dict<'TKey, 'TValue when 'TValue : equality and 'TKey : comparison>
         | _ -> false
 
 
-    override __.GetHashCode () = elements.GetHashCode ()
+    override _.GetHashCode () = elements.GetHashCode ()
 
 
-    member __.Append (map2 : Map<'TKey, 'TValue>) =
+    member _.Append (map2 : Map<'TKey, 'TValue>) =
         Map.fold (fun acc key value -> Map.add key value acc) elements map2 |> Dict
 
 
     member this.Append (dict2 : Dict<'TKey, 'TValue>) =
         let map2 = dict2 |> Seq.map (|KeyValue|) |> Map.ofSeq
-        this.Append (map2)
+        this.Append map2
 
 
-    member this.Add (key : 'TKey, value : 'TValue) = this.Append (Map ([ key, value ]))
+    member this.Add (key : 'TKey, value : 'TValue) = this.Append (Map [ key, value ])
 
 
 [<RequireQualifiedAccess>]
 module Dict =
 
     let empty<'TKey, 'TValue when 'TValue : equality and 'TKey : comparison> =
-        Dict<'TKey, 'TValue> (Map.empty)
+        Dict<'TKey, 'TValue> Map.empty
 
 
     let toMap (source : Dict<'TKey, 'TValue>) =
