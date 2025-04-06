@@ -16,7 +16,7 @@ let df = dockerfile
 let plain = Plain
 
 
-let br = plain System.String.Empty
+let br = plain empty
 
 
 let part = Subpart
@@ -27,8 +27,6 @@ let (!&) = part
 
 [<RequireQualifiedAccess>]
 module Dockerfile =
-    
-    let private ws = " "
 
     let render df =
         let rec renderInstruction instr =

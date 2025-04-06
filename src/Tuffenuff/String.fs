@@ -6,6 +6,12 @@ open System
 let eol = Environment.NewLine
 
 
+let ws = " "
+
+
+let empty = String.Empty
+
+
 let eol_slash = $" \\%s{eol}    "
 
 
@@ -25,18 +31,17 @@ let printList list =
     if (list :> obj) :? string[] then
         list |> Seq.map quote |> String.concat ", " |> sprintf "[ %s ]"
     else
-        list |> String.concat " "
+        list |> String.concat ws
 
 
-let printFlag name value =
-    if value then $" --%s{name}" else ""
+let printFlag name value = if value then $" --%s{name}" else empty
 
 
 let printParameter<'T> name (value : 'T option) =
     if value.IsSome then
         $" --%s{name}=%s{string value.Value}"
     else
-        String.Empty
+        empty
 
 
 let printParameterQ<'T> name (value : 'T option) =

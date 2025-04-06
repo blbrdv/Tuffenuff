@@ -11,8 +11,7 @@ let healthcheck cmds = HealthcheckBuilder cmds
 
 /// <summary>Define a command that Docker will run to check the health of a containe.
 /// </summary>
-let hc commands =
-    HealthcheckInstruction.Create commands
+let hc commands = HealthcheckInstruction.Create commands
 
 /// <summary>Disable any health check inherited from the base image.</summary>
 let disableHealthcheck =
