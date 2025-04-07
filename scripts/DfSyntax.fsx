@@ -75,7 +75,41 @@ module Version =
     module private Parsing =
         open FParsec
         
-        let parseNumber = puint8 <?> "Number (unsigned)"
+        let zero =
+            pchar '0'
+            >>= (fun _ -> preturn System.Byte.MinValue)
+            
+        let nonZero =
+            let parser =
+                satisfy (fun  c -> '1' <= c && c <= '9') .>>.
+                many digit
+            fun stream ->
+                let reply = parser stream
+                if reply.Status = Ok then
+                    let result = reply.Result
+                    
+                    let c1, crest = result
+                    let rest = crest |> Array.ofList |> System.String
+                    
+                    try
+                        Reply( uint8 $"%c{c1}%s{rest}" )
+                    with
+                    | :? System.OverflowException ->
+                        let len = 1 + crest.Length
+                        stream.Skip(-len)
+                        Reply(
+                            FatalError,
+                            messageError "Value is too small or too large for number"
+                        )
+                else
+                    Reply(reply.Status, reply.Error)
+        
+        let parseNumber: Parser<uint8, unit> =
+            (
+                attempt zero <|>
+                nonZero
+            ) <?> "Number (unsigned)"
+                    
         let parseNumberPart =
             pchar '.' >>.
             parseNumber
@@ -127,9 +161,9 @@ module Version =
         let parse (value : string) =
             match runParserOnString parseVersion () "docker image name" value with
             | ParserResult.Success(result, _, _) -> result
-            | ParserResult.Failure(err, _, _) ->
-                eprintfn $"ParsingException: %s{err}"
-                raise (ParsingException(err))
+            | ParserResult.Failure(msg, _, _) ->
+                eprintfn $"ParsingException: %s{msg}"
+                raise (ParsingException(msg))
             
     module private Sorting =
         open System
