@@ -1,57 +1,57 @@
-// http://www.fssnip.net/7WR/title/Computation-expression-over-StringBuilder
-module Tuffenuff.StringCE
+namespace Tuffenuff
 
-open System.Text
+// http://www.fssnip.net/7WR
+module internal StringCE =
+    open System.Text
+    open Printf
+    open Tuffenuff.String
 
+    type private StringBuffer = StringBuilder -> unit
+    type private StringBuffer<'T> = StringBuilder -> 'T
 
-type StringBuffer = StringBuilder -> unit
+    [<Sealed>]
+    type StringBufferBuilder() =
+        member _.Yield (value: string) : StringBuffer =
+            fun (builder: StringBuilder) -> bprintf builder $"%s{value}"
 
+        member _.Yield (value: char) : StringBuffer =
+            fun (builder: StringBuilder) -> bprintf builder $"%c{value}"
+                    
+        member _.Yield (value: byte) : StringBuffer =
+            fun (builder: StringBuilder) -> bprintf builder $"%02x{value}"
 
-type StringBufferBuilder() =
-    member inline _.Yield (txt : string) =
-        fun (b : StringBuilder) -> Printf.bprintf b $"%s{txt}"
+        member _.Yield (values: #seq<string>) : StringBuffer =
+            fun (builder: StringBuilder) ->
+                for value in values do
+                    bprintf builder $"%s{value}%s{eol}"
 
-    member inline _.Yield (c : char) =
-        fun (b : StringBuilder) -> Printf.bprintf b $"%c{c}"
+        member _.YieldFrom (buffer: StringBuffer) : StringBuffer = buffer
 
-    member inline _.Yield (strings : #seq<string>) =
-        fun (b : StringBuilder) ->
-            for s in strings do
-                Printf.bprintf b $"%s{s}\n"
+        member _.Combine (bufferLeft: StringBuffer, bufferRight: StringBuffer<'a>) : StringBuffer<'a> =
+            fun (builder: StringBuilder) ->
+                bufferLeft builder
+                bufferRight builder
 
-    member inline _.YieldFrom (f : StringBuffer) = f
+        member _.Delay (wrapper: unit -> StringBuffer<'a>) : StringBuffer<'a> =
+            fun (builder: StringBuilder) -> wrapper () builder
 
-    member _.Combine (f, g) =
-        fun (b : StringBuilder) ->
-            f b
-            g b
+        member _.Zero () : 'a -> unit = ignore
 
-    member _.Delay f = fun (b : StringBuilder) -> (f ()) b
+        member _.For (values: 'a seq, yield': 'a -> StringBuffer) : StringBuffer =
+            fun (builder: StringBuilder) ->
+                use e = values.GetEnumerator()
 
-    member _.Zero () = ignore
+                while e.MoveNext() do
+                    yield' e.Current builder
 
-    member _.For (xs : 'a seq, f : 'a -> StringBuffer) =
-        fun (b : StringBuilder) ->
-            use e = xs.GetEnumerator ()
+        member _.While (test: unit -> bool, buffer: StringBuffer) : StringBuffer =
+            fun builder ->
+                while test() do
+                    buffer builder
 
-            while e.MoveNext () do
-                (f e.Current) b
+        member _.Run (buffer: StringBuffer) : string =
+            let builder = StringBuilder()
+            do buffer builder
+            builder.ToString()
 
-    member _.While (p : unit -> bool, f : StringBuffer) =
-        fun (b : StringBuilder) ->
-            while p () do
-                f b
-
-    member _.Run (f : StringBuffer) =
-        let b = StringBuilder ()
-        do f b
-        b.ToString ()
-
-
-let str = StringBufferBuilder ()
-
-
-type StringBufferBuilder with
-
-    member inline _.Yield (b : byte) =
-        fun (sb : StringBuilder) -> Printf.bprintf sb $"%02x{b} "
+    let str = StringBufferBuilder()
