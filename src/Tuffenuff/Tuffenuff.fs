@@ -1,35 +1,31 @@
 [<AutoOpen>]
 module Tuffenuff.Dockerfile
 
+open System
 open System.IO
 open Tuffenuff.Domain.Types
 open Tuffenuff.String
 open Tuffenuff.StringCE
 
+type private Entities = Entity seq
 
-let dockerfile (entities : Entity seq) = entities
+let dockerfile (value: Entities) : Entities = value
 
+let df (value: Entities) : Entities = dockerfile value
 
-let df = dockerfile
-
-
-let plain = Plain
-
+let plain (value: string) : Entity = Plain value
 
 let br = plain empty
 
+let part (value: Entities) : Entity = Subpart value
 
-let part = Subpart
-
-
-let (!&) = part
-
+let (!&) (value: Entities) : Entity = part value
 
 [<RequireQualifiedAccess>]
 module Dockerfile =
 
-    let render df =
-        let rec renderInstruction instr =
+    let render (value: Entities) : string =
+        let rec renderInstruction (instr: InstructionType) : string =
             match instr with
             | Simple s ->
                 if s.Name = "#" then
@@ -59,7 +55,8 @@ module Dockerfile =
                 str {
                     "FROM"
                     printParameterQ "platform" f.Platform
-                    $" %s{f.Image}"
+                    ws
+                    f.Image
 
                     if f.Name.IsSome then
                         $" AS %s{f.Name.Value}"
@@ -73,16 +70,16 @@ module Dockerfile =
                         mount.Params
                         |> Seq.map (fun p -> printKV p.Key p.Value)
                         |> Seq.append [
-                            printKV "type" (mount.Name.ToString().ToLower ())
+                            printKV "type" (mount.Name.ToString().ToLower())
                         ]
                         |> String.concat ","
                         |> sprintf "--mount=%s"
 
                     if r.Network.IsSome then
-                        $"--network=%s{(nameof r.Network.Value).ToLower ()}"
+                        $"--network=%s{(nameof r.Network.Value).ToLower()}"
 
                     if r.Security.IsSome then
-                        $"--security=%s{(nameof r.Network.Value).ToLower ()}"
+                        $"--security=%s{(nameof r.Network.Value).ToLower()}"
 
                     for arg in r.Arguments do
                         arg
@@ -121,40 +118,44 @@ module Dockerfile =
                     eol
                 }
 
-            | Healthcheck hc ->
-                let hcstr =
-                    seq {
-                        "HEALTCHECK"
+            | Healthcheck hc ->            
+                seq {
+                    "HEALTCHECK"
 
-                        for opt in hc.Options do
-                            printParameter opt.Key (Some opt.Value)
+                    for opt in hc.Options do
+                        printParameter opt.Key (Some opt.Value)
 
-                        "CMD"
-                        printList hc.Instructions.Collection
-                    }
-                    |> String.concat ws
+                    "CMD"
+                    printList hc.Instructions.Collection
+                }
+                |> String.concat ws
+                |> sprintf "%s%s"
+                <| eol
 
-                hcstr + eol
+            | Onbuild onb ->
+                seq { onb.Instruction }
+                |> renderSubpart
+                |> sprintf "ONBUILD %s%s"
+                <| eol
 
-            | Onbuild onb -> seq { onb.Instruction } |> r |> sprintf "ONBUILD %s\n"
-
-        and r sub =
-            sub
+        and renderSubpart (part: Entities) : string =
+            part
             |> Seq.map (fun instr ->
                 match instr with
                 | Plain t -> t
                 | Instruction i -> renderInstruction i
-                | Subpart s -> r s |> trim
+                | Subpart sp -> sp |> renderSubpart |> trim
             )
             |> String.concat eol
 
-        r df |> trim
+        value |> renderSubpart |> trim
 
+    let toFile (path: string) (text: string) = File.WriteAllText (path, text)
 
-    let toFile (path : string) (text : string) = File.WriteAllText (path, text)
-
-
-    let fromFile (path : string) =
+    let fromFile (path: string) : Entities =
+        if not (File.Exists path) then
+            raise (ArgumentException("File not found", nameof path))
+        
         seq {
             for line in File.ReadLines path do
                 plain line
