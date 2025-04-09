@@ -9,23 +9,23 @@ open Tuffenuff.StringCE
 
 type private Entities = Entity seq
 
-let dockerfile (value: Entities) : Entities = value
+let dockerfile (value : Entities) : Entities = value
 
-let df (value: Entities) : Entities = dockerfile value
+let df (value : Entities) : Entities = dockerfile value
 
-let plain (value: string) : Entity = Plain value
+let plain (value : string) : Entity = Plain value
 
 let br = plain empty
 
-let part (value: Entities) : Entity = Subpart value
+let part (value : Entities) : Entity = Subpart value
 
-let (!&) (value: Entities) : Entity = part value
+let (!&) (value : Entities) : Entity = part value
 
 [<RequireQualifiedAccess>]
 module Dockerfile =
 
-    let render (value: Entities) : string =
-        let rec renderInstruction (instr: InstructionType) : string =
+    let render (value : Entities) : string =
+        let rec renderInstruction (instr : InstructionType) : string =
             match instr with
             | Simple s ->
                 if s.Name = "#" then
@@ -70,16 +70,16 @@ module Dockerfile =
                         mount.Params
                         |> Seq.map (fun p -> printKV p.Key p.Value)
                         |> Seq.append [
-                            printKV "type" (mount.Name.ToString().ToLower())
+                            printKV "type" (mount.Name.ToString().ToLower ())
                         ]
                         |> String.concat ","
                         |> sprintf "--mount=%s"
 
                     if r.Network.IsSome then
-                        $"--network=%s{(nameof r.Network.Value).ToLower()}"
+                        $"--network=%s{(nameof r.Network.Value).ToLower ()}"
 
                     if r.Security.IsSome then
-                        $"--security=%s{(nameof r.Network.Value).ToLower()}"
+                        $"--security=%s{(nameof r.Network.Value).ToLower ()}"
 
                     for arg in r.Arguments do
                         arg
@@ -118,7 +118,7 @@ module Dockerfile =
                     eol
                 }
 
-            | Healthcheck hc ->            
+            | Healthcheck hc ->
                 seq {
                     "HEALTCHECK"
 
@@ -133,12 +133,9 @@ module Dockerfile =
                 <| eol
 
             | Onbuild onb ->
-                seq { onb.Instruction }
-                |> renderSubpart
-                |> sprintf "ONBUILD %s%s"
-                <| eol
+                seq { onb.Instruction } |> renderSubpart |> sprintf "ONBUILD %s%s" <| eol
 
-        and renderSubpart (part: Entities) : string =
+        and renderSubpart (part : Entities) : string =
             part
             |> Seq.map (fun instr ->
                 match instr with
@@ -150,12 +147,12 @@ module Dockerfile =
 
         value |> renderSubpart |> trim
 
-    let toFile (path: string) (text: string) = File.WriteAllText (path, text)
+    let toFile (path : string) (text : string) = File.WriteAllText (path, text)
 
-    let fromFile (path: string) : Entities =
+    let fromFile (path : string) : Entities =
         if not (File.Exists path) then
-            raise (ArgumentException("File not found", nameof path))
-        
+            raise (ArgumentException ("File not found", nameof path))
+
         seq {
             for line in File.ReadLines path do
                 plain line

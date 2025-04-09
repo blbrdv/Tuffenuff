@@ -9,7 +9,7 @@ open Tuffenuff.StringCE
 let tests =
     let line = "FROM scratch"
     let trimableLine = $"{eol} {eol}{eol} {line}"
-    
+
     testList "string tests" [
         testCase "quote test"
         <| fun _ ->
@@ -18,9 +18,7 @@ let tests =
 
         testCase "print test"
         <| fun _ ->
-            Expect.equal
-                (print "INSTRUCTION" "argument")
-                $"INSTRUCTION argument%s{eol}"
+            Expect.equal (print "INSTRUCTION" "argument") $"INSTRUCTION argument%s{eol}"
             <| "Instruction and argument should be printed separately"
 
         testCase "printKV test"
@@ -83,25 +81,19 @@ let tests =
 
         testCase "trim empty lines test"
         <| fun _ ->
-            Expect.equal
-                (trim trimableLine)
-                line
+            Expect.equal (trim trimableLine) line
             <| "Trim should remove leading empty lines and spaces"
-            
+
         testCase "trim non-empty lines test"
         <| fun _ ->
-            Expect.equal
-                (trim $"somevalue{trimableLine}")
-                $"somevalue{trimableLine}"
+            Expect.equal (trim $"somevalue{trimableLine}") $"somevalue{trimableLine}"
             <| "Trim should not remove leading non-empty lines"
-            
+
         testCase "variable test"
         <| fun _ ->
-            Expect.equal
-                (variable "somevalue")
-                "${somevalue}"
+            Expect.equal (variable "somevalue") "${somevalue}"
             <| "Variable should be notated"
-            
+
         ptestCase "variable short syntax test" // TODO fix short syntax
         <| fun _ ->
             Expect.equal
