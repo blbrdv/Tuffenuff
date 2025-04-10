@@ -27,17 +27,17 @@ module Dockerfile =
     let render (value : Entities) : string =
         let rec renderInstruction (instr : InstructionType) : string =
             match instr with
-            | Simple s ->
-                if s.Name = "#" then
-                    $"%s{s.Name} %s{s.Value}"
-                else
-                    print s.Name s.Value
+            | Simple s when s.Name = "#" && s.Value = empty -> empty
 
-            | SimpleQuoted s -> print s.Name (quote s.Value)
+            | Simple s when s.Name = "#" -> $"%s{s.Name}%s{ws}%s{s.Value}"
 
-            | List l -> print l.Name (printList l.Elements.Collection)
+            | Simple s -> print s.Name s.Value
 
-            | KeyValue kv -> print kv.Name (printKVQ kv.Key kv.Value)
+            | SimpleQuoted s -> s.Value |> quote |> print s.Name
+
+            | List l -> l.Elements.Collection |> printList |> print l.Name
+
+            | KeyValue kv -> printKVQ kv.Key kv.Value |> print kv.Name
 
             | KeyValueList l ->
                 str {
