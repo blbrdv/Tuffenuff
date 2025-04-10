@@ -42,7 +42,7 @@ Target.create "CodestyleCheck" (fun _ ->
     elif result.ExitCode = 99 then
         failwith "Some files need formatting, check output for more info"
     else
-        Trace.logf "Errors while formatting: %A" result.Errors
+        Trace.traceError $"Errors while formatting: %A{result.Errors}"
 )
 
 Target.create "CodestyleFormat" (fun _ -> 
