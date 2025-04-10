@@ -71,24 +71,22 @@ let escape (value : char) : Entity = !/ $"escape=%c{value}"
 let check (directives : string seq) (warnAsError : bool) : Entity =
     if Seq.length directives < 1 then
         raise (
-            ArgumentOutOfRangeException(
+            ArgumentOutOfRangeException (
                 "Sequence of directives must not be empty",
-                nameof directives)
+                nameof directives
+            )
         )
-    
+
     str {
         if directives = [ "all" ] then
             printKV "skip" "all"
         else
-            directives
-            |> String.concat ","
-            |> printKV "skip"
-            
+            directives |> String.concat "," |> printKV "skip"
+
         ";"
-        
-        warnAsError.ToString().ToLower()
-        |> printKV "error"
-        
+
+        warnAsError.ToString().ToLower () |> printKV "error"
+
     }
     |> printKV "check"
     |> comment
@@ -124,16 +122,13 @@ let warnAsError : Entity = printKV "error" "true" |> printKV "check" |> comment
 let skip (directives : string seq) : Entity =
     if Seq.length directives < 1 then
         raise (
-            ArgumentOutOfRangeException(
+            ArgumentOutOfRangeException (
                 "Sequence of directives must not be empty",
-                nameof directives)
+                nameof directives
+            )
         )
-    
-    directives
-    |> String.concat ","
-    |> printKV "skip"
-    |> printKV "check"
-    |> comment
+
+    directives |> String.concat "," |> printKV "skip" |> printKV "check" |> comment
 
 /// <summary>
 /// Specify all directives to be skipped during build process.

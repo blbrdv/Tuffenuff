@@ -16,7 +16,7 @@ module internal String =
     let q = "\""
 
     let eol = Environment.NewLine
-    
+
     let eol_slash = $"%s{ws}\\%s{eol}%s{tab}"
 
     let quote (value : 'a) : string = $"%s{q}%s{string value}%s{q}"
