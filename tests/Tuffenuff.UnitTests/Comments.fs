@@ -34,7 +34,7 @@ let tests =
 
         testCase "short comment test"
         <| fun _ ->
-            Expect.equal (!/ text |> render) $"# %s{text}"
+            Expect.equal (!/text |> render) $"# %s{text}"
             <| "Comment should should start with '#' and contains it's text"
 
         testCase "syntax parser directive test"
@@ -60,7 +60,7 @@ let tests =
         testCase "check some parser directive test"
         <| fun _ ->
             Expect.equal
-                (check [ "StageNameCasing"; "FromAsCasing" ] false |> render)
+                (check [ "StageNameCasing" ; "FromAsCasing" ] false |> render)
                 "# check=skip=StageNameCasing,FromAsCasing;error=false"
             <| "Check parser directive should be comment with 'check=skip=<checks>;error=<boolean>' value"
 
@@ -72,15 +72,13 @@ let tests =
 
         testCase "warnAsError parser directive test"
         <| fun _ ->
-            Expect.equal
-                (warnAsError |> render)
-                "# check=error=true"
+            Expect.equal (warnAsError |> render) "# check=error=true"
             <| "Turn on error parser directive should be comment with 'check=error=true' value"
 
         testCase "skip some parser directive test"
         <| fun _ ->
             Expect.equal
-                ([ "StageNameCasing"; "FromAsCasing" ] |> skip |> render)
+                ([ "StageNameCasing" ; "FromAsCasing" ] |> skip |> render)
                 "# check=skip=StageNameCasing,FromAsCasing"
             <| "Skip parser directive should be comment with 'check=skip=<checks>' value"
 
