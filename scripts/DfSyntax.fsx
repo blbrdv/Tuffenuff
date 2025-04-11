@@ -298,7 +298,7 @@ module Codegen =
                 
                 StringBuilder()
                 <<| "///<summary>"
-                <<| "///Sets the version of docker syntax to "
+                <<| "///Sets the version of docker syntax to"
                 <~| "///<c>docker/dockerfile:"
                 <~| v.Raw
                 <<| "</c>"
