@@ -81,12 +81,12 @@ module Version =
         | Tag of string
         | Value of SemVer
         
-        member this.AsName() =
+        member this.Name with get() =
             match this with
             | Tag t -> t
             | Value v -> v.Name
         
-        member this.AsRaw() =
+        member this.Raw with get() =
             match this with
             | Tag t -> t
             | Value v -> v.Raw
@@ -300,21 +300,21 @@ module Codegen =
                 <<| "///<summary>"
                 <<| "///Sets the version of docker syntax to "
                 <~| "///<c>docker/dockerfile:"
-                <~| v.AsRaw()
+                <~| v.Raw
                 <<| "</c>"
                 <<| "///</summary>"
                 <<| "///<example>"
                 <~| "///<c>"
-                <~| v.AsName()
+                <~| v.Name
                 <~| "</c> -> <c># syntax=docker/dockerfile:"
-                <~| v.AsRaw()
+                <~| v.Raw
                 <<| "</c>"
                 <<| "///</example>"
                 <<| "///<seealso cref=\"Tuffenuff.DSL.Comments.syntax\" />"
                 <~| "let "
-                <~| v.AsName()
+                <~| v.Name
                 <~| " = syntax \"docker/dockerfile:"
-                <~| v.AsRaw()
+                <~| v.Raw
                 <<| "\""
                 |> string
                 
