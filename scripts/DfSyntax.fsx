@@ -6,8 +6,27 @@
 #r "nuget: FsHttp, 15.0.1"
 #r "nuget: FParsec, 1.1.1"
 
+let args = fsi.CommandLineArgs
+
+if args.Length <> 2 then
+    eprintf "Output file target must be provided, "
+    eprintfn "e.g. 'dotnet fsi <this script file> <path to output file>'"
+    failwith "One argument expected"
+    
+open System
 open System.Text
-let (!>) (str: StringBuilder) (text : string) = str.Append(text) |> ignore
+open System.IO
+
+let target =
+    [| Environment.CurrentDirectory ; args[1] |]
+    |> Path.Combine
+    |> Path.GetFullPath
+
+let (<~|) (builder : StringBuilder) (text : string) = builder.Append(text)
+let (<<|) (builder : StringBuilder) (text : string) = builder.AppendLine(text)
+
+let (<~|!) (builder : StringBuilder) (text : string) = builder <~| text |> ignore
+let (<<|!) (builder : StringBuilder) (text : string) = builder <<| text |> ignore
 
 module Version =
         
@@ -32,21 +51,21 @@ module Version =
                 match rest with
                 | Some (m, p) ->
                     min <- Some m
-                    !> name $"_{m}"
-                    !> raw $".{m}"
+                    name <~|! $"_{m}"
+                    raw <~|! $".{m}"
                     
                     match p with
                     | Some v ->
                         pat <- Some v
-                        !> name $"_{v}"
-                        !> raw $".{v}"
+                        name <~|! $"_{v}"
+                        raw<~|! $".{v}"
                     | None -> ()
                     
                 | None -> ()
                 
                 if pre.IsSome then
-                    !> name $"_{pre.Value}"
-                    !> raw $"-{pre.Value}"
+                    name <~|! $"_{pre.Value}"
+                    raw <~|! $"-{pre.Value}"
                 
                 {
                     Major = maj;
@@ -77,7 +96,7 @@ module Version =
         
         let zero =
             pchar '0'
-            >>= (fun _ -> preturn System.Byte.MinValue)
+            >>= (fun _ -> preturn Byte.MinValue)
             
         let nonZero =
             let parser =
@@ -89,12 +108,12 @@ module Version =
                     let result = reply.Result
                     
                     let c1, crest = result
-                    let rest = crest |> Array.ofList |> System.String
+                    let rest = crest |> Array.ofList |> String
                     
                     try
                         Reply( uint8 $"%c{c1}%s{rest}" )
                     with
-                    | :? System.OverflowException ->
+                    | :? OverflowException ->
                         let len = 1 + crest.Length
                         stream.Skip(-len)
                         Reply(
@@ -165,9 +184,7 @@ module Version =
                 eprintfn $"ParsingException: %s{msg}"
                 raise (ParsingException(msg))
             
-    module private Sorting =
-        open System
-        
+    module private Sorting =        
         let sortMaj (a: uint8, b: uint8) =
             if a > b then
                 -1
@@ -269,23 +286,49 @@ module Codegen =
     open Version
     
     let genModule (values : Version seq) =
-        let str = StringBuilder()
-
-        !> str "(*\n    Generated with 'scripts/DfSyntax.fsx'\n*)\n"
-        !> str "module Tuffenuff.DSL.Dockerfile\n\n"
-
-        values
-        |> Seq.iter (fun version ->
-            !> str $"\n///<summary><c>{version.AsRaw()}</c> version of docker syntax</summary>"
-            !> str $"\nlet {version.AsName()} = syntax \"docker/dockerfile:{version.AsRaw()}\"\n"
+        StringBuilder()
+        <<| "(*"
+        <<| "    Generated with 'scripts/DfSyntax.fsx'"
+        <<| "*)"
+        <<| "module Tuffenuff.DSL.Dockerfile"
+        <<| ""
+        <~| (
+            values
+            |> Seq.map (fun v ->
+                
+                StringBuilder()
+                <<| "///<summary>"
+                <<| "///Sets the version of docker syntax to "
+                <~| "///<c>docker/dockerfile:"
+                <~| v.AsRaw()
+                <<| "</c>"
+                <<| "///</summary>"
+                <<| "///<example>"
+                <~| "///<c>"
+                <~| v.AsName()
+                <~| "</c> -> <c># syntax=docker/dockerfile:"
+                <~| v.AsRaw()
+                <<| "</c>"
+                <<| "///</example>"
+                <<| "///<seealso cref=\"Tuffenuff.DSL.Comments.syntax\" />"
+                <~| "let "
+                <~| v.AsName()
+                <~| " = syntax \"docker/dockerfile:"
+                <~| v.AsRaw()
+                <<| "\""
+                |> string
+                
+            )
+            |> String.concat Environment.NewLine
         )
-
-        str.ToString()
+        |> string
 
 let fileContent =
     DockerHub.getAllTags()
     |> Codegen.genModule
-    
-printfn "---------"
-printfn $"%s{fileContent}"
-printfn "---------"
+
+File.WriteAllText(target, fileContent)
+
+printfn ""
+printfn "SUCCESS"
+printfn $"File '%s{target}' updated"
