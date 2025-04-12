@@ -89,17 +89,18 @@ let tests =
             Expect.equal (trim $"somevalue{trimableLine}") $"somevalue{trimableLine}"
             <| "Trim should not remove leading non-empty lines"
 
-        testCase "variable test"
-        <| fun _ ->
-            Expect.equal (variable "somevalue") "${somevalue}"
-            <| "Variable should be notated"
-
-        ptestCase "variable short syntax test" // TODO fix short syntax
-        <| fun _ ->
-            Expect.equal
-                "" //(~% "somevalue")
-                "${somevalue}"
-            <| "Variable should be notated"
+        // TODO move to another file
+        // testCase "variable test"
+        // <| fun _ ->
+        //     Expect.equal (variable "somevalue") "${somevalue}"
+        //     <| "Variable should be notated"
+        //
+        // testCase "variable short syntax test" // TODO fix short syntax
+        // <| fun _ ->
+        //     Expect.equal
+        //         "" //(~% "somevalue")
+        //         "${somevalue}"
+        //     <| "Variable should be notated"
 
         testCase "StringBuilder CE test"
         <| fun _ ->

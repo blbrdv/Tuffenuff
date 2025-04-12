@@ -4,25 +4,28 @@ module Tuffenuff.DSL.Variables
 open Tuffenuff.Domain.Collections
 open Tuffenuff.Domain.Types
 
+let variable (name : string) : string = $"${{%s{name}}}"
 
-/// <summary>Sets environment variables in the container, which can be used by the
-/// application running inside the container.</summary>
-let envs ps =
-    KeyValueList { Name = "ENV" ; Elements = ps } |> Instruction
+let (!~) (name : string) : string = name |> variable
 
-/// <summary>Sets environment variables in the container, which can be used by the
-/// application running inside the container.</summary>
-let env key value =
-    [ (key, value) ] |> Map.ofSeq |> Parameters |> envs
+let (!~-) (name : string) (value : string) : string = $"%s{name}:-%s{value}" |> variable
 
-/// <summary>Defines a build-time variable.</summary>
-let args ps =
-    KeyValueList { Name = "ARG" ; Elements = ps } |> Instruction
+let (!~+) (name : string) (value : string) : string = $"%s{name}:+%s{value}" |> variable
 
-/// <summary>Defines a build-time variable.</summary>
-let arg key value =
-    [ (key, value) ] |> Map.ofSeq |> Parameters |> args
+let (!~?) (name : string) (pattern : string) : string =
+    $"%s{name}#%s{pattern}" |> variable
 
-/// <summary>Defines a build-time variable.</summary>
-let usearg key =
-    Simple { Name = "ARG" ; Value = key } |> Instruction
+let (!~??) (name : string) (pattern : string) : string =
+    $"%s{name}##%s{pattern}" |> variable
+
+let (!~%) (name : string) (pattern : string) : string =
+    $"%s{name}%%%s{pattern}" |> variable
+
+let (!~%%) (name : string) (pattern : string) : string =
+    $"%s{name}%%%%%s{pattern}" |> variable
+    
+let (!~/) (name : string) (pattern : string) (replacement : string) : string =
+    $"%s{name}/%s{pattern}/%s{replacement}" |> variable
+    
+let (!~//) (name : string) (pattern : string) (replacement : string) : string =
+    $"%s{name}//%s{pattern}/%s{replacement}" |> variable

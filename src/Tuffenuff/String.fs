@@ -51,7 +51,3 @@ module internal String =
         |> printParameter name
 
     let trim (value : string) : string = value.TrimStart [| ' ' ; '\n' ; '\r' |]
-
-    let variable (name : string) : string = $"${{%s{name}}}"
-
-    let (~%) (name : string) : string = variable name

@@ -1,5 +1,5 @@
+[<AutoOpen>]
 module Tuffenuff.DSL.GlobalArgs
-
 
 /// <summary>Platform of the build result. Eg <c>linux/amd64</c>, <c>linux/arm/v7</c>,
 /// <c>windows/amd64</c>.</summary>
