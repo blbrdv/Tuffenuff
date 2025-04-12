@@ -5,11 +5,13 @@ open Expecto
 open Tuffenuff.String
 open Tuffenuff.StringCE
 
+[<Literal>]
+let line = "FROM scratch"
+
+let trimmableLine = $"{eol} {eol}{eol} {line}"
+
 [<Tests>]
 let tests =
-    let line = "FROM scratch"
-    let trimableLine = $"{eol} {eol}{eol} {line}"
-
     testList "string tests" [
         testCase "quote test"
         <| fun _ ->
@@ -81,26 +83,13 @@ let tests =
 
         testCase "trim empty lines test"
         <| fun _ ->
-            Expect.equal (trim trimableLine) line
+            Expect.equal (trim trimmableLine) line
             <| "Trim should remove leading empty lines and spaces"
 
         testCase "trim non-empty lines test"
         <| fun _ ->
-            Expect.equal (trim $"somevalue{trimableLine}") $"somevalue{trimableLine}"
+            Expect.equal (trim $"somevalue{trimmableLine}") $"somevalue{trimmableLine}"
             <| "Trim should not remove leading non-empty lines"
-
-        // TODO move to another file
-        // testCase "variable test"
-        // <| fun _ ->
-        //     Expect.equal (variable "somevalue") "${somevalue}"
-        //     <| "Variable should be notated"
-        //
-        // testCase "variable short syntax test" // TODO fix short syntax
-        // <| fun _ ->
-        //     Expect.equal
-        //         "" //(~% "somevalue")
-        //         "${somevalue}"
-        //     <| "Variable should be notated"
 
         testCase "StringBuilder CE test"
         <| fun _ ->

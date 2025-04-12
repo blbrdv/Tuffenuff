@@ -13,6 +13,7 @@
     <Compile Include="Collection.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Comments.fs" />
+    <Compile Include="Variables.fs" />
     <Compile Include="From.fs" />
     <Compile Include="Add.fs" />
     <Compile Include="Copy.fs" />
