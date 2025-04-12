@@ -19,17 +19,50 @@ open Fake.IO.FileSystemOperators
 open Fake.IO.Globbing.Operators
 open Fake.Core.TargetOperators
 
-/////////////////////////////////////////////////////////////////////////////////////////
+// Literals
 
+[<Literal>]
+let projExtension = "fsproj"
+
+[<Literal>]
+let projDir = "src"
+
+[<Literal>]
 let projName = "Tuffenuff"
-let testProjNames = $"%s{projName}.*Tests"
-let projDir = "src" @@ projName
-let projFile = projDir @@ $"%s{projName}.fsproj"
-let packageFile = projDir @@ "**/*.nupkg"
-let projTestFiles = "tests" @@ testProjNames @@ $"%s{testProjNames}.fsproj"
+
+[<Literal>]
+let testsProjDir = "tests"
+
+[<Literal>]
+let integrationTestsProjName = "Tuffenuff.IntegrationTests"
+
+[<Literal>]
+let unitTestsProjName = "Tuffenuff.UnitTests"
+
+// Paths
+
+let proj (name : string) = $"{name}.{projExtension}"
+let projFile (name : string) (subDir : string) = subDir @@ name @@ proj name
+
+let srcProjFile = projFile projName projDir
+let packageFile = projDir @@ projName @@ "**/*.nupkg"
+
+let integrationTestsProjFile = projFile integrationTestsProjName testsProjDir
+
+let unitTestsProjFile = projFile unitTestsProjName testsProjDir
+
 let buildDirs = !! "**/bin" ++ "**/obj"
 
-/////////////////////////////////////////////////////////////////////////////////////////
+// Options
+
+let testOptions = (
+        fun (opt : DotNet.TestOptions) -> 
+            { opt with 
+                Logger = Some "console;verbosity=detailed" 
+            }
+    )
+
+// Targets
 
 Target.initEnvironment ()
 
@@ -52,18 +85,17 @@ Target.create "CodestyleFormat" (fun _ ->
 
 Target.create "Clean" (fun _ -> Shell.deleteDirs buildDirs)
 
-Target.create "Build" (fun _ -> DotNet.build id projFile)
+Target.create "Build" (fun _ -> DotNet.build id srcProjFile)
 
-Target.create "RunTests" (fun _ -> 
-    !! projTestFiles
-    |> Seq.iter (
-        DotNet.test (fun opt -> 
-            { opt with 
-                Logger = Some "console;verbosity=detailed" 
-            }
-        )
-    )
+Target.create "RunIntegrationTests" (fun _ ->
+    DotNet.test testOptions integrationTestsProjFile
 )
+
+Target.create "RunUnitTests" (fun _ ->
+    DotNet.test testOptions unitTestsProjFile
+)
+
+Target.create "RunTests" ignore
 
 Target.create "Release" (fun _ ->
     let nugetApiKey = Environment.environVarOrFail "key"
@@ -84,10 +116,18 @@ Target.create "Release" (fun _ ->
 
 "Clean" 
     ==> "Build"
+
+"Build"
+    ==> "RunUnitTests"
+
+"Build"
+    ==> "RunIntegrationTests"
+
+"RunUnitTests"
+    ==> "RunIntegrationTests"
     ==> "RunTests"
 
-"Clean"
-    ==> "Build"
+"Build"
     ==> "Release"
 
 Target.runOrDefault "RunTests"
