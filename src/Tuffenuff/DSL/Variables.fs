@@ -86,7 +86,7 @@ let (!~%) (name : string) (pattern : string) : string =
 /// <seealso cref="(!~%)"/>
 let (!~%%) (name : string) (pattern : string) : string =
     $"%s{name}%%%%%s{pattern}" |> variable
-    
+
 /// <summary>
 /// Set variable and replace the first occurrence of pattern, with replacement in its
 /// value.
@@ -98,7 +98,7 @@ let (!~%%) (name : string) (pattern : string) : string =
 /// <seealso cref="(!~//)"/>
 let (!~/) (name : string) (pattern : string) (replacement : string) : string =
     $"%s{name}/%s{pattern}/%s{replacement}" |> variable
-    
+
 /// <summary>
 /// Set variable and replace the all occurrences of pattern, with replacement in its
 /// value.
