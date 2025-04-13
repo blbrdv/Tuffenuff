@@ -44,8 +44,10 @@ let scriptsDir = "scripts"
 
 // Paths
 
-let proj (name : string) = $"{name}.{projExtension}"
+let proj (name : string) = $"%s{name}.%s{projExtension}"
 let projFile (name : string) (subDir : string) = subDir @@ name @@ proj name
+
+let genFile (name : string) = $"%s{name}.gen.fs"
 
 let srcProjFile = projFile projName projDir
 let packageFile = projDir @@ projName @@ "**/*.nupkg"
@@ -58,8 +60,8 @@ let syntaxVersionsGeneratorScript = scriptsDir @@ "SyntaxVersionsGenerator.fsx"
 
 let dslPath = projDir @@  projName @@ "DSL"
 
-let syntaxVersionFile = dslPath @@ "SyntaxVersions.fs"
-let syntaxUpstreamVersionFile = dslPath @@ "UpstreamSyntaxVersions.fs"
+let syntaxVersionFile = dslPath @@ genFile "SyntaxVersions"
+let syntaxUpstreamVersionFile = dslPath @@ genFile "UpstreamSyntaxVersions"
 
 let buildDirs = !! "**/bin" ++ "**/obj"
 
