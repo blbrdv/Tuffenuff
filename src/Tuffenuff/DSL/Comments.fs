@@ -6,6 +6,15 @@ open Tuffenuff.Domain.Types
 open Tuffenuff.String
 open Tuffenuff.StringCE
 
+let private checkNotEmpty (directives : String seq) =
+    if Seq.length directives < 1 then
+        raise (
+            ArgumentOutOfRangeException (
+                "Sequence of directives can not be empty",
+                nameof directives
+            )
+        )
+
 /// <summary>
 /// Comment for providing information about the Dockerfile or explaining the purpose of
 /// individual instructions.
@@ -69,13 +78,7 @@ let escape (value : char) : Entity = !/ $"escape=%c{value}"
 /// <seealso cref="skip"/>
 /// <seealso cref="skipAll"/>
 let check (directives : string seq) (warnAsError : bool) : Entity =
-    if Seq.length directives < 1 then
-        raise (
-            ArgumentOutOfRangeException (
-                "Sequence of directives must not be empty",
-                nameof directives
-            )
-        )
+    checkNotEmpty directives
 
     str {
         if directives = [ "all" ] then
@@ -120,13 +123,7 @@ let warnAsError : Entity = printKV "error" "true" |> printKV "check" |> comment
 /// <seealso cref="warnAsError"/>
 /// <seealso cref="skipAll"/>
 let skip (directives : string seq) : Entity =
-    if Seq.length directives < 1 then
-        raise (
-            ArgumentOutOfRangeException (
-                "Sequence of directives must not be empty",
-                nameof directives
-            )
-        )
+    checkNotEmpty directives
 
     directives |> String.concat "," |> printKV "skip" |> printKV "check" |> comment
 

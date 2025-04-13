@@ -10,7 +10,7 @@ open Tests.Utils
 let private text = "This is comment text"
 
 [<Literal>]
-let private errorMsg = "Sequence of directives must not be empty"
+let private errorMsg = "Sequence of directives can not be empty"
 
 [<Tests>]
 let tests =
