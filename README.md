@@ -115,10 +115,16 @@ See [examples](examples/).
 1. Install DotNet SDK version [6.0.x](https://dotnet.microsoft.com/download/dotnet/6.0)
 2. Run `dotnet tool restore`
 3. Run project tasks `dotnet fake run build.fsx -t <Target>`, where `<Target>` is:
-    - `CodestyleCheck`
-    - `CodestyleFormat`
-    - `Clean`
-    - `Build`
-    - `RunTests`
+   - `Build`
+   - `Clean`
+   - `CodestyleCheck`
+   - `CodestyleFormat`
+   - `GenerateAllSyntaxVersions`
+   - `GenerateSyntaxVersions`
+   - `GenerateUpstreamSyntaxVersions`
+   - `Release`
+   - `RunIntegrationTests`
+   - `RunTests`
+   - `RunUnitTests`
 
 See `build.fsx` source code for more info.
