@@ -35,8 +35,8 @@
     <Compile Include="Domain/CE.fs" />
     <Compile Include="DSL/Variables.fs" />
     <Compile Include="DSL/Comments.fs" />
-    <Compile Include="DSL/SyntaxVersions.fs" />
-    <Compile Include="DSL/UpstreamSyntaxVersions.fs" />
+    <Compile Include="DSL\SyntaxVersions.gen.fs" />
+    <Compile Include="DSL\UpstreamSyntaxVersions.gen.fs" />
     <Compile Include="DSL/From.fs" />
     <Compile Include="DSL/Run.fs" />
     <Compile Include="DSL/Cmd.fs" />
