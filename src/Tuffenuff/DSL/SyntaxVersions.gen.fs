@@ -1,5 +1,6 @@
 (*
     Generated with 'scripts/SyntaxVersionsGenerator.fsx'
+    WARNING: Any changes made here by hand will be overwritten!
 *)
 
 /// <summary>

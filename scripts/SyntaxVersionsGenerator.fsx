@@ -120,6 +120,9 @@ module private Generate =
     [<Literal>]
     let private eof = "\r\n"
     
+    [<Literal>]
+    let private indent = "    "
+    
     let inline private (<~|) (stream : FileStream) (text : string) =
         text
         |> Encoding.UTF8.GetBytes
@@ -142,9 +145,12 @@ module private Generate =
             
             stream
             <<| "(*"
-            <~| "    Generated with 'scripts/"
+            <~| indent
+            <~| "Generated with 'scripts/"
             <~| thisFileName
             <<| "'"
+            <~| indent
+            <<| "WARNING: Any changes made here by hand will be overwritten!"
             <<| "*)"
             <~| eof
             
