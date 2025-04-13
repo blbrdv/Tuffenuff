@@ -32,7 +32,9 @@
     <Compile Include="StringCE.fs" />
     <Compile Include="Domain/Collections.fs" />
     <Compile Include="Domain/Types.fs" />
+    <Compile Include="Domain/Common.fs" />
     <Compile Include="Domain/CE.fs" />
+    <Compile Include="Domain/FromCE.fs" />
     <Compile Include="DSL/Variables.fs" />
     <Compile Include="DSL/Comments.fs" />
     <Compile Include="DSL/SyntaxVersions.gen.fs" />

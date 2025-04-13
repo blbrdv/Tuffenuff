@@ -3,32 +3,6 @@ module Tuffenuff.Domain.CE
 open Tuffenuff.Domain.Types
 open Tuffenuff.Domain.Collections
 
-
-//---------------------------------------------------------------------------------------
-// FROM
-//---------------------------------------------------------------------------------------
-
-
-type FromBuilder(image) =
-    member _.Zero () = FromInstruction.Create image
-
-    member this.Yield _ = this.Zero ()
-
-    [<CustomOperation("as'")>]
-    member _.Alias (state : FromInstruction, value : string) =
-        { state with Name = Some value }
-
-    [<CustomOperation("platform")>]
-    member _.Platform (state : FromInstruction, value : string) =
-        { state with Platform = Some value }
-
-    member _.Combine (_, _) = ()
-
-    member _.Delay f = f ()
-
-    member _.Run state = state |> From |> Instruction
-
-
 //---------------------------------------------------------------------------------------
 // ADD
 //---------------------------------------------------------------------------------------
