@@ -27,14 +27,13 @@ let tests =
 
         testCase "short comment test"
         <| fun _ ->
-            Expect.equal (!/ text |> render) "# This is comment text"
+            Expect.equal (!/text |> render) "# This is comment text"
             <| "String should start with '# ' and contains unmodified text"
 
         testCase "custom syntax parser directive test"
         <| fun _ ->
             Expect.equal ("foo/bar" |> syntax |> render) "# syntax=foo/bar"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -44,8 +43,7 @@ let tests =
         testCase "'v1' syntax parser directive test"
         <| fun _ ->
             Expect.equal (Syntax.v1 |> render) "# syntax=docker/dockerfile:1"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -57,8 +55,7 @@ let tests =
             Expect.equal
                 (UpstreamSyntax.master |> render)
                 "# syntax=docker/dockerfile-upstream:master"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -68,8 +65,7 @@ let tests =
         testCase "escape parser directive test"
         <| fun _ ->
             Expect.equal ('`' |> escape |> render) "# escape=`"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -79,8 +75,7 @@ let tests =
         testCase "check all parser directive test"
         <| fun _ ->
             Expect.equal (check [ "all" ] true |> render) "# check=skip=all;error=true"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -92,14 +87,13 @@ let tests =
                     3.4. key-value with\n\
                       3.4.1. 'error' keyword\n\
                       3.4.2. value from second argument\n\n"
-                    
+
         testCase "check some parser directive test"
         <| fun _ ->
             Expect.equal
                 (check [ "StageNameCasing" ; "FromAsCasing" ] false |> render)
                 "# check=skip=StageNameCasing,FromAsCasing;error=false"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -121,8 +115,7 @@ let tests =
         testCase "warnAsError parser directive test"
         <| fun _ ->
             Expect.equal (warnAsError |> render) "# check=error=true"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -134,8 +127,7 @@ let tests =
             Expect.equal
                 ([ "StageNameCasing" ; "FromAsCasing" ] |> skip |> render)
                 "# check=skip=StageNameCasing,FromAsCasing"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -153,8 +145,7 @@ let tests =
         testCase "skipAll parser directive test"
         <| fun _ ->
             Expect.equal (skipAll |> render) "# check=skip=all"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\

@@ -10,8 +10,7 @@ let tests =
         testCase "quote test"
         <| fun _ ->
             Expect.equal (quote "quoted text") "\"quoted text\""
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. quote symbol\n\
                   2. unformatted text\n\
                   3. quote symbol\n\n"
@@ -19,8 +18,7 @@ let tests =
         testCase "print test"
         <| fun _ ->
             Expect.equal (print "INSTRUCTION" "argument") $"INSTRUCTION argument%s{eol}"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. name from first argument\n\
                   2. whitespace\n\
                   3. value from second argument\n\
@@ -29,8 +27,7 @@ let tests =
         testCase "printKV test"
         <| fun _ ->
             Expect.equal (printKV "key.name" "somevalue") "key.name=somevalue"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. key from first argument\n\
                   2. equals symbol\n\
                   3. value from second argument\n\n"
@@ -38,8 +35,7 @@ let tests =
         testCase "printKVQ test"
         <| fun _ ->
             Expect.equal (printKVQ "key.name" "somevalue") "key.name=\"somevalue\""
-            <| 
-                "String should contain\n\
+            <| "String should contain\n\
                   1. key from first argument\n\
                   2. equals symbol\n\
                   3. quote symbol\n\
@@ -67,8 +63,7 @@ let tests =
         testCase "printList array test"
         <| fun _ ->
             Expect.equal (printList [| "a" ; "b" ; "c" |]) """[ "a", "b", "c" ]"""
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. left bracket\n\
                   2. whitespace\n\
                   3. all strings from argument, quoted and seperated by comma and\
@@ -79,8 +74,7 @@ let tests =
         testCase "printFlag true test"
         <| fun _ ->
             Expect.equal (printFlag "flag-name" true) " --flag-name"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. whitespace\n\
                   2. two minus symbols\n\
                   3. flag name unmodified\n\n"
@@ -93,8 +87,7 @@ let tests =
         testCase "printParameter some test"
         <| fun _ ->
             Expect.equal (printParameter "parameter" (Some 3)) " --parameter=3"
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. whitespace\n\
                   2. two minus symbols\n\
                   3. parameter name from first argument\n\
@@ -109,8 +102,7 @@ let tests =
         testCase "printParameterQ some test"
         <| fun _ ->
             Expect.equal (printParameterQ "parameter" (Some 3)) " --parameter=\"3\""
-            <|
-                "String should contain\n\
+            <| "String should contain\n\
                   1. whitespace\n\
                   2. two minus symbols\n\
                   3. parameter name from first argument\n\
@@ -118,7 +110,7 @@ let tests =
                   5. quote symbol\n\
                   6. unfolded value from second argument\n\
                   7. quote symbol\n\n"
-        
+
         testCase "printParameterQ none test"
         <| fun _ ->
             Expect.equal (printParameterQ "parameter" None) String.Empty
@@ -127,8 +119,7 @@ let tests =
         testCase "trim empty lines test"
         <| fun _ ->
             Expect.equal (trim $"{eol} {eol}{eol} FROM scratch") "FROM scratch"
-            <|
-                "String should contain text starting from first occurence of\
+            <| "String should contain text starting from first occurence of\
                 symbols except whitespaces and EOL"
 
         testCase "trim non-empty lines test"
