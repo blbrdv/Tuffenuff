@@ -120,7 +120,7 @@ let tests =
         testCase "check empty parser directive test"
         <| fun _ ->
             Expect.throwsT<ArgumentOutOfRangeException>
-                (check [] false |> explode)
+                (fun _ -> check [] false |> ignore)
                 errorMsg
 
         testCase "warnAsError parser directive test"
@@ -151,7 +151,9 @@ let tests =
 
         testCase "skip empty parser directive test"
         <| fun _ ->
-            Expect.throwsT<ArgumentOutOfRangeException> (skip [] |> explode) errorMsg
+            Expect.throwsT<ArgumentOutOfRangeException>
+                (fun _ -> skip [] |> ignore)
+                errorMsg
 
         testCase "skipAll parser directive test"
         <| fun _ ->
