@@ -39,6 +39,9 @@ let integrationTestsProjName = "Tuffenuff.IntegrationTests"
 [<Literal>]
 let unitTestsProjName = "Tuffenuff.UnitTests"
 
+[<Literal>]
+let scriptsDir = "scripts"
+
 // Paths
 
 let proj (name : string) = $"{name}.{projExtension}"
@@ -51,6 +54,13 @@ let integrationTestsProjFile = projFile integrationTestsProjName testsProjDir
 
 let unitTestsProjFile = projFile unitTestsProjName testsProjDir
 
+let syntaxVersionsGeneratorScript = scriptsDir @@ "SyntaxVersionsGenerator.fsx"
+
+let dslPath = projDir @@  projName @@ "DSL"
+
+let syntaxVersionFile = dslPath @@ "SyntaxVersions.fs"
+let syntaxUpstreamVersionFile = dslPath @@ "UpstreamSyntaxVersions.fs"
+
 let buildDirs = !! "**/bin" ++ "**/obj"
 
 // Options
@@ -60,6 +70,16 @@ let testOptions = (
             { opt with 
                 Logger = Some "console;verbosity=detailed" 
             }
+    )
+
+// Prebuild targets
+
+let execFsi (script : string) (arguments : string list) = (
+        fun _ ->
+            script :: arguments
+            |> String.concat " "
+            |> DotNet.exec id "fsi"
+            |> ignore
     )
 
 // Targets
@@ -114,6 +134,19 @@ Target.create "Release" (fun _ ->
     <| packageFile
 )
 
+(syntaxVersionsGeneratorScript, [ syntaxVersionFile ; "dockerfile" ; "Syntax" ])
+||> execFsi
+|> Target.create "GenerateSyntaxVersions"
+
+(
+    syntaxVersionsGeneratorScript,
+    [ syntaxUpstreamVersionFile ; "dockerfile-upstream" ; "UpstreamSyntax" ]
+)
+||> execFsi
+|> Target.create "GenerateUpstreamSyntaxVersions"
+
+Target.create "GenerateAllSyntaxVersions" ignore
+
 "Clean" 
     ==> "Build"
 
@@ -129,5 +162,9 @@ Target.create "Release" (fun _ ->
 
 "Build"
     ==> "Release"
+
+"GenerateSyntaxVersions"
+    ==> "GenerateUpstreamSyntaxVersions"
+    ==> "GenerateAllSyntaxVersions"
 
 Target.runOrDefault "RunTests"
