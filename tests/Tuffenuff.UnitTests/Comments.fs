@@ -17,23 +17,28 @@ let tests =
     testList "comment tests" [
         testCase "comment test"
         <| fun _ ->
-            Expect.equal (text |> comment |> render) "# This is comment text"
-            <| "String should start with '# ' and contains unmodified text"
+            Expect.equal
+                (text |> comment |> render)
+                "# This is comment text"
+                "String must start with '# ' and contains unmodified text"
 
         testCase "empty comment test"
         <| fun _ ->
-            Expect.equal (empty |> comment |> render) String.Empty
-            <| "String should be empty"
+            Expect.equal (empty |> comment |> render) String.Empty "String must be empty"
 
         testCase "short comment test"
         <| fun _ ->
-            Expect.equal (!/text |> render) "# This is comment text"
-            <| "String should start with '# ' and contains unmodified text"
+            Expect.equal
+                (!/text |> render)
+                "# This is comment text"
+                "String must start with '# ' and contains unmodified text"
 
         testCase "custom syntax parser directive test"
         <| fun _ ->
-            Expect.equal ("foo/bar" |> syntax |> render) "# syntax=foo/bar"
-            <| "String should contain\n\
+            Expect.equal
+                ("foo/bar" |> syntax |> render)
+                "# syntax=foo/bar"
+                "String must contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -42,8 +47,10 @@ let tests =
 
         testCase "'v1' syntax parser directive test"
         <| fun _ ->
-            Expect.equal (Syntax.v1 |> render) "# syntax=docker/dockerfile:1"
-            <| "String should contain\n\
+            Expect.equal
+                (Syntax.v1 |> render)
+                "# syntax=docker/dockerfile:1"
+                "String must contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -55,7 +62,7 @@ let tests =
             Expect.equal
                 (UpstreamSyntax.master |> render)
                 "# syntax=docker/dockerfile-upstream:master"
-            <| "String should contain\n\
+                "String must contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -64,8 +71,10 @@ let tests =
 
         testCase "escape parser directive test"
         <| fun _ ->
-            Expect.equal ('`' |> escape |> render) "# escape=`"
-            <| "String should contain\n\
+            Expect.equal
+                ('`' |> escape |> render)
+                "# escape=`"
+                "String must contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -74,8 +83,10 @@ let tests =
 
         testCase "check all parser directive test"
         <| fun _ ->
-            Expect.equal (check [ "all" ] true |> render) "# check=skip=all;error=true"
-            <| "String should contain\n\
+            Expect.equal
+                (check [ "all" ] true |> render)
+                "# check=skip=all;error=true"
+                "String must contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -93,7 +104,7 @@ let tests =
             Expect.equal
                 (check [ "StageNameCasing" ; "FromAsCasing" ] false |> render)
                 "# check=skip=StageNameCasing,FromAsCasing;error=false"
-            <| "String should contain\n\
+                "String must contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -109,13 +120,15 @@ let tests =
         testCase "check empty parser directive test"
         <| fun _ ->
             Expect.throwsT<ArgumentOutOfRangeException>
-                (fun _ -> check [] false |> render |> ignore)
+                (fun _ -> check [] false |> ignore)
                 errorMsg
 
         testCase "warnAsError parser directive test"
         <| fun _ ->
-            Expect.equal (warnAsError |> render) "# check=error=true"
-            <| "String should contain\n\
+            Expect.equal
+                (warnAsError |> render)
+                "# check=error=true"
+                "String must contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -127,7 +140,7 @@ let tests =
             Expect.equal
                 ([ "StageNameCasing" ; "FromAsCasing" ] |> skip |> render)
                 "# check=skip=StageNameCasing,FromAsCasing"
-            <| "String should contain\n\
+                "String must contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
@@ -139,13 +152,15 @@ let tests =
         testCase "skip empty parser directive test"
         <| fun _ ->
             Expect.throwsT<ArgumentOutOfRangeException>
-                (fun _ -> [] |> skip |> render |> ignore)
+                (fun _ -> skip [] |> ignore)
                 errorMsg
 
         testCase "skipAll parser directive test"
         <| fun _ ->
-            Expect.equal (skipAll |> render) "# check=skip=all"
-            <| "String should contain\n\
+            Expect.equal
+                (skipAll |> render)
+                "# check=skip=all"
+                "String must contain\n\
                   1. sharp symbol\n\
                   2. whitespace\n\
                   3. key-value with\n\
