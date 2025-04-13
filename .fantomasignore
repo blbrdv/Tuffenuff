@@ -1,9 +1,9 @@
-# experiments
-xtest.fsx
-
 # FAKE
 .fake
 build.fsx
 
 # scripts
 scripts
+
+# generated files
+**/*.gen.fs
