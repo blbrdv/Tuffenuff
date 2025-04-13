@@ -9,21 +9,56 @@ open Tuffenuff.StringCE
 
 type private Entities = Entity seq
 
+/// <summary>
+/// Form sequence of Dockerfile entities.
+/// </summary>
+/// <param name="value">Sequence of entities.</param>
+/// <seealso cref="df"/>
 let dockerfile (value : Entities) : Entities = value
 
+/// <summary>
+/// Form sequence of Dockerfile entities.
+/// </summary>
+/// <param name="value">Sequence of entities.</param>
+/// <seealso cref="dockerfile"/>
 let df (value : Entities) : Entities = dockerfile value
 
+/// <summary>
+/// Insert plain text line into Dockerfile.
+/// </summary>
+/// <param name="value">Text to insert.</param>
 let plain (value : string) : Entity = Plain value
 
+/// <summary>
+/// Insert empty line into Dockerfile.
+/// </summary>
 let br = plain empty
 
+/// <summary>
+/// Insert sequence of Dockerfile entities as part of Dockerfile.
+/// </summary>
+/// <param name="value">Sequence of entities.</param>
+/// <seealso cref="(!&)"/>
 let part (value : Entities) : Entity = Subpart value
 
+/// <summary>
+/// Insert sequence of Dockerfile entities as part of Dockerfile.
+/// </summary>
+/// <param name="value">Sequence of entities.</param>
+/// <seealso cref="part"/>
 let (!&) (value : Entities) : Entity = part value
 
+/// <summary>
+/// Module of functions to work with Dockerfile entities.
+/// </summary>
 [<RequireQualifiedAccess>]
 module Dockerfile =
 
+    /// <summary>
+    /// Convert sequence of Dockerfile entities to human-readable Dockerfile string.
+    /// </summary>
+    /// <param name="value">Sequence of entities to convert.</param>
+    /// <returns>Dockerfile string.</returns>
     let render (value : Entities) : string =
         let rec renderInstruction (instr : InstructionType) : string =
             match instr with
@@ -147,8 +182,18 @@ module Dockerfile =
 
         value |> renderSubpart |> trim
 
+    /// <summary>
+    /// Creates a new file, writes the Dockerfile string to the file, and then closes the
+    /// file. If the target file already exists, it is overwritten.
+    /// </summary>
+    /// <param name="path">Path to the target file.</param>
+    /// <param name="text">Dockerfile string.</param>
     let toFile (path : string) (text : string) = File.WriteAllText (path, text)
 
+    /// <summary>
+    /// Reads entities from Dockerfile.
+    /// </summary>
+    /// <param name="path">Path to the Dockerfile.</param>
     let fromFile (path : string) : Entities =
         if not (File.Exists path) then
             raise (ArgumentException ("File not found", nameof path))
