@@ -1,6 +1,6 @@
 (*
-    Generates module with dockerfile syntax versions from 
-    https://hub.docker.com/r/docker/dockerfile/tags
+    Generate file with F# module with Dockerfile syntax versions from 
+    https://hub.docker.com/u/docker
 *)
 
 #r "nuget: FsHttp, 15.0.1"
@@ -8,7 +8,7 @@
 let private args = fsi.CommandLineArgs
 
 if args.Length <> 4 then
-    eprintf "Output file path, repository name and namespace must be provided, "
+    eprintf "Output file path, repository name and namespace must be provided"
     failwith "3 arguments expected"
 
 let private targetFilePath = args[1]
