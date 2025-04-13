@@ -3,12 +3,6 @@ module Tests.String
 open System
 open Expecto
 open Tuffenuff.String
-open Tuffenuff.StringCE
-
-[<Literal>]
-let line = "FROM scratch"
-
-let trimmableLine = $"{eol} {eol}{eol} {line}"
 
 [<Tests>]
 let tests =
@@ -16,22 +10,41 @@ let tests =
         testCase "quote test"
         <| fun _ ->
             Expect.equal (quote "quoted text") "\"quoted text\""
-            <| "String should be quoted"
+            <|
+                "String should contain\n\
+                  1. quote symbol\n\
+                  2. unformatted text\n\
+                  3. quote symbol\n\n"
 
         testCase "print test"
         <| fun _ ->
             Expect.equal (print "INSTRUCTION" "argument") $"INSTRUCTION argument%s{eol}"
-            <| "Instruction and argument should be printed separately"
+            <|
+                "String should contain\n\
+                  1. name from first argument\n\
+                  2. whitespace\n\
+                  3. value from second argument\n\
+                  4. EOL\n\n"
 
         testCase "printKV test"
         <| fun _ ->
             Expect.equal (printKV "key.name" "somevalue") "key.name=somevalue"
-            <| "Key-Value print should be prettified"
+            <|
+                "String should contain\n\
+                  1. key from first argument\n\
+                  2. equals symbol\n\
+                  3. value from second argument\n\n"
 
         testCase "printKVQ test"
         <| fun _ ->
             Expect.equal (printKVQ "key.name" "somevalue") "key.name=\"somevalue\""
-            <| "Quoted Key-Value print should be prettified"
+            <| 
+                "String should contain\n\
+                  1. key from first argument\n\
+                  2. equals symbol\n\
+                  3. quote symbol\n\
+                  4. value from second argument\n\
+                  5. quote symbol\n\n"
 
         testCase "printList seq test"
         <| fun _ ->
@@ -44,69 +57,84 @@ let tests =
                     }
                 ))
                 "a b c"
-            <| "Seq should be printed in shell form"
+            <| "String should contain all strings from argument seperated with whitespace"
 
         testCase "printList list test"
         <| fun _ ->
             Expect.equal (printList [ "a" ; "b" ; "c" ]) "a b c"
-            <| "List should be printed in shell form"
+            <| "String should contain all strings from argument seperated with whitespace"
 
         testCase "printList array test"
         <| fun _ ->
             Expect.equal (printList [| "a" ; "b" ; "c" |]) """[ "a", "b", "c" ]"""
-            <| "Array should be printed in exec form"
+            <|
+                "String should contain\n\
+                  1. left bracket\n\
+                  2. whitespace\n\
+                  3. all strings from argument, quoted and seperated by comma and\
+                  whitespace\n\
+                  4. whitespace\n\
+                  5. right bracket\n\n"
 
         testCase "printFlag true test"
         <| fun _ ->
             Expect.equal (printFlag "flag-name" true) " --flag-name"
-            <| "Included flag should be prettified"
+            <|
+                "String should contain\n\
+                  1. whitespace\n\
+                  2. two minus symbols\n\
+                  3. flag name unmodified\n\n"
 
         testCase "printFlag false test"
         <| fun _ ->
             Expect.equal (printFlag "flag-name" false) String.Empty
-            <| "Excluded flag should be equal to empty string"
+            <| "String should be empty"
 
         testCase "printParameter some test"
         <| fun _ ->
             Expect.equal (printParameter "parameter" (Some 3)) " --parameter=3"
-            <| "Parameter with value should be prettified"
+            <|
+                "String should contain\n\
+                  1. whitespace\n\
+                  2. two minus symbols\n\
+                  3. parameter name from first argument\n\
+                  4. equals symbol\n\
+                  5. unfolded value from second argument\n\n"
 
         testCase "printParameter none test"
         <| fun _ ->
             Expect.equal (printParameter "parameter" None) String.Empty
-            <| "Parameter without value should be equal to empty string"
+            <| "String should be empty"
 
-        testCase "printParameterQ test"
+        testCase "printParameterQ some test"
         <| fun _ ->
             Expect.equal (printParameterQ "parameter" (Some 3)) " --parameter=\"3\""
-            <| "String parameter should be quoted"
+            <|
+                "String should contain\n\
+                  1. whitespace\n\
+                  2. two minus symbols\n\
+                  3. parameter name from first argument\n\
+                  4. equals symbol\n\
+                  5. quote symbol\n\
+                  6. unfolded value from second argument\n\
+                  7. quote symbol\n\n"
+        
+        testCase "printParameterQ none test"
+        <| fun _ ->
+            Expect.equal (printParameterQ "parameter" None) String.Empty
+            <| "String should be empty"
 
         testCase "trim empty lines test"
         <| fun _ ->
-            Expect.equal (trim trimmableLine) line
-            <| "Trim should remove leading empty lines and spaces"
+            Expect.equal (trim $"{eol} {eol}{eol} FROM scratch") "FROM scratch"
+            <|
+                "String should contain text starting from first occurence of\
+                symbols except whitespaces and EOL"
 
         testCase "trim non-empty lines test"
         <| fun _ ->
-            Expect.equal (trim $"somevalue{trimmableLine}") $"somevalue{trimmableLine}"
-            <| "Trim should not remove leading non-empty lines"
-
-        testCase "StringBuilder CE test"
-        <| fun _ ->
-            let a = "A"
-            let b = "B"
-            let c = "C"
-
-            let expected = $"{a} {b}{eol}{c}"
-
-            let actual =
-                str {
-                    a
-                    ws
-                    b
-                    eol
-                    c
-                }
-
-            Expect.equal actual expected "String should be built"
+            Expect.equal
+                (trim $"somevalue{eol} {eol}{eol} FROM scratch")
+                $"somevalue{eol} {eol}{eol} FROM scratch"
+            <| "String should be equal to provided in argument"
     ]

@@ -19,52 +19,85 @@ let replacement = "baz"
 let tests =
     testList "variable tests" [
         testCase "variable test"
-        <| fun _ -> Expect.equal (variable name) "${foo}" <| "Variable should be notated"
+        <| fun _ -> Expect.equal (variable name) "${foo}" <| "String should be notated"
 
         testCase "variable short syntax test"
-        <| fun _ -> Expect.equal (!~name) "${foo}" <| "Variable should be notated"
+        <| fun _ -> Expect.equal (!~name) "${foo}" <| "String should be notated"
 
         testCase "variable bash minus modifier syntax test"
         <| fun _ ->
             Expect.equal (!~- name value) "${foo:-bar}"
-            <| "Variable's name and value should be notated with bash minus modifier"
+            <|
+                "String should be notated and contains\n\
+                  1. variable name from first argument\n\
+                  2. bash minus modifier (:-)\n\
+                  3. value from second argument\n\n"
 
         testCase "variable bash plus modifier syntax test"
         <| fun _ ->
             Expect.equal (!~+ name value) "${foo:+bar}"
-            <| "Variable's name and value should be notated with bash plus modifier"
+            <| 
+                "String should be notated and contains\n\
+                  1. variable name from first argument\n\
+                  2. bash plus modifier (:+)\n\
+                  3. value from second argument\n\n"
 
-        testCase
-            "variable pattern removal (seeking from the start of the string, shortest match) syntax test"
+        testCase "variable pattern removal (from start, shortest match) syntax test"
         <| fun _ ->
             Expect.equal (!~? name pattern) "${foo#b*r}"
-            <| "Variable's name and pattern should be notated with '#' modifier"
+            <|
+                "String should be notated and contains\n\
+                  1. variable name from first argument\n\
+                  2. hash symbol\n\
+                  3. pattern from second argument\n\n"
 
-        testCase
-            "variable pattern removal (seeking from the start of the string, longest match) syntax test"
+        testCase "variable pattern removal (from start, longest match) syntax test"
         <| fun _ ->
             Expect.equal (!~?? name pattern) "${foo##b*r}"
-            <| "Variable's name and pattern should be notated with '##' modifier"
+            <| 
+                "String should be notated and contains\n\
+                  1. variable name from first argument\n\
+                  2. two hash symbols\n\
+                  3. pattern from second argument\n\n"
 
-        testCase
-            "variable pattern removal (seeking backwards from the end of the string, shortest match) syntax test"
+        testCase "variable pattern removal (backwards from the end, shortest) syntax test"
         <| fun _ ->
             Expect.equal (!~% name pattern) "${foo%b*r}"
-            <| "Variable's name and pattern should be notated with '%' modifier"
+            <|
+                "String should be notated and contains\n\
+                  1. variable name from first argument\n\
+                  2. modulus symbol\n\
+                  3. pattern from second argument\n\n"
 
         testCase
-            "variable pattern removal (seeking backwards from the end of the string, longest match) syntax test"
+            "variable pattern removal (backwards from the end, longest match) syntax test"
         <| fun _ ->
             Expect.equal (!~%% name pattern) "${foo%%b*r}"
-            <| "Variable's name and pattern should be notated with '%%' modifier"
+            <|
+                "String should be notated and contains\n\
+                  1. variable name from first argument\n\
+                  2. two modulus symbols\n\
+                  3. pattern from second argument\n\n"
 
         testCase "variable pattern replacement (first occurrence) syntax test"
         <| fun _ ->
             Expect.equal (!~/ name pattern replacement) "${foo/b*r/baz}"
-            <| "Variable's name, pattern and replacement should be notated with '/' modifier"
+            <|
+                "String should be notated and contains\n\
+                  1. variable name from first argument\n\
+                  2. slash symbol\n\
+                  3. pattern from second argument\n\
+                  4. slash symbol\n\
+                  5. replacement from third argument\n\n"
 
         testCase "variable pattern replacement (all occurrences) syntax test"
         <| fun _ ->
             Expect.equal (!~// name pattern replacement) "${foo//b*r/baz}"
-            <| "Variable's name, pattern and replacement should be notated with '//' modifier"
+            <| 
+                "String should be notated and contains\n\
+                  1. variable name from first argument\n\
+                  2. two slash symbols\n\
+                  3. pattern from second argument\n\
+                  4. slash symbol\n\
+                  5. replacement from third argument\n\n"
     ]

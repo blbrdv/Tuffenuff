@@ -3,18 +3,11 @@ module Tests.Comments
 open System
 open Expecto
 open Tuffenuff.DSL
-open Tuffenuff.DSL.Dockerfile
 open Tuffenuff.String
 open Tests.Utils
 
 [<Literal>]
 let private text = "This is comment text"
-
-[<Literal>]
-let private docker_v1 = "docker/dockerfile:1"
-
-[<Literal>]
-let private esc = '`'
 
 [<Literal>]
 let private errorMsg = "Sequence of directives must not be empty"
@@ -24,45 +17,100 @@ let tests =
     testList "comment tests" [
         testCase "comment test"
         <| fun _ ->
-            Expect.equal (text |> comment |> render) $"# %s{text}"
-            <| "Comment should should start with '#' and contains it's text"
+            Expect.equal (text |> comment |> render) "# This is comment text"
+            <| "String should start with '# ' and contains unmodified text"
 
         testCase "empty comment test"
         <| fun _ ->
-            Expect.equal (empty |> comment |> render) empty
-            <| "Empty comment should not be rendered"
+            Expect.equal (empty |> comment |> render) String.Empty
+            <| "String should be empty"
 
         testCase "short comment test"
         <| fun _ ->
-            Expect.equal (!/text |> render) $"# %s{text}"
-            <| "Comment should should start with '#' and contains it's text"
+            Expect.equal (!/ text |> render) "# This is comment text"
+            <| "String should start with '# ' and contains unmodified text"
 
-        testCase "syntax parser directive test"
+        testCase "custom syntax parser directive test"
         <| fun _ ->
-            Expect.equal (docker_v1 |> syntax |> render) $"# syntax=%s{docker_v1}"
-            <| "Syntax parser directive should be comment with 'syntax=<version>' value"
+            Expect.equal ("foo/bar" |> syntax |> render) "# syntax=foo/bar"
+            <|
+                "String should contain\n\
+                  1. sharp symbol\n\
+                  2. whitespace\n\
+                  3. key-value with\n\
+                    3.1 'syntax' keyword\n\
+                    3.2. custom image reference from argument\n\n"
 
-        testCase "v1 syntax parser directive test"
+        testCase "'v1' syntax parser directive test"
         <| fun _ ->
-            Expect.equal (v1 |> render) $"# syntax=%s{docker_v1}"
-            <| "Syntax parser directive should be comment with 'syntax=<version>' value"
+            Expect.equal (Syntax.v1 |> render) "# syntax=docker/dockerfile:1"
+            <|
+                "String should contain\n\
+                  1. sharp symbol\n\
+                  2. whitespace\n\
+                  3. key-value with\n\
+                    3.1 'syntax' keyword\n\
+                    3.2. first 'dockerfile' version image reference\n\n"
+
+        testCase "'master' upstream syntax parser directive test"
+        <| fun _ ->
+            Expect.equal
+                (UpstreamSyntax.master |> render)
+                "# syntax=docker/dockerfile-upstream:master"
+            <|
+                "String should contain\n\
+                  1. sharp symbol\n\
+                  2. whitespace\n\
+                  3. key-value with\n\
+                    3.1 'syntax' keyword\n\
+                    3.2. 'master' 'dockerfile-upstream' image reference\n\n"
 
         testCase "escape parser directive test"
         <| fun _ ->
-            Expect.equal (esc |> escape |> render) $"# escape=%c{esc}"
-            <| "Escape parser directive should be comment with 'escape=<char>' value"
+            Expect.equal ('`' |> escape |> render) "# escape=`"
+            <|
+                "String should contain\n\
+                  1. sharp symbol\n\
+                  2. whitespace\n\
+                  3. key-value with\n\
+                    3.1. 'escape' keyword\n\
+                    3.2. provided character\n\n"
 
         testCase "check all parser directive test"
         <| fun _ ->
             Expect.equal (check [ "all" ] true |> render) "# check=skip=all;error=true"
-            <| "Check parser directive should be comment with 'check=skip=<checks>;error=<boolean>' value"
-
+            <|
+                "String should contain\n\
+                  1. sharp symbol\n\
+                  2. whitespace\n\
+                  3. key-value with\n\
+                    3.1. 'check' keyword\n\
+                    3.2. key-value with\n\
+                      3.2.1. 'skip' keyword\n\
+                      3.2.2. values from first argument seperated by comma\n\
+                    3.3. semicolon\n\
+                    3.4. key-value with\n\
+                      3.4.1. 'error' keyword\n\
+                      3.4.2. value from second argument\n\n"
+                    
         testCase "check some parser directive test"
         <| fun _ ->
             Expect.equal
                 (check [ "StageNameCasing" ; "FromAsCasing" ] false |> render)
                 "# check=skip=StageNameCasing,FromAsCasing;error=false"
-            <| "Check parser directive should be comment with 'check=skip=<checks>;error=<boolean>' value"
+            <|
+                "String should contain\n\
+                  1. sharp symbol\n\
+                  2. whitespace\n\
+                  3. key-value with\n\
+                    3.1. 'check' keyword\n\
+                    3.2. key-value with\n\
+                      3.2.1. 'skip' keyword\n\
+                      3.2.2. values in first argument seperated by comma\n\
+                    3.3. semicolon\n\
+                    3.4. key-value with\n\
+                      3.4.1. 'error' keyword\n\
+                      3.4.2. value from second argument\n\n"
 
         testCase "check empty parser directive test"
         <| fun _ ->
@@ -73,14 +121,28 @@ let tests =
         testCase "warnAsError parser directive test"
         <| fun _ ->
             Expect.equal (warnAsError |> render) "# check=error=true"
-            <| "Turn on error parser directive should be comment with 'check=error=true' value"
+            <|
+                "String should contain\n\
+                  1. sharp symbol\n\
+                  2. whitespace\n\
+                  3. key-value with\n\
+                    3.1. 'check' keyword\n\
+                    3.2. 'error=true' value\n\n"
 
         testCase "skip some parser directive test"
         <| fun _ ->
             Expect.equal
                 ([ "StageNameCasing" ; "FromAsCasing" ] |> skip |> render)
                 "# check=skip=StageNameCasing,FromAsCasing"
-            <| "Skip parser directive should be comment with 'check=skip=<checks>' value"
+            <|
+                "String should contain\n\
+                  1. sharp symbol\n\
+                  2. whitespace\n\
+                  3. key-value with\n\
+                    3.1. 'check' keyword\n\
+                    3.2. key-value with\n\
+                      3.2.1. 'skip' keyword\n\
+                      3.2.2. values in first argument seperated by comma\n\n"
 
         testCase "skip empty parser directive test"
         <| fun _ ->
@@ -91,5 +153,11 @@ let tests =
         testCase "skipAll parser directive test"
         <| fun _ ->
             Expect.equal (skipAll |> render) "# check=skip=all"
-            <| "Skip all parser directive should be comment with 'check=skip=all' value"
+            <|
+                "String should contain\n\
+                  1. sharp symbol\n\
+                  2. whitespace\n\
+                  3. key-value with\n\
+                    3.1. 'check' keyword\n\
+                    3.2. 'skip=all' value\n\n"
     ]
