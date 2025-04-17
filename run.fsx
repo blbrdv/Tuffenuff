@@ -57,7 +57,7 @@ Usage:
 
 Options:
   -h --help     Print this.
-  {list}        Print list of defined targets.
+  {list}        Print list of available targets.
   {version}     Print module version.
   {silent}            Silent trace level.
   {normal}            Normal trace level.
