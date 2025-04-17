@@ -64,26 +64,24 @@ type MinimalListener() =
             | TraceData.ErrorMessage text -> printrn text
 
             | TraceData.LogMessage (text, lineBreak) ->
-                // TODO fix logging when not verbose level
                 if isVerbose then
                     printLine text lineBreak
-                else if text.StartsWith optsStr then
-                    printwn text[optsStr.Length ..]
-                elif text.StartsWith groupStartStr then
-                    let matches = groupPattern.Matches (text)
+                else
+                    if text.StartsWith optsStr then
+                        printwn text[optsStr.Length ..]
+                    elif text.StartsWith groupStartStr then
+                        let matches = groupPattern.Matches (text)
 
-                    if matches.Count <> 0 then
-                        printnl ()
-                        printn groupStartStr
+                        if matches.Count <> 0 then
+                            printnl ()
+                            printn groupStartStr
 
-                        matches
-                        |> Seq.iter (fun m ->
-                            printn $"%s{m.Groups[1].Value} - %s{m.Groups[2].Value}"
-                        )
+                            matches
+                            |> Seq.iter (fun m ->
+                                printn $"%s{m.Groups[1].Value} - %s{m.Groups[2].Value}"
+                            )
 
-                        printnl ()
-                elif not (text.StartsWith "Shortened DependencyGraph") then
-                    printLine text lineBreak
+                            printnl ()
 
             | TraceData.TraceMessage (text, lineBreak) ->
                 if isVerbose then
