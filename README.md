@@ -112,19 +112,45 @@ See [examples](examples/).
 
 ## Local development
 
+### Pre-requirements
+
 1. Install DotNet SDK version [6.0.x](https://dotnet.microsoft.com/download/dotnet/6.0)
 2. Run `dotnet tool restore`
-3. Run project tasks `dotnet fake run build.fsx -t <Target>`, where `<Target>` is:
-   - `Build`
-   - `Clean`
-   - `CodestyleCheck`
-   - `CodestyleFormat`
-   - `GenerateAllSyntaxVersions`
-   - `GenerateSyntaxVersions`
-   - `GenerateUpstreamSyntaxVersions`
-   - `Release`
-   - `RunIntegrationTests`
-   - `RunTests`
-   - `RunUnitTests`
 
-See `build.fsx` source code for more info.
+### Use automation script
+
+Run `.\run.cmd` (Windows OS) or `./run.sh` (Unix-based OS) script:
+
+```
+Automation script.
+
+Usage:
+    script <TARGET> [-s|-n|-v] [--rebuild] [-e <ENV> ...]
+    script (-h | --help)
+    script --list
+    script --version
+
+Options:
+  -h --help     Print this.
+  --list        Print list of available targets.
+  --version     Print module version.
+  -s            Silent trace level.
+  -n            Normal trace level.
+  -v            Verbose trace level.
+  --rebuild     Force building CICD project.
+  -e            Sets environment variables.
+```
+
+#### The following targets are available:
+
+ - `AllTests` - Run "UnitTests" then "IntegrationTests"
+ - `Build` - Build Tuffenuff
+ - `CheckFormat` - Check if code files need formatting
+ - `Clean` - Delete "bin" and "obj" directories
+ - `Format` - Format code files
+ - `GenerateAllSyntaxVersions` - Run "GenerateSyntaxVersions" then "GenerateUpstreamSyntaxVersions"
+ - `GenerateSyntaxVersions` - Generates module with syntax versions from "dockerfile" repository
+ - `GenerateUpstreamSyntaxVersions` - Generates module with syntax versions from "dockerfile-upstream" repository
+ - `IntegrationTests` - Tests scripts in examples directory
+ - `Release` - Push library to Nuget
+ - `UnitTests` - Tests DSL
