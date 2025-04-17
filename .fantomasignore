@@ -1,9 +1,6 @@
-# FAKE
-.fake
-build.fsx
-
-# scripts
-scripts
+# cicd
+run.fsx
+cicd/**
 
 # generated files
 **/*.gen.fs
