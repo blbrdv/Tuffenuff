@@ -16,18 +16,18 @@ let init () =
     Target.create
         "CheckFormat"
         (fun _ ->
-            let result = DotNet.exec dotnetOptions "fantomas" "--recurse --check ."
+            let result = DotNet.exec fantomasOptions "fantomas" "--recurse --check ."
 
             if result.ExitCode = 0 then
                 Trace.log "No files need formatting"
             elif result.ExitCode = 99 then
                 failwith "Some files need formatting, check output for more info"
             else
-                Trace.traceError $"Errors while formatting: %A{result.Errors}"
+                failwith $"Errors while formatting: %A{result.Errors}"
         )
 
     Target.description "Format code files"
-    Target.create "Format" (fun _ -> DotNet.exec dotnetOptions "fantomas" "." |> ignore)
+    Target.create "Format" (fun _ -> DotNet.exec fantomasOptions "fantomas" "." |> ignore)
 
     Target.description "Delete \"bin\" and \"obj\" directories"
     Target.create

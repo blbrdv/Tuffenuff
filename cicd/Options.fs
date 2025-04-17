@@ -28,6 +28,21 @@ let dotnetOptions =
         }
     )
 
+/// Default 'dotnet fantomas' command options.
+/// Using this instead of 'dotnetOptions' because fantomas silently fails when verbosity
+/// is Quiet or Minimal. 🤡🤡🤡
+let fantomasOptions =
+    (fun (opt : DotNet.Options) ->
+        let newOpts = dotnetOptions opt
+        { newOpts with
+            Verbosity =
+                if isVerbose then
+                    newOpts.Verbosity
+                else
+                    Some DotNet.Verbosity.Normal
+        }
+    )
+
 /// Default 'dotnet build' command options.
 let buildOptions =
     (fun (opt : DotNet.BuildOptions) ->
