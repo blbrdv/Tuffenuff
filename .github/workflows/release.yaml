@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     paths-ignore:
-    - '.config/**'
+    - '.idea/**'
     - '.vscode/**'
     tags:
       - "*"
@@ -34,10 +34,7 @@ jobs:
       with:
         global-json-file: global.json
 
-    - name: Restore tools
-      run: dotnet tool restore
-
     - name: Nuget release
       env:
         KEY: ${{ secrets.NUGET_API_KEY }}
-      run: dotnet fake run build.fsx -t Release -e key=$KEY
+      run: ./run.sh Release -e NUGET_API_KEY=$KEY
