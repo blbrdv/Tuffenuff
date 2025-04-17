@@ -1,3 +1,4 @@
+<!--suppress HtmlDeprecatedAttribute -->
 <img align="left" width="80" height="76" src="imgs/logo.png" alt="logo">
 
 # Tuffenuff
@@ -108,7 +109,7 @@ ENTRYPOINT [ "/bin/bash", "-l" ]
 
 ### More examples
 
-See [examples](examples/).
+See [examples](examples).
 
 ## Local development
 
