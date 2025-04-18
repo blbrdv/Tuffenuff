@@ -33,13 +33,18 @@ let init () =
     Target.create
         "Clean"
         (fun _ ->
-            buildDirs
-            |> (fun value ->
-                value |> Seq.iter (fun dir -> Trace.log $"Deleting %s{dir}")
+            let targets = buildDirs |> List.ofSeq
 
-                value
-            )
-            |> Shell.deleteDirs
+            if targets.Length > 0 then
+                targets
+                |> (fun value ->
+                    value |> Seq.iter (fun dir -> Trace.log $"Deleting %s{dir}")
+
+                    value
+                )
+                |> Shell.deleteDirs
+            else
+                Trace.log "Nothing to delete"
         )
 
     Target.description "Build Tuffenuff"
@@ -111,17 +116,28 @@ let init () =
 
     // TODO check for build server
 
-    "Clean" ==> "Build" |> ignore
+    "Clean"
+        ==> "Build"
+        |> ignore
 
-    "Build" ==> "UnitTests" |> ignore
+    "Build"
+        ==> "UnitTests"
+        |> ignore
 
-    "Build" ==> "IntegrationTests" |> ignore
+    "Build"
+        ==> "IntegrationTests"
+        |> ignore
 
-    "Build" ==> "Release" |> ignore
+    "Build"
+        ==> "Release"
+        |> ignore
 
-    "UnitTests" ==> "IntegrationTests" ==> "AllTests" |> ignore
+    "UnitTests"
+        ==> "IntegrationTests"
+        ==> "AllTests"
+        |> ignore
 
     "GenerateSyntaxVersions"
-    ==> "GenerateUpstreamSyntaxVersions"
-    ==> "GenerateAllSyntaxVersions"
-    |> ignore
+        ==> "GenerateUpstreamSyntaxVersions"
+        ==> "GenerateAllSyntaxVersions"
+        |> ignore
