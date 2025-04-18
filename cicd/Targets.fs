@@ -45,12 +45,7 @@ let init () =
     Target.description "Build Tuffenuff"
     Target.create
         "Build"
-        (fun _ ->
-            let fullPath = System.IO.Path.GetFullPath srcProjFile
-
-            Trace.traceImportant fullPath
-            DotNet.build id fullPath
-        )
+        (fun _ -> DotNet.build buildOptions srcProjFile)
 
     Target.description "Tests scripts in examples directory"
     Target.create
