@@ -68,16 +68,22 @@ Options:
         member _.Target = dict[targetVar].ToString ()
 
         member _.Verbosity =
-            if dict[verbose].IsTrue then verbose
-            elif dict[normal].IsTrue then normal
-            else silent
+            if dict[verbose].IsTrue then
+                verbose
+            elif dict[normal].IsTrue then
+                normal
+            else
+                silent
 
         member _.Rebuild = dict[rebuild].IsTrue
 
         member this.DotnetVerbosity =
-            if verbose.Equals this.Verbosity then dotnetVerbose
-            elif normal.Equals this.Verbosity then dotnetNormal
-            else dotnetSilent
+            if verbose.Equals this.Verbosity then
+                dotnetVerbose
+            elif normal.Equals this.Verbosity then
+                dotnetNormal
+            else
+                dotnetSilent
 
         member this.Env =
             let verbosityEnv =
@@ -88,6 +94,11 @@ Options:
 
             let otherEnvs =
                 if dict[env].IsTrue then
+                    // "Yes please give me an OBJECT of the VALUE of the ELEMENT
+                    // from the dictionary,
+                    // then downcast it to an ArrayList,
+                    // then copy the elements of it to the new Array"
+                    // - Statements dreamed up by the utterly Deranged
                     (dict[envVAR].Value :?> ArrayList).ToArray ()
                     |> Array.map (fun o ->
                         let str = o |> string
@@ -139,7 +150,7 @@ module private Commands =
         }
         |> Seq.readonly
 
-    /// Print command error and exit with its exit code.
+    /// Print command error to stderr and exit with its exit code.
     let inline private printError (command : string) (result : Output) =
         eprintfn
             $"%s{red}Command \"%s{command}\"\
@@ -154,11 +165,11 @@ module private Commands =
 
         exit result.ExitCode
 
-    /// Execute binary/executable from 'executable' with 'args' and environment
-    /// variables from 'envs'.
-    /// If 'isVerbose' is true - print context before executing.
-    /// If 'return\'' is true - return executable output from stdout, else print it. 
-    /// If executable returns non-zero exit code print it and exit with this code.  
+    /// Execute binary/executable from "executable" with "args" and environment
+    /// variables from "envs".
+    /// If "isVerbose" is true - print context before executing.
+    /// If "return" is true - return executable output from stdout, else print it. 
+    /// If executable returns non-zero exit code print it and exit with this code.
     let inline private exec
         (return' : bool)
         (isVerbose : bool)
@@ -210,18 +221,18 @@ module private Commands =
 
             String.Empty
 
-    /// Check if files in 'path' changed since last time.
+    /// Check if files in "path" changed since last time.
     let inline private isModified (path : string) (isVerbose : bool) =
         let result = exec true isVerbose "git" $"diff --dirstat=files -- %s{path}" []
 
         not (String.Empty.Equals(result))
 
-    /// Add files from 'path' to Git index.
+    /// Add files from "path" to Git index.
     let inline private add (path : string) (isVerbose : bool) =
         let glob = Path.Combine(path, "**")
         exec false isVerbose "git" $"add %s{glob}" [] |> ignore
 
-    /// Execute 'dotnet' cli with 'args' and environment variables from 'envs'.
+    /// Execute "dotnet" cli with "args" and environment variables from "envs".
     let inline private dotnet
         (isVerbose : bool)
         (envs : (string * string) list)
@@ -229,8 +240,8 @@ module private Commands =
         =
         exec false isVerbose "dotnet" args envs |> ignore
 
-    /// Execute 'dotnet run' command on cicd project with 'args', environment variables
-    /// from 'envs', 'verbosity' option and '--no-build' flag if cicd project has not
+    /// Execute "dotnet run" command on cicd project with "args", environment variables
+    /// from "envs", "verbosity" option and "--no-build" flag if cicd project has not
     /// changed since the last time.
     let inline run
         (verbosity : string)
@@ -270,7 +281,7 @@ module private Commands =
         if String.Empty.Equals(noBuild) then
             add projDir isVerbose
 
-    /// Execute 'dotnet run' command on cicd project with 'flag' silently.
+    /// Execute "dotnet run" command on cicd project with "flag" silently.
     let inline print (flag : string) =
         run dotnetSilent false [] [ flag ]
         exit 0
