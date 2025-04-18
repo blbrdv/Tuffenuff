@@ -185,11 +185,7 @@ module private Commands =
                                 (key, value)
                         )
 
-                    printfn
-                        $"%s{white}Fli context:%s{eol}\
-                        Env = %A{envs}%s{eol}\
-                        Command = \"%s{command}\"%s{eol}\
-                        %s{reset}"
+                    printfn $"%s{white}Exec \"%s{command}\" %A{envs}%s{reset}"
 
                 context
             )
