@@ -68,8 +68,7 @@ let init () =
                 match nugetApiKey with
                 | Some value -> value
                 | None ->
-                    // TODO raise
-                    failwith "todo"
+                    failwith "Nuget API key must be provided via environment variables"
 
             DotNet.nugetPush
                 (fun defaults ->
