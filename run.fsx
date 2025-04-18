@@ -8,7 +8,9 @@ open System.Collections.Generic
 open DocoptNet
 open Fli
 
+// ---------------------------------------------------------------------------------------
 // ** Args **
+// ---------------------------------------------------------------------------------------
 
 [<Literal>]
 let silent = "-s"
@@ -108,7 +110,9 @@ type Args(dict : IDictionary<string, ValueObject>) =
 
         verbosityEnv @ otherEnvs
 
-// ** Print **
+// ---------------------------------------------------------------------------------------
+// ** Exec **
+// ---------------------------------------------------------------------------------------
 
 [<Literal>]
 let white = "\u001b[37m"
@@ -119,28 +123,66 @@ let red = "\u001b[31m"
 [<Literal>]
 let reset = "\u001b[0m"
 
+[<Literal>]
+let projName = "cicd"
+
+/// End of line symbol(s) as string.
 let eol = Environment.NewLine
 
-// ** Exec **
+/// Path to directory of CI/CD project.
+let projDir = Path.Combine(".", projName)
 
-/// Execute 'dotnet' cli with 'args' and environment variables from 'envs'.
-/// Print Fli context if 'isVerbose'.
-/// Print cli output.
-/// Exit with non-zero code if cli return error.
-let inline dotnet (isVerbose : bool) (envs : (string * string) list) (args : string) =
+/// Path to exe file of CI/CD project.
+let exePath = Path.Combine(projDir, "bin", "Debug", "net6.0", $"%s{projName}.exe")
+
+/// List of env keys, value which must be redacted.
+let badKeys =
+    seq {
+        "NUGET_API_KEY"
+    }
+    |> Seq.readonly
+
+/// Print command error and exit with its exit code.
+let inline printError (command : string) (result : Output) =
+    eprintfn
+        $"%s{red}Command \"%s{command}\"\
+        exited with code %d{result.ExitCode}.%s{reset}"
+
+    if result.Error.IsSome then
+        eprintfn
+            $"%s{red}Error message:%s{eol}\
+            %s{result.Error.Value}%s{reset}"
+    else
+        eprintfn ""
+
+    exit result.ExitCode
+
+/// Execute binary/executable from 'executable' with 'args' and environment
+/// variables from 'envs'.
+/// If 'isVerbose' is true - print context before executing.
+/// If 'return\'' is true - return executable output from stdout, else print it. 
+/// If executable returns non-zero exit code print it and exit with this code.  
+let inline exec
+    (return' : bool)
+    (isVerbose : bool)
+    (executable : string)
+    (args : string)
+    (envs : (string * string) list)
+    =
+    let command = $"%s{executable} %s{args}"
+
     let result =
         cli {
-            Exec "dotnet"
+            Exec executable
             Arguments args
             EnvironmentVariables envs
-            Output (printf "%s")
         }
         |> (fun context ->
             if isVerbose then
                 let envs =
                     context.config.EnvironmentVariables.Value
                     |> List.map (fun (key, value) ->
-                        if "NUGET_API_KEY".Equals key then
+                        if Seq.contains key badKeys then
                             (key, "<REDACTED>")
                         else
                             (key, value)
@@ -149,27 +191,50 @@ let inline dotnet (isVerbose : bool) (envs : (string * string) list) (args : str
                 printfn
                     $"%s{white}Fli context:%s{eol}\
                     Env = %A{envs}%s{eol}\
-                    Command = \"dotnet %s{context.config.Arguments.Value}\"%s{eol}\
+                    Command = \"%s{command}\"%s{eol}\
                     %s{reset}"
 
             context
         )
         |> Command.execute
 
-    if result.ExitCode <> 0 then
-        eprintfn $"%s{red}Command exited with code %d{result.ExitCode}.%s{reset}"
+    if return' then
+        if result.ExitCode <> 0 then
+            printError command result
 
-        if result.Error.IsSome then
-            eprintfn
-                $"%s{red}Error message:%s{eol}\
-                %s{result.Error.Value}%s{reset}"
-        else
-            eprintfn ""
+        match result.Text with
+        | Some value -> value
+        | None -> String.Empty
+    else
+        if result.Text.IsSome then
+            printfn $"%s{result.Text.Value}"
 
-        exit result.ExitCode
+        if result.ExitCode <> 0 then
+            if result.Text.IsSome then
+                printfn ""
+
+            printError command result
+
+        String.Empty
+
+/// Check if files in 'path' changed since last time.
+let inline isModified (path : string) (isVerbose : bool) =
+    let result = exec true isVerbose "git" $"diff --dirstat=files -- %s{path}" []
+
+    not (String.Empty.Equals(result))
+
+/// Add files from 'path' to Git index.
+let inline add (path : string) (isVerbose : bool) =
+    let glob = Path.Combine(path, "**")
+    exec false isVerbose "git" $"add %s{glob}" [] |> ignore
+
+/// Execute 'dotnet' cli with 'args' and environment variables from 'envs'.
+let inline dotnet (isVerbose : bool) (envs : (string * string) list) (args : string) =
+    exec false isVerbose "dotnet" args envs |> ignore
 
 /// Execute 'dotnet run' command on cicd project with 'args', environment variables
-/// from 'envs', 'verbosity' option and '--no-build' flag if cicd project already built.
+/// from 'envs', 'verbosity' option and '--no-build' flag if cicd project has not changed
+/// since the last time.
 let inline run
     (verbosity : string)
     (rebuild : bool)
@@ -179,30 +244,39 @@ let inline run
     let isVerbose = dotnetVerbose.Equals verbosity
 
     let noBuild =
-        if rebuild || not (File.Exists @".\cicd\bin\Debug\net6.0\cicd.exe") then
+        if rebuild ||
+           not (File.Exists exePath) ||
+           isModified projDir isVerbose
+        then
             String.Empty
         else
             "--no-build"
 
-    let command = $"run %s{verbosity} %s{noBuild} --project ./cicd/cicd.fsproj"
+    let fsprojPath = Path.Combine(projDir, $"%s{projName}.fsproj")
+    let commandArgs =
+        $"run %s{verbosity} %s{noBuild} --project %s{fsprojPath}"
 
     if (Seq.length args) > 0 then
         seq {
-            yield command
+            yield commandArgs
             yield "--"
             yield! args
         }
         |> String.concat " "
     else
-        command
+        commandArgs
     |> dotnet isVerbose envs
+
+    add projDir isVerbose
 
 /// Execute 'dotnet run' command on cicd project with 'flag' silently.
 let inline print (flag : string) =
     run dotnetSilent false [] [ flag ]
     exit 0
 
+// ---------------------------------------------------------------------------------------
 // ** Start of this script **
+// ---------------------------------------------------------------------------------------
 
 let cliArgs = fsi.CommandLineArgs[1..]
 
