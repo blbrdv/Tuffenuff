@@ -253,6 +253,9 @@ module private Commands =
             else
                 "--no-build"
 
+        if String.Empty.Equals(noBuild) then
+            printfn "Building CI/CD project..."
+
         let fsprojPath = Path.Combine(projDir, $"%s{projName}.fsproj")
         let commandArgs =
             $"run %s{verbosity} %s{noBuild} --project %s{fsprojPath}"
@@ -268,7 +271,8 @@ module private Commands =
             commandArgs
         |> dotnet isVerbose envs
 
-        add projDir isVerbose
+        if String.Empty.Equals(noBuild) then
+            add projDir isVerbose
 
     /// Execute 'dotnet run' command on cicd project with 'flag' silently.
     let inline print (flag : string) =
@@ -308,5 +312,18 @@ if argsRaw[version].IsTrue then
 
 let private args = argsRaw |> Arguments
 
-seq { $"-t %s{args.Target}" }
-|> run args.DotnetVerbosity args.Rebuild args.Env
+open System.Diagnostics
+
+let private sw = Stopwatch()
+
+try
+    printfn "Starting..."
+    sw.Start()
+
+    seq { $"-t %s{args.Target}" }
+    |> run args.DotnetVerbosity args.Rebuild args.Env
+
+    sw.Stop()
+finally
+    sw.Elapsed.ToString(@"hh\:mm\:ss\.fff")
+    |> printfn "Finished [%s]"
