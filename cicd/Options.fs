@@ -49,6 +49,7 @@ let buildOptions =
         { opt with
             Common = dotnetOptions opt.Common
             MSBuildParams = setLogParams opt.MSBuildParams
+            NoLogo = true
         }
     )
 
@@ -63,6 +64,7 @@ let testOptions =
                 else
                     None
             MSBuildParams = setLogParams opt.MSBuildParams
+            NoLogo = true
         }
     )
 

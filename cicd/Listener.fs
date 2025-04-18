@@ -82,6 +82,10 @@ type MinimalListener() =
                             )
 
                             printnl ()
+                    elif text.StartsWith "Shortened DependencyGraph" then
+                        ()
+                    else
+                        printLine text lineBreak
 
             | TraceData.TraceMessage (text, lineBreak) ->
                 if isVerbose then

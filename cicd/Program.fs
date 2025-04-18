@@ -12,10 +12,12 @@ let main argv =
     CoreTracing.setTraceListeners [ MinimalListener () ]
     CICD.Targets.init ()
 
-    Trace.log "Passed environment variables:"
+    Trace.traceLine ()
+    Trace.trace "Passed environment variables:"
     Environment.environVars ()
-    |> List.iter (fun (key, value) -> Trace.log $"  %s{key}=\"%s{value}\"")
-    Trace.log ""
+    |> List.iter (fun (key, value) -> Trace.trace $"  %s{key}=\"%s{value}\"")
+    Trace.traceLine ()
+    Trace.trace ""
 
     Target.runOrList ()
 
