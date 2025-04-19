@@ -34,7 +34,7 @@ let inline private genFile (name : string) = $"%s{name}.gen.fs"
 let private dslPath = projDir @@ projName @@ "DSL"
 
 let srcProjFile = projFile projName projDir
-let packageFile = projDir @@ projName @@ "**/*.nupkg"
+let packageFile = projDir @@ projName @@ "**" @@ "*.nupkg"
 
 let integrationTestsProjFile = projFile integrationTestsProjName testsProjDir
 
@@ -45,4 +45,4 @@ let syntaxVersionsGeneratorScript = scriptsDir @@ "SyntaxVersionsGenerator.fsx"
 let syntaxVersionFile = dslPath @@ genFile "SyntaxVersions"
 let syntaxUpstreamVersionFile = dslPath @@ genFile "UpstreamSyntaxVersions"
 
-let buildDirs = !! "**/bin" ++ "**/obj" -- "cicd/**"
+let buildDirs = !! ("**" @@ "bin") ++ ("**" @@ "obj") -- ("cicd" @@ "**")
