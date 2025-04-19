@@ -194,11 +194,6 @@ module private Generate =
                 <<| "</c>"
                 <<| "/// </example>"
 
-                <<| "/// <remarks>"
-                <~| "/// Last updated at "
-                <<| v.UpdatedAt.ToString "yyyy-MM-ddTHH:mm:ss"
-                <<| "/// </remarks>"
-
                 <<| "/// <seealso cref=\"Tuffenuff.DSL.Comments.syntax\" />"
 
                 <~| "let "

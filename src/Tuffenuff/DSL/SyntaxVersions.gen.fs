@@ -18,9 +18,6 @@ module Tuffenuff.DSL.Syntax
 /// <c>v1_15_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.15-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-04-15T16:04:22
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_15_labs = syntax "docker/dockerfile:1.15-labs"
 
@@ -32,9 +29,6 @@ let v1_15_labs = syntax "docker/dockerfile:1.15-labs"
 /// <c>v1_15_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.15.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-04-15T16:04:11
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_15_0_labs = syntax "docker/dockerfile:1.15.0-labs"
 
@@ -46,9 +40,6 @@ let v1_15_0_labs = syntax "docker/dockerfile:1.15.0-labs"
 /// <c>v1_15</c> ->
 /// <c># syntax=docker/dockerfile:1.15</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-04-15T16:03:46
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_15 = syntax "docker/dockerfile:1.15"
 
@@ -60,9 +51,6 @@ let v1_15 = syntax "docker/dockerfile:1.15"
 /// <c>v1_15_0</c> ->
 /// <c># syntax=docker/dockerfile:1.15.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-04-15T16:03:33
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_15_0 = syntax "docker/dockerfile:1.15.0"
 
@@ -74,9 +62,6 @@ let v1_15_0 = syntax "docker/dockerfile:1.15.0"
 /// <c>v1_labs</c> ->
 /// <c># syntax=docker/dockerfile:1-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-03-06T12:39:37
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_labs = syntax "docker/dockerfile:1-labs"
 
@@ -88,9 +73,6 @@ let v1_labs = syntax "docker/dockerfile:1-labs"
 /// <c>v1</c> ->
 /// <c># syntax=docker/dockerfile:1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-03-06T12:39:35
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1 = syntax "docker/dockerfile:1"
 
@@ -102,9 +84,6 @@ let v1 = syntax "docker/dockerfile:1"
 /// <c>v1_14_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.14-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-03-06T12:39:27
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_14_labs = syntax "docker/dockerfile:1.14-labs"
 
@@ -116,9 +95,6 @@ let v1_14_labs = syntax "docker/dockerfile:1.14-labs"
 /// <c>v1_14</c> ->
 /// <c># syntax=docker/dockerfile:1.14</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-03-06T12:39:26
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_14 = syntax "docker/dockerfile:1.14"
 
@@ -130,9 +106,6 @@ let v1_14 = syntax "docker/dockerfile:1.14"
 /// <c>v1_14_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.14.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-03-06T12:39:17
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_14_0_labs = syntax "docker/dockerfile:1.14.0-labs"
 
@@ -144,9 +117,6 @@ let v1_14_0_labs = syntax "docker/dockerfile:1.14.0-labs"
 /// <c>v1_14_0</c> ->
 /// <c># syntax=docker/dockerfile:1.14.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-03-06T12:39:16
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_14_0 = syntax "docker/dockerfile:1.14.0"
 
@@ -158,9 +128,6 @@ let v1_14_0 = syntax "docker/dockerfile:1.14.0"
 /// <c>labs</c> ->
 /// <c># syntax=docker/dockerfile:labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-01-21T18:28:39
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let labs = syntax "docker/dockerfile:labs"
 
@@ -172,9 +139,6 @@ let labs = syntax "docker/dockerfile:labs"
 /// <c>v1_13_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.13-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-01-21T18:28:20
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_13_labs = syntax "docker/dockerfile:1.13-labs"
 
@@ -186,9 +150,6 @@ let v1_13_labs = syntax "docker/dockerfile:1.13-labs"
 /// <c>v1_13_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.13.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-01-21T18:28:11
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_13_0_labs = syntax "docker/dockerfile:1.13.0-labs"
 
@@ -200,9 +161,6 @@ let v1_13_0_labs = syntax "docker/dockerfile:1.13.0-labs"
 /// <c>v1_13</c> ->
 /// <c># syntax=docker/dockerfile:1.13</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-01-21T18:28:10
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_13 = syntax "docker/dockerfile:1.13"
 
@@ -214,9 +172,6 @@ let v1_13 = syntax "docker/dockerfile:1.13"
 /// <c>v1_13_0</c> ->
 /// <c># syntax=docker/dockerfile:1.13.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2025-01-21T18:28:00
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_13_0 = syntax "docker/dockerfile:1.13.0"
 
@@ -228,9 +183,6 @@ let v1_13_0 = syntax "docker/dockerfile:1.13.0"
 /// <c>v1_12_1_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.12.1-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-12-17T00:20:17
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_12_1_labs = syntax "docker/dockerfile:1.12.1-labs"
 
@@ -242,9 +194,6 @@ let v1_12_1_labs = syntax "docker/dockerfile:1.12.1-labs"
 /// <c>v1_12_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.12-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-12-17T00:20:13
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_12_labs = syntax "docker/dockerfile:1.12-labs"
 
@@ -256,9 +205,6 @@ let v1_12_labs = syntax "docker/dockerfile:1.12-labs"
 /// <c>v1_12</c> ->
 /// <c># syntax=docker/dockerfile:1.12</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-12-17T00:19:23
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_12 = syntax "docker/dockerfile:1.12"
 
@@ -270,9 +216,6 @@ let v1_12 = syntax "docker/dockerfile:1.12"
 /// <c>v1_12_1</c> ->
 /// <c># syntax=docker/dockerfile:1.12.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-12-17T00:19:18
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_12_1 = syntax "docker/dockerfile:1.12.1"
 
@@ -284,9 +227,6 @@ let v1_12_1 = syntax "docker/dockerfile:1.12.1"
 /// <c>v1_12_0</c> ->
 /// <c># syntax=docker/dockerfile:1.12.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-11-27T01:54:22
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_12_0 = syntax "docker/dockerfile:1.12.0"
 
@@ -298,9 +238,6 @@ let v1_12_0 = syntax "docker/dockerfile:1.12.0"
 /// <c>v1_12_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.12.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-11-27T01:54:07
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_12_0_labs = syntax "docker/dockerfile:1.12.0-labs"
 
@@ -312,9 +249,6 @@ let v1_12_0_labs = syntax "docker/dockerfile:1.12.0-labs"
 /// <c>v1_11_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.11-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-11-08T01:18:25
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_11_labs = syntax "docker/dockerfile:1.11-labs"
 
@@ -326,9 +260,6 @@ let v1_11_labs = syntax "docker/dockerfile:1.11-labs"
 /// <c>v1_11_1_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.11.1-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-11-08T01:18:21
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_11_1_labs = syntax "docker/dockerfile:1.11.1-labs"
 
@@ -340,9 +271,6 @@ let v1_11_1_labs = syntax "docker/dockerfile:1.11.1-labs"
 /// <c>v1_11</c> ->
 /// <c># syntax=docker/dockerfile:1.11</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-11-08T01:18:20
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_11 = syntax "docker/dockerfile:1.11"
 
@@ -354,9 +282,6 @@ let v1_11 = syntax "docker/dockerfile:1.11"
 /// <c>v1_11_1</c> ->
 /// <c># syntax=docker/dockerfile:1.11.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-11-08T01:18:16
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_11_1 = syntax "docker/dockerfile:1.11.1"
 
@@ -368,9 +293,6 @@ let v1_11_1 = syntax "docker/dockerfile:1.11.1"
 /// <c>v1_11_0</c> ->
 /// <c># syntax=docker/dockerfile:1.11.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-10-31T10:50:28
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_11_0 = syntax "docker/dockerfile:1.11.0"
 
@@ -382,9 +304,6 @@ let v1_11_0 = syntax "docker/dockerfile:1.11.0"
 /// <c>v1_11_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.11.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-10-31T10:50:28
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_11_0_labs = syntax "docker/dockerfile:1.11.0-labs"
 
@@ -396,9 +315,6 @@ let v1_11_0_labs = syntax "docker/dockerfile:1.11.0-labs"
 /// <c>v1_10_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.10-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-09-11T07:16:32
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_10_labs = syntax "docker/dockerfile:1.10-labs"
 
@@ -410,9 +326,6 @@ let v1_10_labs = syntax "docker/dockerfile:1.10-labs"
 /// <c>v1_10_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.10.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-09-11T07:16:28
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_10_0_labs = syntax "docker/dockerfile:1.10.0-labs"
 
@@ -424,9 +337,6 @@ let v1_10_0_labs = syntax "docker/dockerfile:1.10.0-labs"
 /// <c>v1_10</c> ->
 /// <c># syntax=docker/dockerfile:1.10</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-09-11T07:12:11
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_10 = syntax "docker/dockerfile:1.10"
 
@@ -438,9 +348,6 @@ let v1_10 = syntax "docker/dockerfile:1.10"
 /// <c>v1_10_0</c> ->
 /// <c># syntax=docker/dockerfile:1.10.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-09-11T07:12:07
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_10_0 = syntax "docker/dockerfile:1.10.0"
 
@@ -452,9 +359,6 @@ let v1_10_0 = syntax "docker/dockerfile:1.10.0"
 /// <c>v1_9_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.9-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-07-11T18:57:43
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_9_labs = syntax "docker/dockerfile:1.9-labs"
 
@@ -466,9 +370,6 @@ let v1_9_labs = syntax "docker/dockerfile:1.9-labs"
 /// <c>v1_9_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.9.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-07-11T18:57:38
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_9_0_labs = syntax "docker/dockerfile:1.9.0-labs"
 
@@ -480,9 +381,6 @@ let v1_9_0_labs = syntax "docker/dockerfile:1.9.0-labs"
 /// <c>v1_9</c> ->
 /// <c># syntax=docker/dockerfile:1.9</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-07-11T18:57:31
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_9 = syntax "docker/dockerfile:1.9"
 
@@ -494,9 +392,6 @@ let v1_9 = syntax "docker/dockerfile:1.9"
 /// <c>v1_9_0</c> ->
 /// <c># syntax=docker/dockerfile:1.9.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-07-11T18:57:22
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_9_0 = syntax "docker/dockerfile:1.9.0"
 
@@ -508,9 +403,6 @@ let v1_9_0 = syntax "docker/dockerfile:1.9.0"
 /// <c>v1_8_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.8-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-06-20T17:01:21
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_8_labs = syntax "docker/dockerfile:1.8-labs"
 
@@ -522,9 +414,6 @@ let v1_8_labs = syntax "docker/dockerfile:1.8-labs"
 /// <c>v1_8_1_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.8.1-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-06-20T17:01:15
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_8_1_labs = syntax "docker/dockerfile:1.8.1-labs"
 
@@ -536,9 +425,6 @@ let v1_8_1_labs = syntax "docker/dockerfile:1.8.1-labs"
 /// <c>v1_8</c> ->
 /// <c># syntax=docker/dockerfile:1.8</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-06-20T16:58:33
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_8 = syntax "docker/dockerfile:1.8"
 
@@ -550,9 +436,6 @@ let v1_8 = syntax "docker/dockerfile:1.8"
 /// <c>v1_8_1</c> ->
 /// <c># syntax=docker/dockerfile:1.8.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-06-20T16:58:28
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_8_1 = syntax "docker/dockerfile:1.8.1"
 
@@ -564,9 +447,6 @@ let v1_8_1 = syntax "docker/dockerfile:1.8.1"
 /// <c>v1_8_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.8.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-06-20T16:54:46
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_8_0_labs = syntax "docker/dockerfile:1.8.0-labs"
 
@@ -578,9 +458,6 @@ let v1_8_0_labs = syntax "docker/dockerfile:1.8.0-labs"
 /// <c>v1_8_0</c> ->
 /// <c># syntax=docker/dockerfile:1.8.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-06-11T18:45:33
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_8_0 = syntax "docker/dockerfile:1.8.0"
 
@@ -592,9 +469,6 @@ let v1_8_0 = syntax "docker/dockerfile:1.8.0"
 /// <c>v1_7_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.7-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-04-25T18:48:25
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_7_labs = syntax "docker/dockerfile:1.7-labs"
 
@@ -606,9 +480,6 @@ let v1_7_labs = syntax "docker/dockerfile:1.7-labs"
 /// <c>v1_7_1_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.7.1-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-04-25T18:48:19
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_7_1_labs = syntax "docker/dockerfile:1.7.1-labs"
 
@@ -620,9 +491,6 @@ let v1_7_1_labs = syntax "docker/dockerfile:1.7.1-labs"
 /// <c>v1_7</c> ->
 /// <c># syntax=docker/dockerfile:1.7</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-04-25T18:47:07
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_7 = syntax "docker/dockerfile:1.7"
 
@@ -634,9 +502,6 @@ let v1_7 = syntax "docker/dockerfile:1.7"
 /// <c>v1_7_1</c> ->
 /// <c># syntax=docker/dockerfile:1.7.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-04-25T18:47:02
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_7_1 = syntax "docker/dockerfile:1.7.1"
 
@@ -648,9 +513,6 @@ let v1_7_1 = syntax "docker/dockerfile:1.7.1"
 /// <c>v1_7_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.7.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-03-06T16:43:06
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_7_0_labs = syntax "docker/dockerfile:1.7.0-labs"
 
@@ -662,9 +524,6 @@ let v1_7_0_labs = syntax "docker/dockerfile:1.7.0-labs"
 /// <c>v1_7_0</c> ->
 /// <c># syntax=docker/dockerfile:1.7.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2024-03-05T21:58:14
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_7_0 = syntax "docker/dockerfile:1.7.0"
 
@@ -676,9 +535,6 @@ let v1_7_0 = syntax "docker/dockerfile:1.7.0"
 /// <c>v1_6_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.6.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-08-03T07:41:24
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_6_0_labs = syntax "docker/dockerfile:1.6.0-labs"
 
@@ -690,9 +546,6 @@ let v1_6_0_labs = syntax "docker/dockerfile:1.6.0-labs"
 /// <c>v1_6_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.6-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-07-13T00:21:09
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_6_labs = syntax "docker/dockerfile:1.6-labs"
 
@@ -704,9 +557,6 @@ let v1_6_labs = syntax "docker/dockerfile:1.6-labs"
 /// <c>v1_6</c> ->
 /// <c># syntax=docker/dockerfile:1.6</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-07-13T00:17:43
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_6 = syntax "docker/dockerfile:1.6"
 
@@ -718,9 +568,6 @@ let v1_6 = syntax "docker/dockerfile:1.6"
 /// <c>v1_6_0</c> ->
 /// <c># syntax=docker/dockerfile:1.6.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-07-13T00:17:39
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_6_0 = syntax "docker/dockerfile:1.6.0"
 
@@ -732,9 +579,6 @@ let v1_6_0 = syntax "docker/dockerfile:1.6.0"
 /// <c>v1_5_2_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.5.2-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-02-13T23:14:25
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_5_2_labs = syntax "docker/dockerfile:1.5.2-labs"
 
@@ -746,9 +590,6 @@ let v1_5_2_labs = syntax "docker/dockerfile:1.5.2-labs"
 /// <c>v1_5_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.5-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-02-13T23:14:21
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_5_labs = syntax "docker/dockerfile:1.5-labs"
 
@@ -760,9 +601,6 @@ let v1_5_labs = syntax "docker/dockerfile:1.5-labs"
 /// <c>v1_5_2</c> ->
 /// <c># syntax=docker/dockerfile:1.5.2</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-02-13T23:14:17
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_5_2 = syntax "docker/dockerfile:1.5.2"
 
@@ -774,9 +612,6 @@ let v1_5_2 = syntax "docker/dockerfile:1.5.2"
 /// <c>v1_5</c> ->
 /// <c># syntax=docker/dockerfile:1.5</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-02-13T23:14:13
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_5 = syntax "docker/dockerfile:1.5"
 
@@ -788,9 +623,6 @@ let v1_5 = syntax "docker/dockerfile:1.5"
 /// <c>v1_5_1_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.5.1-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-01-30T18:23:42
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_5_1_labs = syntax "docker/dockerfile:1.5.1-labs"
 
@@ -802,9 +634,6 @@ let v1_5_1_labs = syntax "docker/dockerfile:1.5.1-labs"
 /// <c>v1_5_1</c> ->
 /// <c># syntax=docker/dockerfile:1.5.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-01-30T18:23:35
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_5_1 = syntax "docker/dockerfile:1.5.1"
 
@@ -816,9 +645,6 @@ let v1_5_1 = syntax "docker/dockerfile:1.5.1"
 /// <c>v1_5_0</c> ->
 /// <c># syntax=docker/dockerfile:1.5.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-01-17T22:25:22
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_5_0 = syntax "docker/dockerfile:1.5.0"
 
@@ -830,9 +656,6 @@ let v1_5_0 = syntax "docker/dockerfile:1.5.0"
 /// <c>v1_5_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.5.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2023-01-17T22:23:22
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_5_0_labs = syntax "docker/dockerfile:1.5.0-labs"
 
@@ -844,9 +667,6 @@ let v1_5_0_labs = syntax "docker/dockerfile:1.5.0-labs"
 /// <c>v1_4_3_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.4.3-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-08-31T00:41:16
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4_3_labs = syntax "docker/dockerfile:1.4.3-labs"
 
@@ -858,9 +678,6 @@ let v1_4_3_labs = syntax "docker/dockerfile:1.4.3-labs"
 /// <c>v1_4_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.4-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-08-31T00:41:15
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4_labs = syntax "docker/dockerfile:1.4-labs"
 
@@ -872,9 +689,6 @@ let v1_4_labs = syntax "docker/dockerfile:1.4-labs"
 /// <c>v1_4_3</c> ->
 /// <c># syntax=docker/dockerfile:1.4.3</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-08-31T00:40:59
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4_3 = syntax "docker/dockerfile:1.4.3"
 
@@ -886,9 +700,6 @@ let v1_4_3 = syntax "docker/dockerfile:1.4.3"
 /// <c>v1_4</c> ->
 /// <c># syntax=docker/dockerfile:1.4</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-08-31T00:40:57
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4 = syntax "docker/dockerfile:1.4"
 
@@ -900,9 +711,6 @@ let v1_4 = syntax "docker/dockerfile:1.4"
 /// <c>v1_4_2_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.4.2-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-05-06T18:12:40
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4_2_labs = syntax "docker/dockerfile:1.4.2-labs"
 
@@ -914,9 +722,6 @@ let v1_4_2_labs = syntax "docker/dockerfile:1.4.2-labs"
 /// <c>v1_4_2</c> ->
 /// <c># syntax=docker/dockerfile:1.4.2</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-05-06T18:12:14
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4_2 = syntax "docker/dockerfile:1.4.2"
 
@@ -928,9 +733,6 @@ let v1_4_2 = syntax "docker/dockerfile:1.4.2"
 /// <c>v1_4_1_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.4.1-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-04-08T05:28:36
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4_1_labs = syntax "docker/dockerfile:1.4.1-labs"
 
@@ -942,9 +744,6 @@ let v1_4_1_labs = syntax "docker/dockerfile:1.4.1-labs"
 /// <c>v1_4_1</c> ->
 /// <c># syntax=docker/dockerfile:1.4.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-04-08T05:28:04
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4_1 = syntax "docker/dockerfile:1.4.1"
 
@@ -956,9 +755,6 @@ let v1_4_1 = syntax "docker/dockerfile:1.4.1"
 /// <c>v1_4_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.4.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-03-09T20:55:17
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4_0_labs = syntax "docker/dockerfile:1.4.0-labs"
 
@@ -970,9 +766,6 @@ let v1_4_0_labs = syntax "docker/dockerfile:1.4.0-labs"
 /// <c>v1_4_0</c> ->
 /// <c># syntax=docker/dockerfile:1.4.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2022-03-09T20:51:53
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_4_0 = syntax "docker/dockerfile:1.4.0"
 
@@ -984,9 +777,6 @@ let v1_4_0 = syntax "docker/dockerfile:1.4.0"
 /// <c>v1_3_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.3-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2021-10-19T06:29:50
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_3_labs = syntax "docker/dockerfile:1.3-labs"
 
@@ -998,9 +788,6 @@ let v1_3_labs = syntax "docker/dockerfile:1.3-labs"
 /// <c>v1_3_1_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.3.1-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2021-10-19T06:29:48
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_3_1_labs = syntax "docker/dockerfile:1.3.1-labs"
 
@@ -1012,9 +799,6 @@ let v1_3_1_labs = syntax "docker/dockerfile:1.3.1-labs"
 /// <c>v1_3</c> ->
 /// <c># syntax=docker/dockerfile:1.3</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2021-10-19T06:29:35
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_3 = syntax "docker/dockerfile:1.3"
 
@@ -1026,9 +810,6 @@ let v1_3 = syntax "docker/dockerfile:1.3"
 /// <c>v1_3_1</c> ->
 /// <c># syntax=docker/dockerfile:1.3.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2021-10-19T06:29:33
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_3_1 = syntax "docker/dockerfile:1.3.1"
 
@@ -1040,9 +821,6 @@ let v1_3_1 = syntax "docker/dockerfile:1.3.1"
 /// <c>v1_3_0</c> ->
 /// <c># syntax=docker/dockerfile:1.3.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2021-07-19T19:55:12
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_3_0 = syntax "docker/dockerfile:1.3.0"
 
@@ -1054,9 +832,6 @@ let v1_3_0 = syntax "docker/dockerfile:1.3.0"
 /// <c>v1_3_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.3.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2021-07-19T19:52:11
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_3_0_labs = syntax "docker/dockerfile:1.3.0-labs"
 
@@ -1068,9 +843,6 @@ let v1_3_0_labs = syntax "docker/dockerfile:1.3.0-labs"
 /// <c>v1_2_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.2-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-12-12T01:05:24
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_2_labs = syntax "docker/dockerfile:1.2-labs"
 
@@ -1082,9 +854,6 @@ let v1_2_labs = syntax "docker/dockerfile:1.2-labs"
 /// <c>v1_2_1_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.2.1-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-12-12T01:05:18
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_2_1_labs = syntax "docker/dockerfile:1.2.1-labs"
 
@@ -1096,9 +865,6 @@ let v1_2_1_labs = syntax "docker/dockerfile:1.2.1-labs"
 /// <c>v1_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-12-12T01:05:17
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_experimental = syntax "docker/dockerfile:1-experimental"
 
@@ -1110,9 +876,6 @@ let v1_experimental = syntax "docker/dockerfile:1-experimental"
 /// <c>experimental</c> ->
 /// <c># syntax=docker/dockerfile:experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-12-12T01:05:15
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let experimental = syntax "docker/dockerfile:experimental"
 
@@ -1124,9 +887,6 @@ let experimental = syntax "docker/dockerfile:experimental"
 /// <c>v1_2_1</c> ->
 /// <c># syntax=docker/dockerfile:1.2.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-12-12T01:04:49
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_2_1 = syntax "docker/dockerfile:1.2.1"
 
@@ -1138,9 +898,6 @@ let v1_2_1 = syntax "docker/dockerfile:1.2.1"
 /// <c>v1_2</c> ->
 /// <c># syntax=docker/dockerfile:1.2</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-12-12T01:04:45
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_2 = syntax "docker/dockerfile:1.2"
 
@@ -1152,9 +909,6 @@ let v1_2 = syntax "docker/dockerfile:1.2"
 /// <c>v1_2_0</c> ->
 /// <c># syntax=docker/dockerfile:1.2.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-12-08T06:10:05
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_2_0 = syntax "docker/dockerfile:1.2.0"
 
@@ -1166,9 +920,6 @@ let v1_2_0 = syntax "docker/dockerfile:1.2.0"
 /// <c>v1_2_0_labs</c> ->
 /// <c># syntax=docker/dockerfile:1.2.0-labs</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-12-08T06:04:51
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_2_0_labs = syntax "docker/dockerfile:1.2.0-labs"
 
@@ -1180,9 +931,6 @@ let v1_2_0_labs = syntax "docker/dockerfile:1.2.0-labs"
 /// <c>v1_1_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.1-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-04-28T01:24:12
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_experimental = syntax "docker/dockerfile:1.1-experimental"
 
@@ -1194,9 +942,6 @@ let v1_1_experimental = syntax "docker/dockerfile:1.1-experimental"
 /// <c>v1_1_7_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.1.7-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-04-28T01:24:10
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_7_experimental = syntax "docker/dockerfile:1.1.7-experimental"
 
@@ -1208,9 +953,6 @@ let v1_1_7_experimental = syntax "docker/dockerfile:1.1.7-experimental"
 /// <c>v1_1_7</c> ->
 /// <c># syntax=docker/dockerfile:1.1.7</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-04-28T01:22:23
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_7 = syntax "docker/dockerfile:1.1.7"
 
@@ -1222,9 +964,6 @@ let v1_1_7 = syntax "docker/dockerfile:1.1.7"
 /// <c>v1_1</c> ->
 /// <c># syntax=docker/dockerfile:1.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-04-28T01:20:31
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1 = syntax "docker/dockerfile:1.1"
 
@@ -1236,9 +975,6 @@ let v1_1 = syntax "docker/dockerfile:1.1"
 /// <c>v1_1_6_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.1.6-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-04-28T01:08:39
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_6_experimental = syntax "docker/dockerfile:1.1.6-experimental"
 
@@ -1250,9 +986,6 @@ let v1_1_6_experimental = syntax "docker/dockerfile:1.1.6-experimental"
 /// <c>v1_1_6</c> ->
 /// <c># syntax=docker/dockerfile:1.1.6</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-04-28T01:08:38
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_6 = syntax "docker/dockerfile:1.1.6"
 
@@ -1264,9 +997,6 @@ let v1_1_6 = syntax "docker/dockerfile:1.1.6"
 /// <c>v1_1_5</c> ->
 /// <c># syntax=docker/dockerfile:1.1.5</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-02-24T21:45:04
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_5 = syntax "docker/dockerfile:1.1.5"
 
@@ -1278,9 +1008,6 @@ let v1_1_5 = syntax "docker/dockerfile:1.1.5"
 /// <c>v1_1_4</c> ->
 /// <c># syntax=docker/dockerfile:1.1.4</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-02-24T21:44:27
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_4 = syntax "docker/dockerfile:1.1.4"
 
@@ -1292,9 +1019,6 @@ let v1_1_4 = syntax "docker/dockerfile:1.1.4"
 /// <c>v1_1_5_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.1.5-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-02-24T21:38:16
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_5_experimental = syntax "docker/dockerfile:1.1.5-experimental"
 
@@ -1306,9 +1030,6 @@ let v1_1_5_experimental = syntax "docker/dockerfile:1.1.5-experimental"
 /// <c>v1_1_4_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.1.4-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2020-02-24T21:21:53
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_4_experimental = syntax "docker/dockerfile:1.1.4-experimental"
 
@@ -1320,9 +1041,6 @@ let v1_1_4_experimental = syntax "docker/dockerfile:1.1.4-experimental"
 /// <c>v1_1_3_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.1.3-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2019-08-16T22:52:06
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_3_experimental = syntax "docker/dockerfile:1.1.3-experimental"
 
@@ -1334,9 +1052,6 @@ let v1_1_3_experimental = syntax "docker/dockerfile:1.1.3-experimental"
 /// <c>v1_1_3</c> ->
 /// <c># syntax=docker/dockerfile:1.1.3</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2019-08-16T22:52:03
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_3 = syntax "docker/dockerfile:1.1.3"
 
@@ -1348,9 +1063,6 @@ let v1_1_3 = syntax "docker/dockerfile:1.1.3"
 /// <c>v1_1_1</c> ->
 /// <c># syntax=docker/dockerfile:1.1.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2019-05-06T22:42:55
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_1 = syntax "docker/dockerfile:1.1.1"
 
@@ -1362,9 +1074,6 @@ let v1_1_1 = syntax "docker/dockerfile:1.1.1"
 /// <c>v1_1_1_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.1.1-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2019-05-06T22:33:21
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_1_experimental = syntax "docker/dockerfile:1.1.1-experimental"
 
@@ -1376,9 +1085,6 @@ let v1_1_1_experimental = syntax "docker/dockerfile:1.1.1-experimental"
 /// <c>v1_1_0</c> ->
 /// <c># syntax=docker/dockerfile:1.1.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2019-04-27T02:20:50
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_0 = syntax "docker/dockerfile:1.1.0"
 
@@ -1390,9 +1096,6 @@ let v1_1_0 = syntax "docker/dockerfile:1.1.0"
 /// <c>v1_1_0_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.1.0-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2019-04-27T02:14:14
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_1_0_experimental = syntax "docker/dockerfile:1.1.0-experimental"
 
@@ -1404,9 +1107,6 @@ let v1_1_0_experimental = syntax "docker/dockerfile:1.1.0-experimental"
 /// <c>v1_0_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.0-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2019-02-26T01:52:27
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_0_experimental = syntax "docker/dockerfile:1.0-experimental"
 
@@ -1418,9 +1118,6 @@ let v1_0_experimental = syntax "docker/dockerfile:1.0-experimental"
 /// <c>v1_0_2_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.0.2-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2019-02-26T01:52:25
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_0_2_experimental = syntax "docker/dockerfile:1.0.2-experimental"
 
@@ -1432,9 +1129,6 @@ let v1_0_2_experimental = syntax "docker/dockerfile:1.0.2-experimental"
 /// <c>v1_0_1_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.0.1-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2018-12-11T18:43:53
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_0_1_experimental = syntax "docker/dockerfile:1.0.1-experimental"
 
@@ -1446,9 +1140,6 @@ let v1_0_1_experimental = syntax "docker/dockerfile:1.0.1-experimental"
 /// <c>v1_0</c> ->
 /// <c># syntax=docker/dockerfile:1.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2018-12-11T18:42:22
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_0 = syntax "docker/dockerfile:1.0"
 
@@ -1460,9 +1151,6 @@ let v1_0 = syntax "docker/dockerfile:1.0"
 /// <c>v1_0_1</c> ->
 /// <c># syntax=docker/dockerfile:1.0.1</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2018-12-11T18:42:20
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_0_1 = syntax "docker/dockerfile:1.0.1"
 
@@ -1474,9 +1162,6 @@ let v1_0_1 = syntax "docker/dockerfile:1.0.1"
 /// <c>v1_0_0_experimental</c> ->
 /// <c># syntax=docker/dockerfile:1.0.0-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2018-11-08T00:32:27
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_0_0_experimental = syntax "docker/dockerfile:1.0.0-experimental"
 
@@ -1488,9 +1173,6 @@ let v1_0_0_experimental = syntax "docker/dockerfile:1.0.0-experimental"
 /// <c>v1_0_0</c> ->
 /// <c># syntax=docker/dockerfile:1.0.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2018-11-08T00:31:03
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v1_0_0 = syntax "docker/dockerfile:1.0.0"
 
@@ -1502,9 +1184,6 @@ let v1_0_0 = syntax "docker/dockerfile:1.0.0"
 /// <c>v0_9_experimental</c> ->
 /// <c># syntax=docker/dockerfile:0.9-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2018-11-08T00:29:46
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v0_9_experimental = syntax "docker/dockerfile:0.9-experimental"
 
@@ -1516,9 +1195,6 @@ let v0_9_experimental = syntax "docker/dockerfile:0.9-experimental"
 /// <c>v0_9_0_experimental</c> ->
 /// <c># syntax=docker/dockerfile:0.9.0-experimental</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2018-11-08T00:29:44
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v0_9_0_experimental = syntax "docker/dockerfile:0.9.0-experimental"
 
@@ -1530,9 +1206,6 @@ let v0_9_0_experimental = syntax "docker/dockerfile:0.9.0-experimental"
 /// <c>v0_9</c> ->
 /// <c># syntax=docker/dockerfile:0.9</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2018-11-08T00:26:02
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v0_9 = syntax "docker/dockerfile:0.9"
 
@@ -1544,8 +1217,5 @@ let v0_9 = syntax "docker/dockerfile:0.9"
 /// <c>v0_9_0</c> ->
 /// <c># syntax=docker/dockerfile:0.9.0</c>
 /// </example>
-/// <remarks>
-/// Last updated at 2018-11-08T00:25:59
-/// </remarks>
 /// <seealso cref="Tuffenuff.DSL.Comments.syntax" />
 let v0_9_0 = syntax "docker/dockerfile:0.9.0"
