@@ -179,8 +179,8 @@ let inline logObject (data : 'a) : 'a =
     
     let result = (0, key, value) |||> toString |> String.concat newLine
     
-    (result, true)
-    |> TraceData.TraceMessage
-    |> CoreTracing.postMessage
+    Trace.traceLine ()
+    Trace.trace result
+    Trace.traceLine ()
     
     data
