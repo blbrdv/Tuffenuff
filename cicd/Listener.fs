@@ -71,7 +71,7 @@ type MinimalListener() =
                     if text.StartsWith optsStr then
                         printwn text[optsStr.Length ..]
                     elif text.StartsWith groupStartStr then
-                        let matches = groupPattern.Matches (text)
+                        let matches = groupPattern.Matches text
 
                         if matches.Count <> 0 then
                             printnl ()

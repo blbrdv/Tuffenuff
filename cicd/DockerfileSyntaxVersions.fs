@@ -97,7 +97,7 @@ module private DockerHub =
                     if
                         (image.TryGetProperty ("content_type", &type')
                          && "image".Equals (type'.GetString ())
-                         && not ("latest".Equals (name)))
+                         && not ("latest".Equals name))
                     then
                         yield (name, updatedAt)
             }
@@ -196,7 +196,7 @@ module private Generate =
 
                 <<| "/// <remarks>"
                 <~| "/// Last updated at "
-                <<| v.UpdatedAt.ToString ("yyyy-MM-ddTHH:mm:ss")
+                <<| v.UpdatedAt.ToString "yyyy-MM-ddTHH:mm:ss"
                 <<| "/// </remarks>"
 
                 <<| "/// <seealso cref=\"Tuffenuff.DSL.Comments.syntax\" />"
