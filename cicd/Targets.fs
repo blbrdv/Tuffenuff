@@ -35,16 +35,16 @@ let init () =
         (fun _ ->
             let targets = buildDirs |> List.ofSeq
 
-            if targets.Length > 0 then
+            if targets.Length = 0 then
+                Trace.trace "Nothing to delete"
+            else
                 targets
                 |> (fun value ->
-                    value |> Seq.iter (fun dir -> Trace.log $"Deleting %s{dir}")
+                    value |> Seq.iter (fun dir -> Trace.tracefn $"Deleting %s{dir}")
 
                     value
                 )
                 |> Shell.deleteDirs
-            else
-                Trace.log "Nothing to delete"
         )
 
     Target.description "Build Tuffenuff"
