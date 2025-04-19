@@ -153,7 +153,7 @@ module private Commands =
     /// Print command error to stderr and exit with its exit code.
     let inline private printError (command : string) (result : Output) =
         eprintfn
-            $"%s{red}Command \"%s{command}\"\
+            $"%s{red}Command \"%s{command}\" \
             exited with code %d{result.ExitCode}.%s{reset}"
 
         if result.Error.IsSome then
