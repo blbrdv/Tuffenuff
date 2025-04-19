@@ -3,6 +3,7 @@ module CICD.DockerfileSyntaxVersions
 
 open System.Diagnostics
 open Fake.Core
+open CICD.TimeSpanExtensions
 
 module private Version =
     open System
@@ -68,7 +69,9 @@ module private DockerHub =
             if isVerbose then
                 let elapsed = sw.Elapsed
                 sw.Reset ()
-                Trace.log $"Responded %O{response.statusCode} [%d{toMs elapsed}ms]"
+                Trace.log
+                    $"Responded %O{response.statusCode} \
+                    [%s{elapsed.ToReadableString()}]"
 
             response
         )

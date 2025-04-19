@@ -44,6 +44,7 @@ module private MinimalListener =
 
 open MinimalListener
 open Fake.Core
+open CICD.TimeSpanExtensions
 
 [<Sealed>]
 type MinimalListener() =
@@ -136,7 +137,7 @@ type MinimalListener() =
 
                 print " "
 
-                $"Finished %A{tag} [%d{toMs time}ms]" |> print
+                $"Finished %A{tag} [%s{time.ToReadableString()}]" |> print
 
                 print " ("
 

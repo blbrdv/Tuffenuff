@@ -7,10 +7,6 @@ open System.Text
 /// Break line symbol(s) as string.
 let newLine = Environment.NewLine
 
-/// Convert timespan to milliseconds.
-let inline toMs (time : TimeSpan) =
-    time.TotalMilliseconds |> Math.Truncate |> int
-
 /// Replace control characters to escape sequences or Unicode literals.
 let inline sanitize (value : string) : string =
     let b = StringBuilder(value.Length)
