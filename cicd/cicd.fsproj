@@ -13,7 +13,7 @@
     <Compile Include="Listener.fs" />
     <Compile Include="DockerfileSyntaxVersions.fs" />
     <Compile Include="Paths.fs" />
-    <Compile Include="TraceEx.fs" />
+    <Compile Include="Trace.fs" />
     <Compile Include="Options.fs" />
     <Compile Include="Targets.fs" />
     <Compile Include="Program.fs" />

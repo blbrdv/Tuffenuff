@@ -1,4 +1,5 @@
-﻿open CICD.Listener
+﻿open CICD
+open CICD.Listener
 open Fake.Core
 
 [<EntryPoint>]
@@ -10,12 +11,14 @@ let main argv =
     |> Context.setExecutionContext
 
     CoreTracing.setTraceListeners [ MinimalListener () ]
-    CICD.Targets.init ()
+    Targets.init ()
 
     Trace.traceLine ()
     Trace.trace "Passed environment variables:"
     Environment.environVars ()
-    |> List.iter (fun (key, value) -> Trace.trace $"  %s{key}=\"%s{value}\"")
+    |> List.iter (fun (key, value) ->
+        Trace.trace $"  %s{key}=\"%s{sanitize value}\""
+    )
     Trace.traceLine ()
     Trace.trace ""
 
