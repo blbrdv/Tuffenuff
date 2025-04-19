@@ -72,15 +72,15 @@ let init () =
 
             DotNet.nugetPush
                 (fun defaults ->
-                    //traceOptions "Nuget push options"
-                    { defaults with
-                        PushParams =
-                            { defaults.PushParams with
-                                DisableBuffering = true
-                                Source = Some "https://api.nuget.org/v3/index.json"
-                                ApiKey = Some key
-                            }
-                    }
+                    Trace.logObject
+                        { defaults with
+                            PushParams =
+                                { defaults.PushParams with
+                                    DisableBuffering = true
+                                    Source = Some "https://api.nuget.org/v3/index.json"
+                                    ApiKey = Some key
+                                }
+                        }
                 )
                 packageFile
         )
