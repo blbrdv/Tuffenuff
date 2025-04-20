@@ -47,8 +47,31 @@ let init () =
                 |> Shell.deleteDirs
         )
 
+    // TODO: find easier way to add one flag to build command
     Target.description "Build Tuffenuff"
-    Target.create "Build" (fun _ -> DotNet.build buildOptions srcProjFile)
+    Target.create "Build" (fun _ ->
+        let buildOpts = DotNet.BuildOptions.Create() |> buildOptions
+        let commonOpts = buildOpts.Common
+
+        let args =
+            [
+                $"\"%s{srcProjFile}\""
+                $"--configuration %A{buildOpts.Configuration}"
+                "--no-dependencies"
+            ]
+            |> String.concat " "
+
+        let result =
+            DotNet.exec
+                (fun _ -> commonOpts)
+                "build"
+                args
+
+        if result.ExitCode <> 0 then
+            let errorMessage =
+                $"'build %s{srcProjFile}' failed with exitcode %d{result.ExitCode}."
+            raise (MSBuildException(errorMessage, []))
+    )
 
     Target.description "Tests scripts in examples directory"
     Target.create
