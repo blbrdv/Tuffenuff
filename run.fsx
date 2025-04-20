@@ -117,6 +117,15 @@ module private Console =
     open System.IO
     open System.Text.RegularExpressions
 
+    [<Literal>]
+    let githubActions = "GITHUB_ACTIONS"
+
+    [<Literal>]
+    let term = "TERM"
+
+    [<Literal>]
+    let leTruth = "TRUE"
+
     type private Command =
         | Print of string
         | ColorChange of int
@@ -124,8 +133,15 @@ module private Console =
     let private regex = Regex @"\u001b\[(\d+)m"
 
     let private isSupportANSIColors =
-        Environment.GetEnvironmentVariables().Contains("TERM") &&
-        not (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("TERM")))
+        let envs = Environment.GetEnvironmentVariables ()
+
+        (
+            envs.Contains githubActions &&
+            envs[githubActions].ToString().ToUpper().Equals("TRUE")
+        ) || (
+            envs.Contains term &&
+            not (String.IsNullOrEmpty(envs[term].ToString()))
+        )
 
     let inline private print (writer : TextWriter) (text : string) =
         if isSupportANSIColors then
