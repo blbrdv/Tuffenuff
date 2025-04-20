@@ -110,13 +110,111 @@ Options:
 
             verbosityEnv @ otherEnvs
 
+/// Printing to console with colors no matter supported ANSII escape character (\u001b)
+/// or not
+[<RequireQualifiedAccess>]
+module private Console =
+    open System.IO
+    open System.Text.RegularExpressions
+
+    type private Command =
+        | Print of string
+        | ColorChange of int
+
+    let private regex = Regex @"\u001b\[(\d+)m"
+
+    let private isSupportANSIColors =
+        Environment.GetEnvironmentVariables().Contains("TERM") &&
+        not (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("TERM")))
+
+    let inline private print (writer : TextWriter) (text : string) =
+        if isSupportANSIColors then
+            writer.WriteLine text
+        else
+            text.Split Environment.NewLine
+            |> Array.map (fun value ->
+                let result = ResizeArray<Command> ()
+                let mutable lastIndex = 0
+
+                let matches = regex.Matches value
+
+                if matches.Count = 0 then
+                    value
+                    |> Print
+                    |> result.Add 
+                else
+                    for match' in matches do     
+                        let num = match'.Groups[1].Value
+
+                        if match'.Index = 0 then
+                            num
+                            |> Int32.Parse
+                            |> ColorChange
+                            |> result.Add
+
+                            lastIndex <- match'.Length
+                        else
+                            value.Substring(lastIndex, match'.Index - lastIndex)
+                            |> Print
+                            |> result.Add
+
+                            num
+                            |> Int32.Parse
+                            |> ColorChange
+                            |> result.Add
+
+                            lastIndex <- match'.Index + match'.Length
+
+                    let substr = value.Substring(lastIndex)
+
+                    if not (String.IsNullOrEmpty substr) then
+                        substr
+                        |> Print
+                        |> result.Add
+
+                result.ToArray()
+            )
+            |> Array.iter (fun list ->
+                list
+                |> Array.iter (fun command ->
+                    match command with
+                    | Print s -> writer.Write s
+                    | ColorChange i ->
+                        match i with
+                        | 0 -> Console.ResetColor()
+                        | 30 -> Console.ForegroundColor <- ConsoleColor.Black
+                        | 31 -> Console.ForegroundColor <- ConsoleColor.Red
+                        | 32 -> Console.ForegroundColor <- ConsoleColor.Green
+                        | 33 -> Console.ForegroundColor <- ConsoleColor.Yellow
+                        | 34 -> Console.ForegroundColor <- ConsoleColor.Blue
+                        | 35 -> Console.ForegroundColor <- ConsoleColor.Magenta
+                        | 36 -> Console.ForegroundColor <- ConsoleColor.Cyan
+                        | 37 -> Console.ForegroundColor <- ConsoleColor.Gray
+                        | 90 -> Console.ForegroundColor <- ConsoleColor.DarkGray
+                        | 91 -> Console.ForegroundColor <- ConsoleColor.DarkRed
+                        | 92 -> Console.ForegroundColor <- ConsoleColor.DarkGreen
+                        | 93 -> Console.ForegroundColor <- ConsoleColor.DarkYellow
+                        | 94 -> Console.ForegroundColor <- ConsoleColor.DarkBlue
+                        | 95 -> Console.ForegroundColor <- ConsoleColor.DarkMagenta
+                        | 96 -> Console.ForegroundColor <- ConsoleColor.DarkCyan
+                        | 97 -> Console.ForegroundColor <- ConsoleColor.White
+                        | _ -> ()
+                )
+
+                writer.Write Environment.NewLine
+            )
+
+    let inline printn (text : string) = print Console.Out text
+
+    let inline eprintn (text : string) = print Console.Error text
+
 /// Bunch of cli commands
 module private Commands =
     open System.IO
     open Fli
 
     [<Literal>]
-    let private white = "\u001b[37m"
+    let private darkGray = "\u001b[90m"
 
     [<Literal>]
     let private red = "\u001b[31m"
@@ -142,16 +240,16 @@ module private Commands =
 
     /// Print command error to stderr and exit with its exit code.
     let inline private printError (command : string) (result : Output) =
-        eprintfn
+        Console.eprintn
             $"%s{red}Command \"%s{command}\" \
             exited with code %d{result.ExitCode}.%s{reset}"
 
         if result.Error.IsSome then
-            eprintfn
+            Console.eprintn
                 $"%s{red}Error message:%s{eol}\
                 %s{result.Error.Value}%s{reset}"
         else
-            eprintfn ""
+            Console.eprintn ""
 
         exit result.ExitCode
 
@@ -186,7 +284,7 @@ module private Commands =
                                 (key, value)
                         )
 
-                    printfn $"%s{white}Exec \"%s{command}\" %A{envs}%s{reset}"
+                    Console.printn $"%s{darkGray}Exec \"%s{command}\" %A{envs}%s{reset}"
 
                 context
             )
@@ -201,11 +299,11 @@ module private Commands =
             | None -> String.Empty
         else
             if result.Text.IsSome then
-                printfn $"%s{result.Text.Value}"
+                Console.printn $"%s{result.Text.Value}"
 
             if result.ExitCode <> 0 then
                 if result.Text.IsSome then
-                    printfn ""
+                    Console.printn ""
 
                 printError command result
 
@@ -248,7 +346,7 @@ module private Commands =
                 "--no-build"
 
         if String.Empty.Equals noBuild then
-            printfn "Building CI/CD project..."
+            Console.printn "Building CI/CD project..."
 
         let fsprojPath = Path.Combine (projDir, $"%s{projName}.fsproj")
         let commandArgs = $"run %s{verbosity} %s{noBuild} --project %s{fsprojPath}"
@@ -281,7 +379,7 @@ open Arguments
 let private cliArgs = fsi.CommandLineArgs[1..]
 
 if cliArgs.Length = 0 then
-    printfn $"%s{doc}"
+    Console.printn $"%s{doc}"
     exit 0
 
 let private scriptArgs =
@@ -310,7 +408,7 @@ open System.Diagnostics
 let private sw = Stopwatch ()
 
 try
-    printfn "Starting..."
+    Console.printn "Starting..."
     sw.Start ()
 
     seq { $"-t %s{args.Target}" }
@@ -319,4 +417,5 @@ try
     sw.Stop ()
 finally
     sw.Elapsed.ToString(@"hh\:mm\:ss\.fff")
-    |> printfn "Finished [%s]"
+    |> sprintf "Finished [%s]"
+    |> Console.printn
