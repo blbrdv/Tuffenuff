@@ -110,7 +110,7 @@ Options:
 
             verbosityEnv @ otherEnvs
 
-/// Printing to console with colors no matter supported ANSII escape character (\u001b)
+/// Printing to console with colors no matter supported ANSI escape character (\u001b)
 /// or not
 [<RequireQualifiedAccess>]
 module private Console =
@@ -220,9 +220,9 @@ module private Console =
                 writer.Write Environment.NewLine
             )
 
-    let inline printn (text : string) = print Console.Out text
+    let inline stdout (text : string) = print Console.Out text
 
-    let inline eprintn (text : string) = print Console.Error text
+    let inline stderr (text : string) = print Console.Error text
 
 /// Bunch of cli commands
 module private Commands =
@@ -264,16 +264,16 @@ module private Commands =
 
     /// Print command error to stderr and exit with its exit code.
     let inline private printError (command : string) (result : Output) =
-        Console.eprintn
+        Console.stderr
             $"%s{red}Command \"%s{command}\" \
             exited with code %d{result.ExitCode}.%s{reset}"
 
         if result.Error.IsSome then
-            Console.eprintn
+            Console.stderr
                 $"%s{red}Error message:%s{eol}\
                 %s{result.Error.Value}%s{reset}"
         else
-            Console.eprintn ""
+            Console.stderr ""
 
         exit result.ExitCode
 
@@ -308,7 +308,7 @@ module private Commands =
                                 (key, value)
                         )
 
-                    Console.printn $"%s{darkGray}Exec \"%s{command}\" %A{envs}%s{reset}"
+                    Console.stdout $"%s{darkGray}Exec \"%s{command}\" %A{envs}%s{reset}"
 
                 context
             )
@@ -323,11 +323,11 @@ module private Commands =
             | None -> String.Empty
         else
             if result.Text.IsSome then
-                Console.printn $"%s{result.Text.Value}"
+                Console.stdout $"%s{result.Text.Value}"
 
             if result.ExitCode <> 0 then
                 if result.Text.IsSome then
-                    Console.printn ""
+                    Console.stdout ""
 
                 printError command result
 
@@ -370,7 +370,7 @@ module private Commands =
                 "--no-build"
 
         if String.Empty.Equals noBuild then
-            Console.printn "Building CI/CD project..."
+            Console.stdout "Building CI/CD project..."
 
         let fsprojPath = Path.Combine (projDir, $"%s{projName}.fsproj")
         let commandArgs = $"run %s{verbosity} %s{noBuild} --project %s{fsprojPath}"
@@ -403,7 +403,7 @@ open Arguments
 let private cliArgs = fsi.CommandLineArgs[1..]
 
 if cliArgs.Length = 0 then
-    Console.printn $"%s{doc}"
+    Console.stdout $"%s{doc}"
     exit 0
 
 let private scriptArgs =
@@ -432,7 +432,7 @@ open System.Diagnostics
 let private sw = Stopwatch ()
 
 try
-    Console.printn "Starting..."
+    Console.stdout "Starting..."
     sw.Start ()
 
     seq { $"-t %s{args.Target}" }
@@ -442,4 +442,4 @@ try
 finally
     sw.Elapsed.ToString(@"hh\:mm\:ss\.fff")
     |> sprintf "Finished [%s]"
-    |> Console.printn
+    |> Console.stdout

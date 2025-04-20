@@ -101,7 +101,7 @@ let inline logObject (data : 'a) : 'a =
             elif origType.FullName.StartsWith "Microsoft.FSharp.Collections.FSharpMap`2"
             then
 
-                match origType.GetProperty ("Item") with
+                match origType.GetProperty "Item" with
                 | null -> failwith "Not supposed to happened!"
                 | _ ->
                     let list = (boxed :?> IEnumerable<obj>) |> List.ofSeq
@@ -163,11 +163,11 @@ let inline logObject (data : 'a) : 'a =
                         result.Add "{"
 
                         props
-                        |> Array.map (fun p -> (p.Name, p.GetValue (boxed)))
+                        |> Array.map (fun p -> (p.Name, p.GetValue boxed))
                         |> Array.iter (fun (name, v) ->
                             // Redacting the "Environment" property because we are already
                             // tracing environment variables on start
-                            if "Environment".Equals (name) then
+                            if "Environment".Equals name then
                                 withIndent nextIndent name
                                 |> sprintf "%s = [...]"
                                 |> result.Add
