@@ -34,6 +34,11 @@ jobs:
       with:
         global-json-file: global.json
 
+    - name: Build project
+      env:
+        KEY: ${{ secrets.NUGET_API_KEY }}
+      run: ./run.sh Build
+
     - name: Nuget release
       env:
         KEY: ${{ secrets.NUGET_API_KEY }}

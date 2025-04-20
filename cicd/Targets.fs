@@ -125,39 +125,39 @@ let init () =
                 "UpstreamSyntax"
         )
 
-    Target.description "Run \"UnitTests\" then \"IntegrationTests\""
-    Target.create "AllTests" ignore
+    if BuildServer.isLocalBuild then
+        Target.description "Run \"UnitTests\" then \"IntegrationTests\""
+        Target.create "AllTests" ignore
 
-    Target.description
-        "Run \"GenerateSyntaxVersions\" then \"GenerateUpstreamSyntaxVersions\""
-    Target.create "GenerateAllSyntaxVersions" ignore
+        Target.description
+            "Run \"GenerateSyntaxVersions\" then \"GenerateUpstreamSyntaxVersions\""
+        Target.create "GenerateAllSyntaxVersions" ignore
 
     // ** Dependencies **
 
-    // TODO check for build server
+    if BuildServer.isLocalBuild then
+        "Clean"
+            ==> "Build"
+            |> ignore
 
-    "Clean"
-        ==> "Build"
-        |> ignore
+        "Build"
+            ==> "UnitTests"
+            |> ignore
 
-    "Build"
-        ==> "UnitTests"
-        |> ignore
+        "Build"
+            ==> "IntegrationTests"
+            |> ignore
 
-    "Build"
-        ==> "IntegrationTests"
-        |> ignore
+        "Build"
+            ==> "Release"
+            |> ignore
 
-    "Build"
-        ==> "Release"
-        |> ignore
+        "UnitTests"
+            ==> "IntegrationTests"
+            ==> "AllTests"
+            |> ignore
 
-    "UnitTests"
-        ==> "IntegrationTests"
-        ==> "AllTests"
-        |> ignore
-
-    "GenerateSyntaxVersions"
-        ==> "GenerateUpstreamSyntaxVersions"
-        ==> "GenerateAllSyntaxVersions"
-        |> ignore
+        "GenerateSyntaxVersions"
+            ==> "GenerateUpstreamSyntaxVersions"
+            ==> "GenerateAllSyntaxVersions"
+            |> ignore

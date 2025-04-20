@@ -43,5 +43,11 @@ jobs:
       with:
         global-json-file: global.json
 
-    - name: Run tests
-      run: ${{ matrix.targets.script }} AllTests
+    - name: Build project
+      run: ${{ matrix.targets.script }} Build
+
+    - name: Run unit tests
+      run: ${{ matrix.targets.script }} UnitTests
+
+    - name: Run integration tests
+      run: ${{ matrix.targets.script }} IntegrationTests
