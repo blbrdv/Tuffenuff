@@ -262,8 +262,9 @@ module private Commands =
     let inline testBin () =
         let path = Path.Combine (projDir, "bin", "Debug", "net6.0")
         
-        Directory.GetFiles(path, "*", SearchOption.AllDirectories)
-        |> Array.iter (fun file -> printfn $"%s{file}")
+        if Directory.Exists path then
+            Directory.GetFiles(path, "*", SearchOption.AllDirectories)
+            |> Array.iter (fun file -> printfn $"%s{file}")
 
     /// List of env keys, value which must be redacted.
     let private badKeys = seq { "NUGET_API_KEY" } |> Seq.readonly
