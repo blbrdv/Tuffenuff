@@ -18,6 +18,7 @@ let inline logObject (data : 'a) : 'a =
         ||> sprintf "%s%s"
 
     let inline toString
+        (separator : string)
         (indentLength : int)
         (key : string)
         (values : List<string>)
@@ -27,85 +28,81 @@ let inline logObject (data : 'a) : 'a =
         let keyWithIndent = withIndent indentLength key
 
         match values.Count with
-        | 0 -> [ $"%s{keyWithIndent} = None" ] |> List
-        | 1 -> [ $"%s{keyWithIndent} = %s{Seq.head values}" ] |> List
+        | 0 -> [ $"%s{keyWithIndent}%s{separator}None" ] |> List
+        | 1 -> [ $"%s{keyWithIndent}%s{separator}%s{Seq.head values}" ] |> List
         | n ->
             let result = List<string>(n + 1)
             let nextIndent = indentLength + 1
             
-            result.Add $"%s{keyWithIndent} ="
+            result.Add $"%s{keyWithIndent}%s{separator}"
             
             for v in values do
                 withIndent nextIndent v
                 |> result.Add
             
             result
-    
-    let toStringSeq (value : 'b) : List<string> =        
-        let rec formSeq (indent : int) (boxed : obj) : List<string> =
-            let nextIndent = indent + 1
-            let result = List<string>()
+         
+    let rec formList (indent : int) (boxed : obj) : List<string> =
+        let nextIndent = indent + 1
+        let result = List<string>()
+        
+        if boxed = null then
+            "None"
+            |> withIndent indent
+            |> result.Add 
+        else
+            let origType = boxed.GetType()
             
-            if boxed = null then
-                result.Add "None"
-            else
-                let origType = boxed.GetType()
+            // TODO: refactor type determination
+            if origType.FullName.Equals("System.String") ||
+               origType.FullName.Equals("Microsoft.FSharp.Core.string")
+            then
                 
-                // TODO: refactor type determination
-                if origType.FullName.Equals("System.String") ||
-                   origType.FullName.Equals("Microsoft.FSharp.Core.string")
-                then
+                boxed
+                |> string
+                |> sanitize
+                |> sprintf "\"%s\""
+                |> withIndent indent
+                |> result.Add
+                
+            elif origType.IsPrimitive then
+                
+                boxed
+                |> string
+                |> withIndent indent
+                |> result.Add
+            
+            elif
+                FSharpType.IsUnion origType &&
+                not (
+                    origType.GetInterfaces()
+                    |> Array.exists (fun i -> i.Name = "IEnumerable")
+                )
+            then
+                let case, values = FSharpValue.GetUnionFields(boxed, origType)
+                
+                match values.Length with
+                | 0 -> result.Add case.Name
+                | 1 ->
+                    // "(indent - 1)" - This is bullshit but it's works
+                    let data = values[0] |> formList (indent - 1)
                     
-                    boxed
-                    |> string
-                    |> sanitize
-                    |> sprintf "\"%s\""
-                    |> result.Add
+                    (indent, case.Name, data)
+                    |||> toString " "
+                    |> result.AddRange
+                | _ ->
+                    let list = formList indent values
                     
-                elif origType.IsPrimitive then
-                    
-                    boxed
-                    |> string
-                    |> result.Add
-                    
-                elif origType.FullName.StartsWith "Microsoft.FSharp.Collections.FSharpMap`2"
-                then
-                    
-                    match origType.GetProperty("Item") with
-                    | null -> failwith "Not supposed to happened!"
-                    | _ ->
-                        let list = (boxed :?> IEnumerable<obj>) |> List.ofSeq
-                        
-                        if List.length list = 0 then
-                            result.Add "[]"
-                        else
-                            result.Add "["
-                            
-                            list
-                            |> List.map (fun o ->
-                                let key =
-                                    o.GetType().GetProperty("Key").GetValue(o)
-                                    |> box
-                                let value =
-                                    o.GetType().GetProperty("Value").GetValue(o)
-                                    |> box
-                                    
-                                (key, value)
-                            )
-                            |> List.iter (fun kv ->
-                                let k, v = kv
-                                let key = $"%A{k}"
-                                
-                                let data = v |> formSeq indent
-                                
-                                (nextIndent, key, data)
-                                |||> toString
-                                |> result.AddRange
-                            )
-                            
-                            result.Add "]"
-                            
-                elif boxed :? IEnumerable<obj> then
+                    (indent, case.Name, list)
+                    |||> toString " "
+                    |> result.AddRange
+                
+            elif origType.FullName.StartsWith "Microsoft.FSharp.Collections.FSharpMap`2"
+            then
+                
+                match origType.GetProperty("Item") with
+                | null -> failwith "Not supposed to happened!"
+                | _ ->
                     let list = (boxed :?> IEnumerable<obj>) |> List.ofSeq
                     
                     if List.length list = 0 then
@@ -114,70 +111,103 @@ let inline logObject (data : 'a) : 'a =
                         result.Add "["
                         
                         list
-                        |> List.iter (fun v ->                            
-                            v
-                            |> formSeq nextIndent
+                        |> List.map (fun o ->
+                            let key =
+                                o.GetType().GetProperty("Key").GetValue(o)
+                                |> box
+                            let value =
+                                o.GetType().GetProperty("Value").GetValue(o)
+                                |> box
+                                
+                            (key, value)
+                        )
+                        |> List.iter (fun kv ->
+                            let k, v = kv
+                            let key = $"%A{k}"
+                            
+                            let data = v |> formList indent
+                            
+                            (nextIndent, key, data)
+                            |||> toString " = "
                             |> result.AddRange
                         )
                         
                         result.Add "]"
                         
+            elif boxed :? IEnumerable<obj> then
+                let list = (boxed :?> IEnumerable<obj>) |> List.ofSeq
+                
+                if List.length list = 0 then
+                    result.Add "()"
                 else
+                    result.Add "("
                     
-                    let props =
-                        origType.GetProperties(
-                            BindingFlags.Instance |||
-                            BindingFlags.Public
-                        )
-                        |> Array.where (fun p ->
-                            p.MemberType = MemberTypes.Property
-                        )
+                    list
+                    |> List.iter (fun v ->
+                        v
+                        |> formList nextIndent
+                        |> result.AddRange
+                    )
                     
-                    if FSharpType.IsRecord origType then
-                        if props.Length = 0 then
-                            result.Add "{}"
-                        else
-                            result.Add "{"
-                            
-                            props
-                            |> Array.map (fun p ->
-                                (
-                                    p.Name,
-                                    p.GetValue(boxed)
-                                )
-                            )
-                            |> Array.iter (fun (name, v) ->                                
-                                if "Environment".Equals(name) then
-                                    withIndent nextIndent name
-                                    |> sprintf "%s = [...]"
-                                    |> result.Add 
-                                else
-                                    let data = v |> formSeq indent
-                                    
-                                    (nextIndent, name, data)
-                                    |||> toString
-                                    |> result.AddRange
-                            )
-                            
-                            result.Add "}"
-                            
+                    result.Add ")"
+                    
+            else
+                
+                let props =
+                    origType.GetProperties(
+                        BindingFlags.Instance |||
+                        BindingFlags.Public
+                    )
+                    |> Array.where (fun p ->
+                        p.MemberType = MemberTypes.Property
+                    )
+                
+                if FSharpType.IsRecord origType then
+                    if props.Length = 0 then
+                        result.Add "{}"
                     else
-                        $"%A{boxed}"
-                        |> sanitize
-                        |> result.Add
+                        result.Add "{"
+                        
+                        props
+                        |> Array.map (fun p ->
+                            (
+                                p.Name,
+                                p.GetValue(boxed)
+                            )
+                        )
+                        |> Array.iter (fun (name, v) ->
+                            // Redacting the "Environment" property because we are already
+                            // tracing environment variables on start
+                            if "Environment".Equals(name) then
+                                withIndent nextIndent name
+                                |> sprintf "%s = [...]"
+                                |> result.Add 
+                            else
+                                let data = v |> formList indent
+                                
+                                (nextIndent, name, data)
+                                |||> toString " = "
+                                |> result.AddRange
+                        )
+                        
+                        result.Add "}"
+                        
+                else
+                    $"%A{boxed}"
+                    |> withIndent indent
+                    |> sanitize
+                    |> result.Add
 
-            result
-        
-        formSeq 0 (box value)
-    
+        result
+
     let dataType = data.GetType()
 
     let module' = dataType.Module.Name.Replace(".dll", "")
     let key = $"%s{module'}.%s{dataType.Name}"
     
-    let value = data |> toStringSeq
+    let value = data |> box |> formList 0
     
-    let result = (0, key, value) |||> toString |> String.concat newLine
+    let result = (0, key, value) |||> toString " = " |> String.concat newLine
     
     Trace.traceLine ()
     Trace.trace result
