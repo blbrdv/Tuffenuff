@@ -48,9 +48,7 @@ let init () =
         )
 
     Target.description "Build Tuffenuff"
-    Target.create
-        "Build"
-        (fun _ -> DotNet.build buildOptions srcProjFile)
+    Target.create "Build" (fun _ -> DotNet.build buildOptions srcProjFile)
 
     Target.description "Tests scripts in examples directory"
     Target.create

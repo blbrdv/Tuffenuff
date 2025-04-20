@@ -69,9 +69,10 @@ module private DockerHub =
             if isVerbose then
                 let elapsed = sw.Elapsed
                 sw.Reset ()
+
                 Trace.log
                     $"Responded %O{response.statusCode} \
-                    [%s{elapsed.ToReadableString()}]"
+                    [%s{elapsed.ToReadableString ()}]"
 
             response
         )

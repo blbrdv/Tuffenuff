@@ -19,7 +19,7 @@ let inline private setLogParams (args : MSBuild.CliArguments) =
 /// Using this instead of 'dotnetOptions' because fantomas silently fails when verbosity
 /// is Quiet or Minimal. 🤡🤡🤡
 let fantomasOptions =
-    (fun (opt : DotNet.Options) ->        
+    (fun (opt : DotNet.Options) ->
         Trace.logObject
             { opt with
                 Verbosity = Some DotNet.Verbosity.Normal

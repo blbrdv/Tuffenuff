@@ -137,7 +137,7 @@ type MinimalListener() =
 
                 print " "
 
-                $"Finished %A{tag} [%s{time.ToReadableString()}]" |> print
+                $"Finished %A{tag} [%s{time.ToReadableString ()}]" |> print
 
                 print " ("
 

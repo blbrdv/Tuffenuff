@@ -15,10 +15,10 @@ let main argv =
 
     Trace.traceLine ()
     Trace.trace "Passed environment variables:"
+
     Environment.environVars ()
-    |> List.iter (fun (key, value) ->
-        Trace.trace $"  %s{key}=\"%s{sanitize value}\""
-    )
+    |> List.iter (fun (key, value) -> Trace.trace $"  %s{key}=\"%s{sanitize value}\"")
+
     Trace.traceLine ()
     Trace.trace ""
 

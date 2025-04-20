@@ -19,11 +19,11 @@ let private list = "--list"
 let private version = "--version"
 
 /// Command line argument parsing essentials
-module private Arguments = 
+module private Arguments =
     open System.Collections
     open System.Collections.Generic
     open DocoptNet
-    
+
     [<Literal>]
     let private silent = "-s"
 
@@ -68,22 +68,16 @@ Options:
         member _.Target = dict[targetVar].ToString ()
 
         member _.Verbosity =
-            if dict[verbose].IsTrue then
-                verbose
-            elif dict[normal].IsTrue then
-                normal
-            else
-                silent
+            if dict[verbose].IsTrue then verbose
+            elif dict[normal].IsTrue then normal
+            else silent
 
         member _.Rebuild = dict[rebuild].IsTrue
 
         member this.DotnetVerbosity =
-            if verbose.Equals this.Verbosity then
-                dotnetVerbose
-            elif normal.Equals this.Verbosity then
-                dotnetNormal
-            else
-                dotnetSilent
+            if verbose.Equals this.Verbosity then dotnetVerbose
+            elif normal.Equals this.Verbosity then dotnetNormal
+            else dotnetSilent
 
         member this.Env =
             let verbosityEnv =
@@ -137,18 +131,14 @@ module private Commands =
     let private eol = Environment.NewLine
 
     /// Path to directory of CI/CD project.
-    let private projDir = Path.Combine(".", projName)
+    let private projDir = Path.Combine (".", projName)
 
     /// Path to exe file of CI/CD project.
     let private exePath =
-        Path.Combine(projDir, "bin", "Debug", "net6.0", $"%s{projName}.exe")
+        Path.Combine (projDir, "bin", "Debug", "net6.0", $"%s{projName}.exe")
 
     /// List of env keys, value which must be redacted.
-    let private badKeys =
-        seq {
-            "NUGET_API_KEY"
-        }
-        |> Seq.readonly
+    let private badKeys = seq { "NUGET_API_KEY" } |> Seq.readonly
 
     /// Print command error to stderr and exit with its exit code.
     let inline private printError (command : string) (result : Output) =
@@ -168,7 +158,7 @@ module private Commands =
     /// Execute binary/executable from "executable" with "args" and environment
     /// variables from "envs".
     /// If "isVerbose" is true - print context before executing.
-    /// If "return" is true - return executable output from stdout, else print it. 
+    /// If "return" is true - return executable output from stdout, else print it.
     /// If executable returns non-zero exit code print it and exit with this code.
     let inline private exec
         (return' : bool)
@@ -225,11 +215,11 @@ module private Commands =
     let inline private isModified (path : string) (isVerbose : bool) =
         let result = exec true isVerbose "git" $"diff --dirstat=files -- %s{path}" []
 
-        not (String.Empty.Equals(result))
+        not (String.Empty.Equals result)
 
     /// Add files from "path" to Git index.
     let inline private add (path : string) (isVerbose : bool) =
-        let glob = Path.Combine(path, "**")
+        let glob = Path.Combine (path, "**")
         exec false isVerbose "git" $"add %s{glob}" [] |> ignore
 
     /// Execute "dotnet" cli with "args" and environment variables from "envs".
@@ -252,20 +242,16 @@ module private Commands =
         let isVerbose = dotnetVerbose.Equals verbosity
 
         let noBuild =
-            if rebuild ||
-               not (File.Exists exePath) ||
-               isModified projDir isVerbose
-            then
+            if rebuild || not (File.Exists exePath) || isModified projDir isVerbose then
                 String.Empty
             else
                 "--no-build"
 
-        if String.Empty.Equals(noBuild) then
+        if String.Empty.Equals noBuild then
             printfn "Building CI/CD project..."
 
-        let fsprojPath = Path.Combine(projDir, $"%s{projName}.fsproj")
-        let commandArgs =
-            $"run %s{verbosity} %s{noBuild} --project %s{fsprojPath}"
+        let fsprojPath = Path.Combine (projDir, $"%s{projName}.fsproj")
+        let commandArgs = $"run %s{verbosity} %s{noBuild} --project %s{fsprojPath}"
 
         if (Seq.length args) > 0 then
             seq {
@@ -278,7 +264,7 @@ module private Commands =
             commandArgs
         |> dotnet isVerbose envs
 
-        if String.Empty.Equals(noBuild) then
+        if String.Empty.Equals noBuild then
             add projDir isVerbose
 
     /// Execute "dotnet run" command on cicd project with "flag" silently.
@@ -321,16 +307,16 @@ let private args = argsRaw |> Arguments
 
 open System.Diagnostics
 
-let private sw = Stopwatch()
+let private sw = Stopwatch ()
 
 try
     printfn "Starting..."
-    sw.Start()
+    sw.Start ()
 
     seq { $"-t %s{args.Target}" }
     |> run args.DotnetVerbosity args.Rebuild args.Env
 
-    sw.Stop()
+    sw.Stop ()
 finally
     sw.Elapsed.ToString(@"hh\:mm\:ss\.fff")
     |> printfn "Finished [%s]"

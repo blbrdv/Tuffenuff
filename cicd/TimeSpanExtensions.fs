@@ -7,5 +7,4 @@ open System.Runtime.CompilerServices
 type TimeSpanExtensions =
 
     [<Extension>]
-    static member ToReadableString (this: TimeSpan) =
-        this.ToString(@"hh\:mm\:ss\.fff")
+    static member ToReadableString (this : TimeSpan) = this.ToString @"hh\:mm\:ss\.fff"
