@@ -7,6 +7,8 @@ jobs:
   codestyle-check:
     runs-on: ubuntu-latest
 
+    name: Codestyle check
+
     steps:
     - uses: actions/checkout@v3
 
@@ -17,7 +19,7 @@ jobs:
     - name: Restore tools
       run: dotnet tool restore
 
-    - name: Codestyle check
+    - name: Check format
       run: ./run.sh CheckFormat
 
   build-and-tests:
@@ -36,6 +38,8 @@ jobs:
 
     runs-on: ${{ matrix.targets.os }}
 
+    name: Build and tests on ${{ matrix.targets.os }}
+
     steps:
     - uses: actions/checkout@v3
 
@@ -43,11 +47,11 @@ jobs:
       with:
         global-json-file: global.json
 
-    - name: Build project
+    - name: Build
       run: ${{ matrix.targets.script }} Build
 
-    - name: Run unit tests
+    - name: Unit tests
       run: ${{ matrix.targets.script }} UnitTests
 
-    - name: Run integration tests
+    - name: Integration tests
       run: ${{ matrix.targets.script }} IntegrationTests
