@@ -30,15 +30,18 @@ jobs:
       matrix:
         targets:
           - os: windows-latest
+            name: Windows
             script: .\run.cmd
           - os: macOS-latest
+            name: macOS
             script: ./run.sh
           - os: ubuntu-latest
+            name: Linux
             script: ./run.sh
 
     runs-on: ${{ matrix.targets.os }}
 
-    name: Build and tests on ${{ matrix.targets.os }}
+    name: Build and tests on ${{ matrix.targets.name }}
 
     steps:
     - uses: actions/checkout@v3
