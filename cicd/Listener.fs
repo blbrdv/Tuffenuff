@@ -37,8 +37,6 @@ module private MinimalListener =
     let inline printLine (text : string) (breakLine : bool) =
         if breakLine then printn text else print text
 
-    let optsStr = "TRACEOPTIONS>>"
-
     let groupStartStr = "The running order is:"
     let groupPattern = Regex (@"Group - (\d+)(?:\n|\r|\r\n)  - (\w[\w\d]+)")
 
@@ -68,9 +66,7 @@ type MinimalListener() =
                 if isVerbose then
                     printLine text lineBreak
                 else
-                    if text.StartsWith optsStr then
-                        printdgn text[optsStr.Length ..]
-                    elif text.StartsWith groupStartStr then
+                    if text.StartsWith groupStartStr then
                         let matches = groupPattern.Matches text
 
                         if matches.Count <> 0 then
@@ -150,7 +146,6 @@ type MinimalListener() =
 
                 printnl ()
 
-            // TODO: find out what is "something"
-            | TraceData.BuildState (status, something) ->
-                //if isVerbose then
-                printn $"Build %A{status} %A{something}"
+            | TraceData.BuildState (status, _) ->
+                if isVerbose then
+                    printn $"Build state: %A{status}"
