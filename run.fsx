@@ -249,7 +249,21 @@ module private Commands =
 
     /// Path to exe file of CI/CD project.
     let private exePath =
-        Path.Combine (projDir, "bin", "Debug", "net6.0", $"%s{projName}.exe")
+        let fileName =
+            if OperatingSystem.IsLinux() then
+                Path.Combine("linux-x64", projName)
+            elif OperatingSystem.IsMacOS() then
+                Path.Combine("osx-x64", projName)
+            else
+                $"%s{projName}.exe"
+
+        Path.Combine (projDir, "bin", "Debug", "net6.0", fileName)
+
+    let inline testBin () =
+        let path = Path.Combine (projDir, "bin", "Debug", "net6.0")
+        
+        Directory.GetFiles(path, "*", SearchOption.AllDirectories)
+        |> Array.iter (fun file -> printfn $"%s{file}")
 
     /// List of env keys, value which must be redacted.
     let private badKeys = seq { "NUGET_API_KEY" } |> Seq.readonly
@@ -426,6 +440,8 @@ let private sw = Stopwatch ()
 try
     Console.printn "Starting..."
     sw.Start ()
+
+    testBin ()
 
     seq { $"-t %s{args.Target}" }
     |> run args.DotnetVerbosity args.Rebuild args.Env
