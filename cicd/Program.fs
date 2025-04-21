@@ -13,14 +13,9 @@ let main argv =
     CoreTracing.setTraceListeners [ MinimalListener () ]
     Targets.init ()
 
-    Trace.traceLine ()
-    Trace.trace "Passed environment variables:"
-
     Environment.environVars ()
-    |> List.iter (fun (key, value) -> Trace.trace $"  %s{key}=\"%s{sanitize value}\"")
-
-    Trace.traceLine ()
-    Trace.trace ""
+    |> Trace.traceObjectWithName "Fake.Core.Environment.environVars"
+    |> ignore
 
     Target.runOrList ()
 

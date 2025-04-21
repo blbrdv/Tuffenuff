@@ -20,7 +20,7 @@ let inline private setLogParams (args : MSBuild.CliArguments) =
 /// is Quiet or Minimal. 🤡🤡🤡
 let fantomasOptions =
     (fun (opt : DotNet.Options) ->
-        Trace.logObject
+        Trace.traceObject
             { opt with
                 Verbosity = Some DotNet.Verbosity.Normal
             }
@@ -29,7 +29,7 @@ let fantomasOptions =
 /// Default 'dotnet build' command options.
 let buildOptions =
     (fun (opt : DotNet.BuildOptions) ->
-        Trace.logObject
+        Trace.traceObject
             { opt with
                 Common =
                     { opt.Common with
@@ -47,7 +47,7 @@ let buildOptions =
 /// Default 'dotnet test' command options.
 let testOptions =
     (fun (opt : DotNet.TestOptions) ->
-        Trace.logObject
+        Trace.traceObject
             { opt with
                 Logger =
                     if isVerbose then
@@ -63,7 +63,7 @@ let testOptions =
 /// Default MSBuild cli options.
 let MSBuildOptions =
     (fun (opt : DotNet.MSBuildOptions) ->
-        Trace.logObject
+        Trace.traceObject
             { opt with
                 MSBuildParams = setLogParams opt.MSBuildParams
             }

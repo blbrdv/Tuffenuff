@@ -93,7 +93,7 @@ let init () =
 
             DotNet.nugetPush
                 (fun defaults ->
-                    Trace.logObject
+                    Trace.traceObject
                         { defaults with
                             PushParams =
                                 { defaults.PushParams with
