@@ -18,6 +18,9 @@ let private list = "--list"
 [<Literal>]
 let private version = "--version"
 
+[<Literal>]
+let private leTruth = "TRUE"
+
 /// Command line argument parsing essentials
 module private Arguments =
     open System.Collections
@@ -64,51 +67,57 @@ Options:
     {rebuild}     Force building CICD project.
     {env}            Sets environment variables."""
 
-    type Arguments(dict : IDictionary<string, ValueObject>) =
-        member _.Target = dict[targetVar].ToString ()
+    type Arguments =
+        {
+            Target: string
+            Verbosity: string
+            DotnetVerbosity: string
+            Rebuild: bool
+            Env: (string * string) list
+        }
 
-        member _.Verbosity =
-            if dict[verbose].IsTrue then verbose
-            elif dict[normal].IsTrue then normal
-            else silent
+        static member Create(dict : IDictionary<string, ValueObject>) =
+            {
+                Target = dict[targetVar].ToString ()
 
-        member _.Rebuild = dict[rebuild].IsTrue
+                Verbosity =
+                    if dict[verbose].IsTrue then verbose
+                    elif dict[normal].IsTrue then normal
+                    else silent
 
-        member this.DotnetVerbosity =
-            if verbose.Equals this.Verbosity then dotnetVerbose
-            elif normal.Equals this.Verbosity then dotnetNormal
-            else dotnetSilent
+                DotnetVerbosity =
+                    if dict[verbose].IsTrue then dotnetVerbose
+                    elif dict[normal].IsTrue then dotnetNormal
+                    else dotnetSilent
 
-        member this.Env =
-            let verbosityEnv =
-                if verbose.Equals this.Verbosity then
-                    [ ("FAKE_FORCE_VERBOSITY", "TRUE") ]
-                else
-                    List.empty
+                Rebuild = dict[rebuild].IsTrue
 
-            let otherEnvs =
-                if dict[env].IsTrue then
-                    // "Yes please give me an OBJECT of the VALUE of the ELEMENT
-                    // from the dictionary,
-                    // then downcast it to an ArrayList,
-                    // then copy the elements of it to the new Array"
-                    // - Statements dreamed up by the utterly Deranged
-                    (dict[envVAR].Value :?> ArrayList).ToArray ()
-                    |> Array.map (fun o ->
-                        let str = o |> string
-                        let temp = str.Split "="
-
-                        if temp.Length = 1 then
-                            (str, "TRUE")
+                Env =
+                    let verbosityEnv =
+                        if dict[verbose].IsTrue then
+                            [ ("FAKE_FORCE_VERBOSITY", leTruth) ]
                         else
-                            let value = temp[1..] |> String.concat "="
-                            (temp[0], value)
-                    )
-                    |> List.ofArray
-                else
-                    List.empty
+                            List.empty
 
-            verbosityEnv @ otherEnvs
+                    let otherEnvs =
+                        if dict[env].IsTrue then
+                            (dict[envVAR].Value :?> ArrayList).ToArray ()
+                            |> Array.map (fun o ->
+                                let str = o |> string
+                                let temp = str.Split "="
+
+                                if temp.Length = 1 then
+                                    (str, leTruth)
+                                else
+                                    let value = temp[1..] |> String.concat "="
+                                    (temp[0], value)
+                            )
+                            |> List.ofArray
+                        else
+                            List.empty
+
+                    verbosityEnv @ otherEnvs
+            }
 
 /// Printing to console with colors no matter supported ANSI escape character (\u001b)
 /// or not
@@ -134,7 +143,7 @@ module private Console =
 
         (
             envs.Contains githubActions &&
-            envs[githubActions].ToString().ToUpper().Equals("TRUE")
+            envs[githubActions].ToString().ToUpper().Equals(leTruth)
         ) || (
             envs.Contains term &&
             not (String.IsNullOrEmpty(envs[term].ToString()))
@@ -396,7 +405,10 @@ module private Commands =
 // ** Start of this script **
 // ---------------------------------------------------------------------------------------
 
+open System.Diagnostics
+open DocoptNet
 open Arguments
+open Commands
 
 let private cliArgs = fsi.CommandLineArgs[1..]
 
@@ -404,6 +416,7 @@ if cliArgs.Length = 0 then
     Console.stdout $"%s{doc}"
     exit 0
 
+/// Array of arguments after "--"
 let private scriptArgs =
     cliArgs
     |> Array.findIndex "--".Equals
@@ -411,11 +424,7 @@ let private scriptArgs =
     |> Array.skip
     <| cliArgs
 
-open DocoptNet
-
 let private argsRaw = Docopt().Apply (doc, scriptArgs, exit = true)
-
-open Commands
 
 if argsRaw[list].IsTrue then
     print list
@@ -423,9 +432,7 @@ if argsRaw[list].IsTrue then
 if argsRaw[version].IsTrue then
     print version
 
-let private args = argsRaw |> Arguments
-
-open System.Diagnostics
+let private args = argsRaw |> Arguments.Create
 
 let private sw = Stopwatch ()
 
