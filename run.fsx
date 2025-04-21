@@ -123,9 +123,6 @@ module private Console =
     [<Literal>]
     let term = "TERM"
 
-    [<Literal>]
-    let leTruth = "TRUE"
-
     type private Command =
         | Print of string
         | ColorChange of int
@@ -141,7 +138,8 @@ module private Console =
         ) || (
             envs.Contains term &&
             not (String.IsNullOrEmpty(envs[term].ToString()))
-        )
+        ) ||
+        envs.Contains "TERMINAL_EMULATOR"
 
     let inline private print (writer : TextWriter) (text : string) =
         if isSupportANSIColors then
