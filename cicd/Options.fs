@@ -56,7 +56,6 @@ let testOptions =
                         None
                 MSBuildParams = setLogParams opt.MSBuildParams
                 NoLogo = true
-                NoRestore = true 
             }
     )
 
