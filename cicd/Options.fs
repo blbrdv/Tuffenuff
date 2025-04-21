@@ -49,11 +49,7 @@ let testOptions =
     (fun (opt : DotNet.TestOptions) ->
         Trace.traceObject
             { opt with
-                Logger =
-                    if isVerbose then
-                        Some "console;verbosity=detailed"
-                    else
-                        None
+                Logger = Some "console;verbosity=detailed"
                 MSBuildParams = setLogParams opt.MSBuildParams
                 NoLogo = true
             }
