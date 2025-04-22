@@ -4,15 +4,6 @@
 open System
 
 [<Literal>]
-let private dotnetSilent = "-v q"
-
-[<Literal>]
-let private dotnetNormal = "-v n"
-
-[<Literal>]
-let private dotnetVerbose = "-v d"
-
-[<Literal>]
 let private list = "--list"
 
 [<Literal>]
@@ -37,7 +28,19 @@ module private Arguments =
     let private verbose = "-v"
 
     [<Literal>]
+    let private dotnetSilent = "-v q"
+
+    [<Literal>]
+    let private dotnetNormal = "-v n"
+
+    [<Literal>]
+    let private dotnetVerbose = "-v d"
+
+    [<Literal>]
     let private rebuild = "--rebuild"
+
+    [<Literal>]
+    let private filter = "--filter"
 
     [<Literal>]
     let private env = "-e"
@@ -46,13 +49,16 @@ module private Arguments =
     let private targetVar = "<TARGET>"
 
     [<Literal>]
-    let private envVAR = "<ENV>"
+    let private filterVar = "<FILTER>"
+
+    [<Literal>]
+    let private envVar = "<ENV>"
 
     let doc =
         $"""Automation script.
 
 Usage:
-    script {targetVar} [{silent}|{normal}|{verbose}] [{rebuild}] [{env} {envVAR} ...]
+    script {targetVar} [{silent}|{normal}|{verbose}] [{rebuild}] [{filter} {filterVar}] [{env} {envVar} ...]
     script (-h | --help)
     script {list}
     script {version}
@@ -65,32 +71,70 @@ Options:
     {normal}            Normal trace level.
     {verbose}            Verbose trace level.
     {rebuild}     Force building CICD project.
+    {filter}      Sets filter expression for tests run.
     {env}            Sets environment variables."""
+
+    type Verbosity =
+        | Silent
+        | Normal
+        | Verbose
+
+        override this.ToString() =
+            match this with
+            | Silent -> silent
+            | Normal -> normal
+            | Verbose -> verbose
+
+        static member Create(value : string) =
+            if verbose.Equals value then Verbose
+            elif normal.Equals value then Normal
+            else Silent
+
+    type DotnetVerbosity =
+        | Quiet
+        | Normal
+        | Verbose
+
+        override this.ToString() =
+            match this with
+            | Quiet -> dotnetSilent
+            | Normal -> dotnetNormal
+            | Verbose -> dotnetVerbose
+
+        member this.IsMaxLevel with get() = this = Verbose
+
+        static member Create(value : string) =
+            if verbose.Equals value then Verbose
+            elif normal.Equals value then Normal
+            else Quiet
 
     type Arguments =
         {
             Target: string
-            Verbosity: string
-            DotnetVerbosity: string
+            Verbosity: Verbosity
+            DotnetVerbosity: DotnetVerbosity
             Rebuild: bool
+            Filter: string option
             Env: (string * string) list
         }
 
         static member Create(dict : IDictionary<string, ValueObject>) =
             {
-                Target = dict[targetVar].ToString ()
+                Target = dict[targetVar].ToString() |> sprintf "-t %s"
 
-                Verbosity =
-                    if dict[verbose].IsTrue then verbose
-                    elif dict[normal].IsTrue then normal
-                    else silent
+                Verbosity = dict[verbose].Value.ToString() |> Verbosity.Create
 
-                DotnetVerbosity =
-                    if dict[verbose].IsTrue then dotnetVerbose
-                    elif dict[normal].IsTrue then dotnetNormal
-                    else dotnetSilent
+                DotnetVerbosity = dict[verbose].Value.ToString() |> DotnetVerbosity.Create
 
                 Rebuild = dict[rebuild].IsTrue
+
+                Filter =
+                    if dict[filter].IsTrue then
+                        dict[filterVar].Value.ToString().Replace(" ", "%20")
+                        |> sprintf "--filter %s"
+                        |> Some
+                    else
+                        None
 
                 Env =
                     let verbosityEnv =
@@ -101,7 +145,7 @@ Options:
 
                     let otherEnvs =
                         if dict[env].IsTrue then
-                            (dict[envVAR].Value :?> ArrayList).ToArray ()
+                            (dict[envVar].Value :?> ArrayList).ToArray ()
                             |> Array.map (fun o ->
                                 let str = o |> string
                                 let temp = str.Split "="
@@ -116,7 +160,17 @@ Options:
                         else
                             List.empty
 
-                    verbosityEnv @ otherEnvs
+                    verbosityEnv @ otherEnvs 
+            }
+
+        static member Create(target : string) =
+            {
+                Target = target
+                Verbosity = Silent
+                DotnetVerbosity = Quiet
+                Rebuild = false
+                Filter = None
+                Env = List.Empty
             }
 
 /// Printing to console with colors no matter supported ANSI escape character (\u001b)
@@ -235,6 +289,7 @@ module private Console =
 module private Commands =
     open System.IO
     open Fli
+    open Arguments
 
     [<Literal>]
     let private darkGray = "\u001b[90m"
@@ -253,6 +308,9 @@ module private Commands =
 
     /// Path to directory of CI/CD project.
     let private projDir = Path.Combine (".", projName)
+
+    /// Path to .fsproj file of CI/CD project.
+    let private fsprojPath = Path.Combine (projDir, $"%s{projName}.fsproj")
 
     /// Path to exe file of CI/CD project.
     let private exePath =
@@ -284,14 +342,13 @@ module private Commands =
 
         exit result.ExitCode
 
-    /// Execute binary/executable from "executable" with "args" and environment
-    /// variables from "envs".
-    /// If "isVerbose" is true - print context before executing.
+    /// Execute binary/executable from "executable" with "verbosity", "args" and
+    /// environment variables from "envs".
     /// If "return" is true - return executable output from stdout, else print it.
     /// If executable returns non-zero exit code print it and exit with this code.
     let inline private exec
         (return' : bool)
-        (isVerbose : bool)
+        (verbosity : DotnetVerbosity)
         (executable : string)
         (args : string)
         (envs : (string * string) list)
@@ -305,7 +362,7 @@ module private Commands =
                 EnvironmentVariables envs
             }
             |> (fun context ->
-                if isVerbose then
+                if verbosity.IsMaxLevel then
                     let envs =
                         context.config.EnvironmentVariables.Value
                         |> List.map (fun (key, value) ->
@@ -341,64 +398,55 @@ module private Commands =
             String.Empty
 
     /// Check if files in "path" changed since last time.
-    let inline private isModified (path : string) (isVerbose : bool) =
-        let result = exec true isVerbose "git" $"diff --dirstat=files -- %s{path}" []
+    let inline private isModified (path : string) (verbosity : DotnetVerbosity) =
+        let result = exec true verbosity "git" $"diff --dirstat=files -- %s{path}" []
 
         not (String.Empty.Equals result)
 
     /// Add files from "path" to Git index.
-    let inline private add (path : string) (isVerbose : bool) =
+    let inline private add (path : string) (verbosity : DotnetVerbosity) =
         let glob = Path.Combine (path, "**")
-        exec false isVerbose "git" $"add %s{glob}" [] |> ignore
+        exec false verbosity "git" $"add %s{glob}" [] |> ignore
 
     /// Execute "dotnet" cli with "args" and environment variables from "envs".
     let inline private dotnet
-        (isVerbose : bool)
+        (verbosity : DotnetVerbosity)
         (envs : (string * string) list)
         (args : string)
         =
-        exec false isVerbose "dotnet" args envs |> ignore
+        exec false verbosity "dotnet" args envs |> ignore
 
-    /// Execute "dotnet run" command on cicd project with "args", environment variables
-    /// from "envs", "verbosity" option and "--no-build" flag if cicd project has not
-    /// changed since the last time.
-    let inline run
-        (verbosity : string)
-        (rebuild : bool)
-        (envs : (string * string) list)
-        (args : string seq)
-        =
-        let isVerbose = dotnetVerbose.Equals verbosity
-
+    /// Execute "dotnet run" command with "args" and "--no-build" flag if cicd project
+    /// has not changed since the last time.
+    let inline run (args : Arguments) =
         let noBuild =
-            if rebuild || not (File.Exists exePath) || isModified projDir isVerbose then
+            if args.Rebuild ||
+               not (File.Exists exePath) ||
+               isModified projDir args.DotnetVerbosity
+            then
+                Console.stdout "Building CI/CD project..."
                 String.Empty
             else
                 "--no-build"
 
-        if String.Empty.Equals noBuild then
-            Console.stdout "Building CI/CD project..."
+        let moreArgs =
+            match args.Filter with
+            | Some flag -> $"-- %s{flag}"
+            | None -> String.Empty
 
-        let fsprojPath = Path.Combine (projDir, $"%s{projName}.fsproj")
-        let commandArgs = $"run %s{verbosity} %s{noBuild} --project %s{fsprojPath}"
+        $"run %s{args.DotnetVerbosity.ToString()} %s{noBuild} \
+        --project %s{fsprojPath} \
+        -- \
+        %s{args.Target} \
+        %s{moreArgs}"
+        |> dotnet args.DotnetVerbosity args.Env
 
-        if (Seq.length args) > 0 then
-            seq {
-                yield commandArgs
-                yield "--"
-                yield! args
-            }
-            |> String.concat " "
-        else
-            commandArgs
-        |> dotnet isVerbose envs
-
-        if String.Empty.Equals noBuild then
-            add projDir isVerbose
+        if noBuild.Length = 0 then
+            add projDir args.DotnetVerbosity
 
     /// Execute "dotnet run" command on cicd project with "flag" silently.
     let inline print (flag : string) =
-        run dotnetSilent false [] [ flag ]
+        Arguments.Create(flag) |> run
         exit 0
 
 // ---------------------------------------------------------------------------------------
@@ -432,16 +480,13 @@ if argsRaw[list].IsTrue then
 if argsRaw[version].IsTrue then
     print version
 
-let private args = argsRaw |> Arguments.Create
-
 let private sw = Stopwatch ()
 
 try
     Console.stdout "Starting..."
     sw.Start ()
 
-    seq { $"-t %s{args.Target}" }
-    |> run args.DotnetVerbosity args.Rebuild args.Env
+    argsRaw |> Arguments.Create |> run 
 
     sw.Stop ()
 finally

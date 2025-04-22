@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="TargetParameterExtensions.fs" />
     <Compile Include="TimeSpanExtensions.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Environment.fs" />

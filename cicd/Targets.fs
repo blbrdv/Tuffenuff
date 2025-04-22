@@ -7,6 +7,10 @@ open Fake.DotNet
 open Fake.IO
 open CICD.Options
 open CICD.Paths
+open CICD.TargetParameterExtensions
+
+[<Literal>]
+let private filterFlag = "--filter"
 
 let init () =
 
@@ -53,10 +57,20 @@ let init () =
     Target.description "Tests scripts in examples directory"
     Target.create
         "IntegrationTests"
-        (fun _ -> DotNet.test testOptions integrationTestsProjFile)
+        (fun args ->
+            args.GetParameter filterFlag
+            |> testOptions
+            |> DotNet.test
+            <| integrationTestsProjFile
+        )
 
     Target.description "Tests DSL"
-    Target.create "UnitTests" (fun _ -> DotNet.test testOptions unitTestsProjFile)
+    Target.create "UnitTests" (fun args ->
+        args.GetParameter filterFlag
+        |> testOptions
+        |> DotNet.test
+        <| unitTestsProjFile
+    )
 
     Target.description "Push library to Nuget"
     Target.create

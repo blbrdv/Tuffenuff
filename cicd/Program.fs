@@ -17,6 +17,6 @@ let main argv =
     |> Trace.traceObjectWithName "Fake.Core.Environment.environVars"
     |> ignore
 
-    Target.runOrList ()
+    Target.runOrDefaultWithArguments "Clean"
 
     0

@@ -15,6 +15,18 @@ let inline private setLogParams (args : MSBuild.CliArguments) =
             FileLoggers = None
         }
 
+/// Default 'dotnet test' command options.
+let inline testOptions (filter : string option) =
+    (fun (opt : DotNet.TestOptions) ->
+        Trace.traceObject
+            { opt with
+                Logger = Some "console;verbosity=detailed"
+                MSBuildParams = setLogParams opt.MSBuildParams
+                NoLogo = true
+                Filter = filter
+            }
+    )
+
 /// Default 'dotnet fantomas' command options.
 /// Using this instead of 'dotnetOptions' because fantomas silently fails when verbosity
 /// is Quiet or Minimal. 🤡🤡🤡
@@ -39,17 +51,6 @@ let buildOptions =
                             else
                                 Some DotNet.Verbosity.Quiet
                     }
-                MSBuildParams = setLogParams opt.MSBuildParams
-                NoLogo = true
-            }
-    )
-
-/// Default 'dotnet test' command options.
-let testOptions =
-    (fun (opt : DotNet.TestOptions) ->
-        Trace.traceObject
-            { opt with
-                Logger = Some "console;verbosity=detailed"
                 MSBuildParams = setLogParams opt.MSBuildParams
                 NoLogo = true
             }
