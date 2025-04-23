@@ -4,7 +4,7 @@ open Tuffenuff.Domain.Types
 open Tuffenuff.CE.Common
 
 [<Sealed>]
-type FromBuilder (reference : string) =
+type FromBuilder(reference : string) =
     member _.Zero () : FromInstruction =
         checkIfStringEmpty reference "Image reference"
         FromInstruction.Create reference

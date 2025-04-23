@@ -12,6 +12,7 @@ type RunBuilder() =
     [<CustomOperation "cmd">]
     member _.Command (state : RunInstruction, cmd : string) =
         checkIfStringEmpty cmd "Command"
+
         { state with
             Arguments = state.Arguments.Add cmd
         }
@@ -20,6 +21,7 @@ type RunBuilder() =
     [<CustomOperation "cmds">]
     member _.Commands (state : RunInstruction, cmds : string seq) =
         checkIfSeqEmpty cmds "Commands"
+
         { state with
             Arguments = state.Arguments.Append (Arguments cmds)
         }

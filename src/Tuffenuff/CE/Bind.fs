@@ -4,7 +4,7 @@ open Tuffenuff.Domain.Types
 open Tuffenuff.CE.Common
 
 [<Sealed>]
-type BindBuilder (target : string) =
+type BindBuilder(target : string) =
     member _.Zero () : MountParameters =
         checkIfStringEmpty target "Target"
         MountParameters.Create (Bind, "target", target)
@@ -15,6 +15,7 @@ type BindBuilder (target : string) =
     [<CustomOperation("source")>]
     member _.Source (state : MountParameters, value : string) =
         checkIfStringEmpty target "Source"
+
         { state with
             Params = state.Params.Add ("source", value)
         }
@@ -24,6 +25,7 @@ type BindBuilder (target : string) =
     [<CustomOperation("from")>]
     member _.From (state : MountParameters, value : string) =
         checkIfStringEmpty target "From"
+
         { state with
             Params = state.Params.Add ("from", value)
         }
@@ -37,8 +39,7 @@ type BindBuilder (target : string) =
 
     /// Allow writes on the mount. Written data will be discarded.
     [<CustomOperation("readwrite")>]
-    member this.Readwrite (state : MountParameters, value : bool) =
-        this.RW (state, value)
+    member this.Readwrite (state : MountParameters, value : bool) = this.RW (state, value)
 
     member _.Combine (_, _) = ()
 

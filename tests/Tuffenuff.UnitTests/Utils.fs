@@ -15,8 +15,7 @@ let toErrorMessage (list : string list) : string =
     let message = list |> String.concat eol
     $"%s{message}%s{eol}%s{eol}"
 
-let toArgsLine (list : string list) : string =
-    list |> String.concat " "
+let toArgsLine (list : string list) : string = list |> String.concat " "
 
 /// Convert single DSL entity to its string representation.
 let render (entity : Entity) : string = [ entity ] |> df |> Dockerfile.render

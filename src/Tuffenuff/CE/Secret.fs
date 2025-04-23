@@ -13,6 +13,7 @@ type SecretBuilder() =
     [<CustomOperation("id")>]
     member _.Id (state : MountParameters, value : string) =
         checkIfStringEmpty value "Id"
+
         { state with
             Params = state.Params.Add ("id", value)
         }
@@ -22,6 +23,7 @@ type SecretBuilder() =
     [<CustomOperation("target")>]
     member _.Target (state : MountParameters, value : string) =
         checkIfStringEmpty value "Target (Dst, Destination)"
+
         { state with
             Params = state.Params.Add ("target", value)
         }
@@ -29,14 +31,13 @@ type SecretBuilder() =
     /// Mount the secret to the specified path. Defaults to /run/secrets/ + id if unset
     /// and if env is also unset.
     [<CustomOperation("dst")>]
-    member this.Dst (state : MountParameters, value : string) =
-        this.Target(state, value)
+    member this.Dst (state : MountParameters, value : string) = this.Target (state, value)
 
     /// Mount the secret to the specified path. Defaults to /run/secrets/ + id if unset
     /// and if env is also unset.
     [<CustomOperation("destination")>]
     member this.Destination (state : MountParameters, value : string) =
-        this.Target(state, value)
+        this.Target (state, value)
 
     /// Sets mount the secret to an environment variable instead of a file, or both.
     [<CustomOperation("env")>]
@@ -56,6 +57,7 @@ type SecretBuilder() =
     [<CustomOperation("mode")>]
     member _.Mode (state : MountParameters, value : string) =
         checkIfStringEmpty value "Mode"
+
         { state with
             Params = state.Params.Add ("mode", value)
         }
@@ -64,6 +66,7 @@ type SecretBuilder() =
     [<CustomOperation("UID")>]
     member _.UID (state : MountParameters, value : int) =
         checkIfPositive value "UID"
+
         { state with
             Params = state.Params.Add ("UID", value.ToString ())
         }
@@ -72,6 +75,7 @@ type SecretBuilder() =
     [<CustomOperation("GID")>]
     member _.GID (state : MountParameters, value : int) =
         checkIfPositive value "GID"
+
         { state with
             Params = state.Params.Add ("GID", value.ToString ())
         }

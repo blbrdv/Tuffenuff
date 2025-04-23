@@ -13,6 +13,7 @@ type SshBuilder() =
     [<CustomOperation("id")>]
     member _.Id (state : MountParameters, value : string) =
         checkIfStringEmpty value "Id"
+
         { state with
             Params = state.Params.Add ("id", value)
         }
@@ -21,14 +22,14 @@ type SshBuilder() =
     [<CustomOperation("target")>]
     member _.Target (state : MountParameters, value : string) =
         checkIfStringEmpty value "Target (Dst, Destination)"
+
         { state with
             Params = state.Params.Add ("target", value)
         }
 
     /// Sets SSH agent socket path. Defaults to /run/buildkit/ssh_agent.${N}.
     [<CustomOperation("dst")>]
-    member this.Dst (state : MountParameters, value : string) =
-        this.Target (state, value)
+    member this.Dst (state : MountParameters, value : string) = this.Target (state, value)
 
     /// Sets SSH agent socket path. Defaults to /run/buildkit/ssh_agent.${N}.
     [<CustomOperation("destination")>]
@@ -47,6 +48,7 @@ type SshBuilder() =
     [<CustomOperation("mode")>]
     member _.Mode (state : MountParameters, value : string) =
         checkIfStringEmpty value "Mode"
+
         { state with
             Params = state.Params.Add ("mode", value)
         }
@@ -55,6 +57,7 @@ type SshBuilder() =
     [<CustomOperation("UID")>]
     member _.UID (state : MountParameters, value : int) =
         checkIfPositive value "UID"
+
         { state with
             Params = state.Params.Add ("UID", value.ToString ())
         }
@@ -63,6 +66,7 @@ type SshBuilder() =
     [<CustomOperation("GID")>]
     member _.GID (state : MountParameters, value : int) =
         checkIfPositive value "GID"
+
         { state with
             Params = state.Params.Add ("GID", value.ToString ())
         }

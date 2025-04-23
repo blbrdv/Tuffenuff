@@ -4,7 +4,7 @@ open Tuffenuff.Domain.Types
 open Tuffenuff.CE.Common
 
 [<Sealed>]
-type CacheBuilder (target : string) =
+type CacheBuilder(target : string) =
     member _.Zero () : MountParameters =
         checkIfStringEmpty target "Mouth"
         MountParameters.Create (Cache, "target", target)
@@ -15,6 +15,7 @@ type CacheBuilder (target : string) =
     [<CustomOperation("id")>]
     member _.Id (state : MountParameters, value) =
         checkIfStringEmpty value "Id"
+
         { state with
             Params = state.Params.Add ("id", value)
         }
@@ -28,8 +29,7 @@ type CacheBuilder (target : string) =
 
     /// Sets read-only mode.
     [<CustomOperation("readonly")>]
-    member this.Readonly (state : MountParameters, value : bool) =
-        this.RO (state, value)
+    member this.Readonly (state : MountParameters, value : bool) = this.RO (state, value)
 
     /// One of shared, private, or locked. Defaults to shared. A shared cache mount can
     /// be used concurrently by multiple writers. private creates a new mount if there
@@ -46,6 +46,7 @@ type CacheBuilder (target : string) =
     [<CustomOperation("from")>]
     member _.From (state : MountParameters, value : string) =
         checkIfStringEmpty value "From"
+
         { state with
             Params = state.Params.Add ("from", value)
         }
@@ -54,6 +55,7 @@ type CacheBuilder (target : string) =
     [<CustomOperation("source")>]
     member _.Source (state : MountParameters, value : string) =
         checkIfStringEmpty value "Source"
+
         { state with
             Params = state.Params.Add ("source", value)
         }
@@ -62,6 +64,7 @@ type CacheBuilder (target : string) =
     [<CustomOperation("mode")>]
     member _.Mode (state : MountParameters, value : string) =
         checkIfStringEmpty value "Mode"
+
         { state with
             Params = state.Params.Add ("mode", value)
         }
@@ -70,6 +73,7 @@ type CacheBuilder (target : string) =
     [<CustomOperation("UID")>]
     member _.UID (state : MountParameters, value : int) =
         checkIfPositive value "UID"
+
         { state with
             Params = state.Params.Add ("UID", value.ToString ())
         }
@@ -78,6 +82,7 @@ type CacheBuilder (target : string) =
     [<CustomOperation("GID")>]
     member _.GID (state : MountParameters, value : int) =
         checkIfPositive value "GID"
+
         { state with
             Params = state.Params.Add ("GID", value.ToString ())
         }

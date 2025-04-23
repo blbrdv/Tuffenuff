@@ -14,14 +14,14 @@ type TmpfsBuilder(target) =
     [<CustomOperation("target")>]
     member _.Target (state : MountParameters, value : string) =
         checkIfStringEmpty value "Target (Dst, Destination)"
+
         { state with
             Params = state.Params.Add ("target", value)
         }
 
     /// Sets mount path.
     [<CustomOperation("dst")>]
-    member this.Dst (state : MountParameters, value : string) =
-        this.Target (state, value)
+    member this.Dst (state : MountParameters, value : string) = this.Target (state, value)
 
     /// Sets mount path.
     [<CustomOperation("destination")>]
@@ -32,6 +32,7 @@ type TmpfsBuilder(target) =
     [<CustomOperation("size")>]
     member _.Size (state : MountParameters, value : int) =
         checkIfPositive value "Size"
+
         { state with
             Params = state.Params.Add ("size", value.ToString ())
         }
