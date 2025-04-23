@@ -111,10 +111,10 @@ module Dockerfile =
                         |> sprintf "--mount=%s"
 
                     if r.Network.IsSome then
-                        $"--network=%s{(nameof r.Network.Value).ToLower ()}"
+                        $"--network=%s{r.Network.Value.ToString().ToLower ()}"
 
                     if r.Security.IsSome then
-                        $"--security=%s{(nameof r.Network.Value).ToLower ()}"
+                        $"--security=%s{r.Security.Value.ToString().ToLower ()}"
 
                     for arg in r.Arguments do
                         arg
