@@ -449,6 +449,37 @@ module private Commands =
         Arguments.Create(flag) |> run
         exit 0
 
+/// Duration prettifying
+module Duration =
+    let private add (value : int) (suffix : string) (prev : string option) =
+        match prev with
+        | None ->
+            if value = 0 then
+                None
+            else
+                value.ToString($"00'%s{suffix}'") |> Some
+        | Some v ->
+            value.ToString($"00'%s{suffix}'")
+            |> sprintf "%s %s" v
+            |> Some
+
+    /// Prettify TimeSpan.
+    let toString (duration : TimeSpan) : string =
+        let rest =
+            if duration.Days = 0 then
+                None
+            else
+                duration.Days.ToString("##'d'") |> Some
+            |> add duration.Hours "h"
+            |> add duration.Minutes "m"
+            |> add duration.Seconds "s"
+
+        let ms = duration.Milliseconds.ToString("000'ms'")
+
+        match rest with
+        | None -> ms
+        | Some value -> $"%s{value} %s{ms}"
+
 // ---------------------------------------------------------------------------------------
 // ** Start of this script **
 // ---------------------------------------------------------------------------------------
@@ -457,6 +488,7 @@ open System.Diagnostics
 open DocoptNet
 open Arguments
 open Commands
+open Duration
 
 let private cliArgs = fsi.CommandLineArgs[1..]
 
@@ -490,6 +522,7 @@ try
 
     sw.Stop ()
 finally
-    sw.Elapsed.ToString(@"hh\:mm\:ss\.fff")
+    sw.Elapsed
+    |> toString
     |> sprintf "Finished [%s]"
     |> Console.stdout
