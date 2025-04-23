@@ -31,6 +31,13 @@ type RunBuilder() =
             Mounts = state.Mounts.Add mount
         }
 
+    /// <summary>Sets SSH mount type for the container.</summary>
+    [<CustomOperation "ssh">]
+    member _.Ssh (state : RunInstruction) =
+        { state with
+            Mounts = state.Mounts.Add (SshBuilder () { () })
+        }
+
     /// <summary>Specify the network mode for the container.</summary>
     [<CustomOperation "network">]
     member _.Network (state : RunInstruction, network : NetworkType) =

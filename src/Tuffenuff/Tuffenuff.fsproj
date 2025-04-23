@@ -36,11 +36,11 @@
     <Compile Include="CE/Common.fs" />
     <Compile Include="CE/Bind.fs" />
     <Compile Include="CE/Cache.fs" />
-    <Compile Include="CE/From.fs" />
-    <Compile Include="CE/Run.fs" />
     <Compile Include="CE/Secret.fs" />
     <Compile Include="CE/Ssh.fs" />
     <Compile Include="CE/Tmpfs.fs" />
+    <Compile Include="CE/Run.fs" />
+    <Compile Include="CE/From.fs" />
     <Compile Include="DSL/Variables.fs" />
     <Compile Include="DSL/Comments.fs" />
     <Compile Include="DSL/SyntaxVersions.gen.fs" />
