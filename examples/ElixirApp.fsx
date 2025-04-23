@@ -5,11 +5,11 @@ open Tuffenuff
 open Tuffenuff.DSL
 
 df [
-    !/ "Hello World Elexir dockerfile"
+    !/"Hello World Elexir dockerfile"
 
     stage "bitnami/git:latest" "repo"
     workdir "/"
-    !> "git clone https://github.com/rjNemo/docker_examples.git"
+    !>"git clone https://github.com/rjNemo/docker_examples.git"
 
     from "elixir:1.14-alpine"
     workdir "/app"

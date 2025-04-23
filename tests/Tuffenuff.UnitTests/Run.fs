@@ -28,7 +28,7 @@ let tests =
         testCase "run short syntax command"
         <| fun _ ->
             let expected = [ "RUN \\" ; "    apt-get dist-upgrade -y" ] |> toMultiline
-            let actual = !> "apt-get dist-upgrade -y" |> render
+            let actual = !>"apt-get dist-upgrade -y" |> render
 
             Expect.equal actual expected
             <| toErrorMessage [
