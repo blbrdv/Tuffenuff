@@ -494,16 +494,6 @@ if cliArgs.Length = 0 then
 
 let private argsRaw = Docopt().Apply (doc, cliArgs, exit = true)
 
-// printfn ""
-// for kv in argsRaw do
-//     printfn $"ARG: %s{kv.Key}=%A{kv.Value}"
-// printfn ""
-//
-// let private cock = argsRaw |> Arguments.Create
-//
-// printfn $"FILTER: %A{cock.Filter}"
-// printfn $"ENV: %A{cock.Env}"
-
 if argsRaw[list].IsTrue then
     print list
 
