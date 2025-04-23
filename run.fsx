@@ -58,7 +58,7 @@ module private Arguments =
         $"""Automation script.
 
 Usage:
-    script {targetVar} [{silent}|{normal}|{verbose}] [{rebuild}] [{filter} {filterVar}] [{env} {envVar} ...]
+    script {targetVar} [{silent}|{normal}|{verbose}] [{rebuild}] [{filter} {filterVar}] [{env} {envVar}...]
     script (-h | --help)
     script {list}
     script {version}
@@ -74,21 +74,15 @@ Options:
     {filter}      Sets filter expression for tests run.
     {env}            Sets environment variables."""
 
-    type Verbosity =
-        | Silent
-        | Normal
-        | Verbose
+    let inline private mapping (o : obj) = 
+        let str = o |> string
+        let temp = str.Split "="
 
-        override this.ToString() =
-            match this with
-            | Silent -> silent
-            | Normal -> normal
-            | Verbose -> verbose
-
-        static member Create(value : string) =
-            if verbose.Equals value then Verbose
-            elif normal.Equals value then Normal
-            else Silent
+        if temp.Length = 1 then
+            (str, leTruth)
+        else
+            let value = temp[1..] |> String.concat "="
+            (temp[0], value)
 
     type DotnetVerbosity =
         | Quiet
@@ -103,15 +97,9 @@ Options:
 
         member this.IsMaxLevel with get() = this = Verbose
 
-        static member Create(value : string) =
-            if verbose.Equals value then Verbose
-            elif normal.Equals value then Normal
-            else Quiet
-
     type Arguments =
         {
             Target: string
-            Verbosity: Verbosity
             DotnetVerbosity: DotnetVerbosity
             Rebuild: bool
             Filter: string option
@@ -122,9 +110,13 @@ Options:
             {
                 Target = dict[targetVar].ToString() |> sprintf "-t %s"
 
-                Verbosity = dict[verbose].Value.ToString() |> Verbosity.Create
-
-                DotnetVerbosity = dict[verbose].Value.ToString() |> DotnetVerbosity.Create
+                DotnetVerbosity =
+                    if dict[verbose].IsTrue then
+                        DotnetVerbosity.Verbose
+                    elif dict[normal].IsTrue then
+                        DotnetVerbosity.Normal
+                    else
+                        DotnetVerbosity.Quiet
 
                 Rebuild = dict[rebuild].IsTrue
 
@@ -143,30 +135,28 @@ Options:
                         else
                             List.empty
 
+                    // for some reason if no --filter provided, Docopt put first env into
+                    // filter value
+                    let docoptBug =
+                        if dict[env].IsTrue && dict[filter].IsFalse then
+                            [ (mapping dict[filterVar].Value) ]
+                        else
+                            List.empty
+
                     let otherEnvs =
                         if dict[env].IsTrue then
                             (dict[envVar].Value :?> ArrayList).ToArray ()
-                            |> Array.map (fun o ->
-                                let str = o |> string
-                                let temp = str.Split "="
-
-                                if temp.Length = 1 then
-                                    (str, leTruth)
-                                else
-                                    let value = temp[1..] |> String.concat "="
-                                    (temp[0], value)
-                            )
+                            |> Array.map mapping
                             |> List.ofArray
                         else
                             List.empty
 
-                    verbosityEnv @ otherEnvs 
+                    verbosityEnv @ docoptBug @ otherEnvs 
             }
 
         static member Create(target : string) =
             {
                 Target = target
-                Verbosity = Silent
                 DotnetVerbosity = Quiet
                 Rebuild = false
                 Filter = None
@@ -312,6 +302,12 @@ module private Commands =
     /// Path to .fsproj file of CI/CD project.
     let private fsprojPath = Path.Combine (projDir, $"%s{projName}.fsproj")
 
+    /// Current .NET runtime version.
+    let private runtime = Environment.Version
+
+    /// Current target framework.
+    let private target = $"net%d{runtime.Major}.%d{runtime.Minor}"
+
     /// Path to exe file of CI/CD project.
     let private exePath =
         let fileName =
@@ -322,7 +318,7 @@ module private Commands =
             else
                 $"%s{projName}.exe"
 
-        Path.Combine (projDir, "bin", "Debug", "net6.0", fileName)
+        Path.Combine (projDir, "bin", "Debug", target, fileName)
 
     /// List of env keys, value which must be redacted.
     let private badKeys = seq { "NUGET_API_KEY" } |> Seq.readonly
@@ -496,15 +492,17 @@ if cliArgs.Length = 0 then
     Console.stdout $"%s{doc}"
     exit 0
 
-/// Array of arguments after "--"
-let private scriptArgs =
-    cliArgs
-    |> Array.findIndex "--".Equals
-    |> (+) 1
-    |> Array.skip
-    <| cliArgs
+let private argsRaw = Docopt().Apply (doc, cliArgs, exit = true)
 
-let private argsRaw = Docopt().Apply (doc, scriptArgs, exit = true)
+// printfn ""
+// for kv in argsRaw do
+//     printfn $"ARG: %s{kv.Key}=%A{kv.Value}"
+// printfn ""
+//
+// let private cock = argsRaw |> Arguments.Create
+//
+// printfn $"FILTER: %A{cock.Filter}"
+// printfn $"ENV: %A{cock.Env}"
 
 if argsRaw[list].IsTrue then
     print list
