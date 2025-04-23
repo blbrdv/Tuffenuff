@@ -1,15 +1,15 @@
-namespace Tuffenuff.Domain.CE
+namespace Tuffenuff.CE
 
 open Tuffenuff.Domain.Types
-open Tuffenuff.Domain.Common
+open Tuffenuff.CE.Common
 
 [<Sealed>]
-type SecretBuilder() =
-    member _.Zero () : MountParameters = MountParameters.Create Secret
+type SshBuilder() =
+    member _.Zero () : MountParameters = MountParameters.Create Ssh
 
     member this.Yield _ = this.Zero ()
 
-    /// Sets ID of the secret. Defaults to basename of the target path.
+    /// Sets the ID of SSH agent socket or key. Defaults to "default".
     [<CustomOperation("id")>]
     member _.Id (state : MountParameters, value : string) =
         checkIfStringEmpty value "Id"
@@ -17,8 +17,7 @@ type SecretBuilder() =
             Params = state.Params.Add ("id", value)
         }
 
-    /// Mount the secret to the specified path. Defaults to /run/secrets/ + id if unset
-    /// and if env is also unset.
+    /// Sets SSH agent socket path. Defaults to /run/buildkit/ssh_agent.${N}.
     [<CustomOperation("target")>]
     member _.Target (state : MountParameters, value : string) =
         checkIfStringEmpty value "Target (Dst, Destination)"
@@ -26,25 +25,17 @@ type SecretBuilder() =
             Params = state.Params.Add ("target", value)
         }
 
-    /// Mount the secret to the specified path. Defaults to /run/secrets/ + id if unset
-    /// and if env is also unset.
+    /// Sets SSH agent socket path. Defaults to /run/buildkit/ssh_agent.${N}.
     [<CustomOperation("dst")>]
     member this.Dst (state : MountParameters, value : string) =
-        this.Target(state, value)
+        this.Target (state, value)
 
-    /// Mount the secret to the specified path. Defaults to /run/secrets/ + id if unset
-    /// and if env is also unset.
+    /// Sets SSH agent socket path. Defaults to /run/buildkit/ssh_agent.${N}.
     [<CustomOperation("destination")>]
     member this.Destination (state : MountParameters, value : string) =
-        this.Target(state, value)
+        this.Target (state, value)
 
-    /// Sets mount the secret to an environment variable instead of a file, or both.
-    [<CustomOperation("env")>]
-    member _.Env (state : MountParameters, value : string) =
-        checkIfStringEmpty value "Env"
-        state
-
-    /// Sets instruction to errors out when the secret is unavailable.
+    /// Sets instruction to errors out when the key is unavailable.
     /// Defaults to false.
     [<CustomOperation("required")>]
     member _.Required (state : MountParameters, value : bool) =
@@ -52,7 +43,7 @@ type SecretBuilder() =
             Params = state.Params.Add ("required", value.ToString().ToLower ())
         }
 
-    /// Sets file mode for secret file in octal. Default 0400.
+    /// Sets file mode for socket in octal. Default 0600.
     [<CustomOperation("mode")>]
     member _.Mode (state : MountParameters, value : string) =
         checkIfStringEmpty value "Mode"
@@ -60,7 +51,7 @@ type SecretBuilder() =
             Params = state.Params.Add ("mode", value)
         }
 
-    /// Sets user ID for secret file. Default 0.
+    /// Sets user ID for socket. Default 0.
     [<CustomOperation("UID")>]
     member _.UID (state : MountParameters, value : int) =
         checkIfPositive value "UID"
@@ -68,7 +59,7 @@ type SecretBuilder() =
             Params = state.Params.Add ("UID", value.ToString ())
         }
 
-    /// Sets group ID for secret file. Default 0.
+    /// Sets group ID for socket. Default 0.
     [<CustomOperation("GID")>]
     member _.GID (state : MountParameters, value : int) =
         checkIfPositive value "GID"

@@ -1,8 +1,8 @@
-namespace Tuffenuff.Domain.CE
+namespace Tuffenuff.CE
 
 open Tuffenuff.Domain.Types
 open Tuffenuff.Domain.Collections
-open Tuffenuff.Domain.Common
+open Tuffenuff.CE.Common
 
 [<Sealed>]
 type RunBuilder() =

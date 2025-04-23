@@ -1,4 +1,4 @@
-module internal Tuffenuff.Domain.Common
+module internal Tuffenuff.CE.Common
 
 open System
 

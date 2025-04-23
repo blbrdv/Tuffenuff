@@ -2,7 +2,7 @@
 module Tuffenuff.DSL.Run
 
 open Tuffenuff.Domain.Types
-open Tuffenuff.Domain.CE
+open Tuffenuff.CE
 
 /// <summary>
 /// Mount a file or directory from the host machine into the container.
