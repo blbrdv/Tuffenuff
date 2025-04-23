@@ -1,7 +1,7 @@
 [<AutoOpen>]
 module Tuffenuff.DSL.From
 
-open Tuffenuff.Domain.FromCE
+open Tuffenuff.Domain.CE
 
 /// <summary>
 /// Initialise a new build stage and sets the base image and other options.

@@ -34,7 +34,13 @@
     <Compile Include="Domain/Types.fs" />
     <Compile Include="Domain/Common.fs" />
     <Compile Include="Domain/CE.fs" />
-    <Compile Include="Domain/FromCE.fs" />
+    <Compile Include="Domain/CE/From.fs" />
+    <Compile Include="Domain/CE/Ssh.fs" />
+    <Compile Include="Domain/CE/Secret.fs" />
+    <Compile Include="Domain/CE/Tmpfs.fs" />
+    <Compile Include="Domain/CE/Cache.fs" />
+    <Compile Include="Domain/CE/Bind.fs" />
+    <Compile Include="Domain/CE/Run.fs" />
     <Compile Include="DSL/Variables.fs" />
     <Compile Include="DSL/Comments.fs" />
     <Compile Include="DSL/SyntaxVersions.gen.fs" />
