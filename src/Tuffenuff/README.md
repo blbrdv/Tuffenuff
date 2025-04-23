@@ -5,7 +5,7 @@ Simple F# DSL for generating dockerfiles.
 ### Why?
 
 1. To work with more flexing scripts and ability to reuse Dockerfile code.
-2. Becouse I can.
+2. Because I can.
 
 ## Usage
 

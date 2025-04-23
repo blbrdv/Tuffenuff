@@ -7,6 +7,8 @@ jobs:
   codestyle-check:
     runs-on: ubuntu-latest
 
+    name: Codestyle check
+
     steps:
     - uses: actions/checkout@v3
 
@@ -17,8 +19,8 @@ jobs:
     - name: Restore tools
       run: dotnet tool restore
 
-    - name: Codestyle check
-      run: dotnet fake run build.fsx -t CodestyleCheck
+    - name: Check format
+      run: ./run.sh CheckFormat
 
   build-and-tests:
     needs: codestyle-check
@@ -26,9 +28,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macOS-latest, ubuntu-latest]
-    
-    runs-on: ${{ matrix.os }}
+        targets:
+          - os: windows-latest
+            name: Windows
+            script: .\run.cmd
+          - os: macOS-latest
+            name: macOS
+            script: ./run.sh
+          - os: ubuntu-latest
+            name: Linux
+            script: ./run.sh
+
+    runs-on: ${{ matrix.targets.os }}
+
+    name: Build and tests on ${{ matrix.targets.name }}
 
     steps:
     - uses: actions/checkout@v3
@@ -37,8 +50,11 @@ jobs:
       with:
         global-json-file: global.json
 
-    - name: Restore tools
-      run: dotnet tool restore
+    - name: Build
+      run: ${{ matrix.targets.script }} Build
 
-    - name: Run tests
-      run: dotnet fake run build.fsx -t RunTests
+    - name: Unit tests
+      run: ${{ matrix.targets.script }} UnitTests
+
+    - name: Integration tests
+      run: ${{ matrix.targets.script }} IntegrationTests

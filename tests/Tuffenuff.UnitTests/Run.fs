@@ -1,322 +1,188 @@
 module Tests.Run
 
 open Expecto
-open Tuffenuff.DSL
 open Tuffenuff.Domain.Types
-open Tuffenuff.Domain.Collections
+open Tuffenuff.DSL
 
 [<Tests>]
 let tests =
     testList "RUN instruction tests" [
-        let errorMessage = "Records must be equals"
 
+        testCase "run command"
+        <| fun _ ->
+            let expected = [ "RUN \\" ; "    apt-get dist-upgrade -y" ] |> toMultiline
+            let actual = run { cmd "apt-get dist-upgrade -y" } |> render
 
-        testCase "short syntax test"
+            Expect.equal actual expected
+            <| toErrorMessage [
+                "String must contain"
+                "  1. 'RUN' keyword"
+                "  2. whitespace"
+                "  3. backslash symbol"
+                "  4. EOL"
+                "  5. 4 whitespaces"
+                "  6. command line from argument of 'cmd' parameter"
+                "  7. EOL"
+            ]
+
+        testCase "run short syntax command"
+        <| fun _ ->
+            let expected = [ "RUN \\" ; "    apt-get dist-upgrade -y" ] |> toMultiline
+            let actual = !> "apt-get dist-upgrade -y" |> render
+
+            Expect.equal actual expected
+            <| toErrorMessage [
+                "String must contain"
+                "  1. 'RUN' keyword"
+                "  2. whitespace"
+                "  3. backslash symbol"
+                "  4. EOL"
+                "  5. 4 whitespaces"
+                "  6. command line from argument of 'cmd' parameter"
+                "  7. EOL"
+            ]
+
+        testCase "run multiple commands"
         <| fun _ ->
             let expected =
-                {
-                    Mounts = Collection.empty
-                    Network = None
-                    Security = None
-                    Arguments = Arguments [ "exit 0" ]
-                }
-                |> Run
-                |> Instruction
-
-            let actual = !> "exit 0"
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "multiple commands test"
-        <| fun _ ->
-            let expected =
-                {
-                    Mounts = Collection.empty
-                    Network = None
-                    Security = None
-                    Arguments = Arguments [ "make test" ; "exit 0" ]
-                }
-                |> Run
-                |> Instruction
+                [ "RUN \\" ; "    echo \"command 1\" \\" ; "    exit 0" ] |> toMultiline
 
             let actual =
                 run {
-                    cmd "make test"
+                    cmd "echo \"command 1\""
                     cmd "exit 0"
                 }
+                |> render
 
-            Expect.equal actual expected errorMessage
+            Expect.equal actual expected
+            <| toErrorMessage [
+                "String must contain"
+                "  1. 'RUN' keyword"
+                "  2. whitespace"
+                "  3. backslash symbol"
+                "  4. EOL"
+                "  5. 4 whitespaces"
+                "  6. command line from argument of first 'cmd' parameter"
+                "  7. whitespace"
+                "  8. backslash symbol"
+                "  9. EOL"
+                "  10. 4 whitespaces"
+                "  11. command line from argument of second 'cmd' parameter"
+                "  12. EOL"
+            ]
 
-
-        testCase "seq commands test"
+        testCase "run multiple commands from seq"
         <| fun _ ->
             let expected =
-                {
-                    Mounts = Collection.empty
-                    Network = None
-                    Security = None
-                    Arguments = Arguments [ "apt-get install wget" ; "exit 0" ]
-                }
-                |> Run
-                |> Instruction
+                [ "RUN \\" ; "    echo \"command 1\" \\" ; "    exit 0" ] |> toMultiline
 
-            let actual = run { cmds [ "apt-get install wget" ; "exit 0" ] }
+            let actual = run { cmds [ "echo \"command 1\"" ; "exit 0" ] } |> render
 
-            Expect.equal actual expected errorMessage
+            Expect.equal actual expected
+            <| toErrorMessage [
+                "String must contain"
+                "  1. 'RUN' keyword"
+                "  2. whitespace"
+                "  3. backslash symbol"
+                "  4. EOL"
+                "  5. 4 whitespaces"
+                "  6. command line from argument of first 'cmd' parameter"
+                "  7. whitespace"
+                "  8. backslash symbol"
+                "  9. EOL"
+                "  10. 4 whitespaces"
+                "  11. command line from argument of second 'cmd' parameter"
+                "  12. EOL"
+            ]
 
-
-        testCase "bind default mount test"
+        testCase "run command with set networking environment"
         <| fun _ ->
             let expected =
-                {
-                    Name = Bind
-                    Params = Dict [ "target", "/" ]
-                }
-
-            let actual = bind "/"
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "bind full mount test"
-        <| fun _ ->
-            let expected =
-                {
-                    Name = Bind
-                    Params =
-                        Dict [
-                            "target", "/"
-                            "source", "/"
-                            "from", "/etc"
-                            "rw", "true"
-                        ]
-                }
-
-            let actual =
-                bindParams "/" {
-                    source "/"
-                    from "/etc"
-                    rw true
-                }
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "cache default mount test"
-        <| fun _ ->
-            let expected =
-                {
-                    Name = Cache
-                    Params = Dict [ "target", "/" ]
-                }
-
-            let actual = cache "/"
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "cache full mount test"
-        <| fun _ ->
-            let expected =
-                {
-                    Name = Cache
-                    Params =
-                        Dict [
-                            "target", "/"
-                            "id", "app"
-                            "ro", "true"
-                            "sharing", "private"
-                            "source", "/"
-                            "from", "/etc/.cache"
-                            "UID", "1"
-                            "mode", "0755"
-                            "GID", "2"
-                        ]
-                }
-
-            let actual =
-                cacheParams "/" {
-                    source "/"
-                    id "app"
-                    ro true
-                    sharing Private
-                    source "/"
-                    from "/etc/.cache"
-                    mode "0755"
-                    UID 1
-                    GID 2
-                }
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "tmpfs default mount test"
-        <| fun _ ->
-            let expected =
-                {
-                    Name = Tmpfs
-                    Params = Dict [ "target", "/" ]
-                }
-
-            let actual = tmpfs "/"
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "tmpfs full mount test"
-        <| fun _ ->
-            let expected =
-                {
-                    Name = Tmpfs
-                    Params = Dict [ "target", "/" ; "size", "1" ]
-                }
-
-            let actual = tmpfsParams "/" { size 1 }
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "secret mount test"
-        <| fun _ ->
-            let expected =
-                {
-                    Name = Secret
-                    Params =
-                        Dict [
-                            "target", "/"
-                            "id", "app"
-                            "required", "true"
-                            "mode", "0400"
-                            "UID", "1"
-                            "GID", "2"
-                        ]
-                }
-
-            let actual =
-                secret {
-                    id "app"
-                    target "/"
-                    required true
-                    mode "0400"
-                    UID 1
-                    GID 2
-                }
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "ssh mount test"
-        <| fun _ ->
-            let expected =
-                {
-                    Name = Ssh
-                    Params =
-                        Dict [
-                            "target", "/"
-                            "id", "app"
-                            "required", "true"
-                            "mode", "0600"
-                            "UID", "1"
-                            "GID", "2"
-                        ]
-                }
-
-            let actual =
-                ssh {
-                    id "app"
-                    target "/"
-                    required true
-                    mode "0600"
-                    UID 1
-                    GID 2
-                }
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "network test"
-        <| fun _ ->
-            let expected =
-                {
-                    Mounts = Collection.empty
-                    Network = Some DefaultNetwork
-                    Security = None
-                    Arguments = Arguments [ "exit 0" ]
-                }
-                |> Run
-                |> Instruction
+                [
+                    "RUN \\"
+                    "    --network=host \\"
+                    "    echo \"command 1\""
+                ]
+                |> toMultiline
 
             let actual =
                 run {
-                    network DefaultNetwork
-                    cmd "exit 0"
+                    cmd "echo \"command 1\""
+                    network Host
                 }
+                |> render
 
-            Expect.equal actual expected errorMessage
+            Expect.equal actual expected
+            <| toErrorMessage [
+                "String must contain"
+                "  1. 'RUN' keyword"
+                "  2. whitespace"
+                "  3. backslash symbol"
+                "  4. EOL"
+                "  5. 4 whitespaces"
+                "  6. '--network' flag"
+                "  7. equal symbol"
+                "  8. network env type from argument of 'network' parameter"
+                "  9. whitespace"
+                "  10. backslash symbol"
+                "  11. EOL"
+                "  12. 4 whitespaces"
+                "  13. command line from argument of second 'cmd' parameter"
+                "  14. EOL"
+            ]
 
-
-        testCase "security test"
+        testCase "run command with set security mode"
         <| fun _ ->
             let expected =
-                {
-                    Mounts = Collection.empty
-                    Network = None
-                    Security = Some Sandbox
-                    Arguments = Arguments [ "exit 0" ]
-                }
-                |> Run
-                |> Instruction
+                [
+                    "RUN \\"
+                    "    --security=insecure \\"
+                    "    echo \"command 1\""
+                ]
+                |> toMultiline
 
             let actual =
                 run {
-                    security Sandbox
-                    cmd "exit 0"
-                }
-
-            Expect.equal actual expected errorMessage
-
-
-        testCase "averything at once test"
-        <| fun _ ->
-            let expected =
-                {
-                    Mounts =
-                        Collection [
-                            {
-                                Name = Cache
-                                Params =
-                                    Dict [
-                                        "target", "/var/cache/apt"
-                                        "sharing", "locked"
-                                    ]
-                            }
-                            {
-                                Name = Cache
-                                Params =
-                                    Dict [
-                                        "target", "/var/lib/apt"
-                                        "sharing", "locked"
-                                    ]
-                            }
-                        ]
-                    Network = Some NoneNetwok
-                    Security = Some Insecure
-                    Arguments =
-                        Arguments [ "make tests" ; "apt-get install wget" ; "exit 0" ]
-                }
-                |> Run
-                |> Instruction
-
-            let actual =
-                run {
-                    mount (cacheParams "/var/cache/apt" { sharing Locked })
-                    mount (cacheParams "/var/lib/apt" { sharing Locked })
-                    network NoneNetwok
+                    cmd "echo \"command 1\""
                     security Insecure
-                    cmd "make tests"
-                    cmds [ "apt-get install wget" ; "exit 0" ]
                 }
+                |> render
 
-            Expect.equal actual expected errorMessage
+            Expect.equal actual expected
+            <| toErrorMessage [
+                "String must contain"
+                "  1. 'RUN' keyword"
+                "  2. whitespace"
+                "  3. backslash symbol"
+                "  4. EOL"
+                "  5. 4 whitespaces"
+                "  6. '--security' flag"
+                "  7. equal symbol"
+                "  8. security mode from argument of 'security' parameter"
+                "  9. whitespace"
+                "  10. backslash symbol"
+                "  11. EOL"
+                "  12. 4 whitespaces"
+                "  13. command line from argument of second 'cmd' parameter"
+                "  14. EOL"
+            ]
+
+        testCase "run command with ssh mount mode"
+        <| fun _ ->
+            let expected =
+                [
+                    "RUN \\"
+                    "    --mount=type=ssh \\"
+                    "    ssh -q -T git@gitlab.com 2>&1 | tee /hello"
+                ]
+                |> toMultiline
+
+            let actual =
+                run {
+                    ssh
+                    cmd "ssh -q -T git@gitlab.com 2>&1 | tee /hello"
+                }
+                |> render
+
+            Expect.equal actual expected "huh"
     ]

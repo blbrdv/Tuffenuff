@@ -39,7 +39,7 @@ type FromInstruction =
         Platform : string option
     }
 
-    static member Create (image) =
+    static member Create image =
         {
             Image = image
             Name = None
@@ -57,7 +57,7 @@ type AddInstruction =
         Elements : Arguments
     }
 
-    static member Create (elements) =
+    static member Create elements =
         {
             Chown = None
             Chmod = None
@@ -77,7 +77,7 @@ type CopyInstruction =
         Elements : Arguments
     }
 
-    static member Create (elements) =
+    static member Create elements =
         {
             From = None
             Chown = None
@@ -93,12 +93,12 @@ type HealthcheckInstruction =
         Instructions : Arguments
     }
 
-    static member Create (cmds) =
+    static member Create cmds =
         let instr =
-            match box (cmds) with
+            match box cmds with
             | :? string as s -> Arguments [ s ]
             | :? IEnumerable<string> as ls -> Arguments ls
-            | _ -> raise (ArgumentException ("Invalid argument type"))
+            | _ -> raise (ArgumentException "Invalid argument type")
 
         {
             Options = Parameters []
@@ -137,12 +137,12 @@ type MountParameters =
             Params = Dict [ key, value ]
         }
 
-    static member Create (name) = { Name = name ; Params = Dict.empty }
+    static member Create name = { Name = name ; Params = Dict.empty }
 
 
 type NetworkType =
     | DefaultNetwork
-    | NoneNetwok
+    | NoneNetwork
     | Host
 
 

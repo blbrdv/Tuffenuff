@@ -1,57 +1,63 @@
-// http://www.fssnip.net/7WR/title/Computation-expression-over-StringBuilder
-module Tuffenuff.StringCE
+namespace Tuffenuff
 
-open System.Text
+// http://www.fssnip.net/7WR
+module internal StringCE =
+    open System.Text
+    open Printf
+    open Tuffenuff.String
 
+    type private StringBuffer = StringBuilder -> unit
+    type private StringBuffer<'T> = StringBuilder -> 'T
 
-type StringBuffer = StringBuilder -> unit
+    [<Sealed>]
+    type StringBufferBuilder() =
+        member _.Yield (value : string) : StringBuffer =
+            fun (builder : StringBuilder) -> bprintf builder $"%s{value}"
 
+        member _.Yield (value : char) : StringBuffer =
+            fun (builder : StringBuilder) -> bprintf builder $"%c{value}"
 
-type StringBufferBuilder() =
-    member inline __.Yield (txt : string) =
-        fun (b : StringBuilder) -> Printf.bprintf b "%s" txt
+        member _.Yield (value : byte) : StringBuffer =
+            fun (builder : StringBuilder) -> bprintf builder $"%02x{value}"
 
-    member inline __.Yield (c : char) =
-        fun (b : StringBuilder) -> Printf.bprintf b "%c" c
+        member _.Yield (values : #seq<string>) : StringBuffer =
+            fun (builder : StringBuilder) ->
+                for value in values do
+                    bprintf builder $"%s{value}%s{eol}"
 
-    member inline __.Yield (strings : #seq<string>) =
-        fun (b : StringBuilder) ->
-            for s in strings do
-                Printf.bprintf b "%s\n" s
+        member _.YieldFrom (buffer : StringBuffer) : StringBuffer = buffer
 
-    member inline __.YieldFrom (f : StringBuffer) = f
+        member _.Combine
+            (
+                bufferLeft : StringBuffer,
+                bufferRight : StringBuffer<'a>
+            )
+            : StringBuffer<'a>
+            =
+            fun (builder : StringBuilder) ->
+                bufferLeft builder
+                bufferRight builder
 
-    member __.Combine (f, g) =
-        fun (b : StringBuilder) ->
-            f b
-            g b
+        member _.Delay (wrapper : unit -> StringBuffer<'a>) : StringBuffer<'a> =
+            fun (builder : StringBuilder) -> wrapper () builder
 
-    member __.Delay f = fun (b : StringBuilder) -> (f ()) b
+        member _.Zero () : 'a -> unit = ignore
 
-    member __.Zero () = ignore
+        member _.For (values : 'a seq, yield' : 'a -> StringBuffer) : StringBuffer =
+            fun (builder : StringBuilder) ->
+                use e = values.GetEnumerator ()
 
-    member __.For (xs : 'a seq, f : 'a -> StringBuffer) =
-        fun (b : StringBuilder) ->
-            use e = xs.GetEnumerator ()
+                while e.MoveNext () do
+                    yield' e.Current builder
 
-            while e.MoveNext () do
-                (f e.Current) b
+        member _.While (test : unit -> bool, buffer : StringBuffer) : StringBuffer =
+            fun builder ->
+                while test () do
+                    buffer builder
 
-    member __.While (p : unit -> bool, f : StringBuffer) =
-        fun (b : StringBuilder) ->
-            while p () do
-                f b
+        member _.Run (buffer : StringBuffer) : string =
+            let builder = StringBuilder ()
+            do buffer builder
+            builder.ToString ()
 
-    member __.Run (f : StringBuffer) =
-        let b = StringBuilder ()
-        do f b
-        b.ToString ()
-
-
-let str = new StringBufferBuilder ()
-
-
-type StringBufferBuilder with
-
-    member inline __.Yield (b : byte) =
-        fun (sb : StringBuilder) -> Printf.bprintf sb "%02x " b
+    let str = StringBufferBuilder ()

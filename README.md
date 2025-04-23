@@ -1,3 +1,4 @@
+<!--suppress HtmlDeprecatedAttribute -->
 <img align="left" width="80" height="76" src="imgs/logo.png" alt="logo">
 
 # Tuffenuff
@@ -11,7 +12,7 @@ Simple F# DSL for generating dockerfiles.
 ### Why?
 
 1. To work with more flexing scripts and ability to reuse Dockerfile code.
-2. Becouse I can.
+2. Because I can.
 
 ## Usage
 
@@ -108,17 +109,12 @@ ENTRYPOINT [ "/bin/bash", "-l" ]
 
 ### More examples
 
-See [examples](examples/).
+See [examples](examples).
 
 ## Local development
 
 1. Install DotNet SDK version [6.0.x](https://dotnet.microsoft.com/download/dotnet/6.0)
 2. Run `dotnet tool restore`
-3. Run project tasks `dotnet fake run build.fsx -t <Target>`, where `<Target>` is:
-    - `CodestyleCheck`
-    - `CodestyleFormat`
-    - `Clean`
-    - `Build`
-    - `RunTests`
+3. Use automation script for building/testing project and more.
 
-See `build.fsx` source code for more info.
+See [script documentation](RUN.md) for more info.

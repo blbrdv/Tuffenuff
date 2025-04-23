@@ -1,52 +1,83 @@
 [<AutoOpen>]
 module Tuffenuff.Dockerfile
 
+open System
 open System.IO
 open Tuffenuff.Domain.Types
 open Tuffenuff.String
 open Tuffenuff.StringCE
 
+type private Entities = Entity seq
 
-let dockerfile (entities : Entity seq) = entities
+/// <summary>
+/// Form sequence of Dockerfile entities.
+/// </summary>
+/// <param name="value">Sequence of entities.</param>
+/// <seealso cref="df"/>
+let dockerfile (value : Entities) : Entities = value
 
+/// <summary>
+/// Form sequence of Dockerfile entities.
+/// </summary>
+/// <param name="value">Sequence of entities.</param>
+/// <seealso cref="dockerfile"/>
+let df (value : Entities) : Entities = dockerfile value
 
-let df = dockerfile
+/// <summary>
+/// Insert plain text line into Dockerfile.
+/// </summary>
+/// <param name="value">Text to insert.</param>
+let plain (value : string) : Entity = Plain value
 
+/// <summary>
+/// Insert empty line into Dockerfile.
+/// </summary>
+let br = plain empty
 
-let plain = Plain
+/// <summary>
+/// Insert sequence of Dockerfile entities as part of Dockerfile.
+/// </summary>
+/// <param name="value">Sequence of entities.</param>
+/// <seealso cref="(!&)"/>
+let part (value : Entities) : Entity = Subpart value
 
+/// <summary>
+/// Insert sequence of Dockerfile entities as part of Dockerfile.
+/// </summary>
+/// <param name="value">Sequence of entities.</param>
+/// <seealso cref="part"/>
+let (!&) (value : Entities) : Entity = part value
 
-let br = plain ""
-
-
-let part = Subpart
-
-
-let (!&) = part
-
-
+/// <summary>
+/// Module of functions to work with Dockerfile entities.
+/// </summary>
 [<RequireQualifiedAccess>]
 module Dockerfile =
 
-    let render df =
-        let rec renderInstruction instr =
+    /// <summary>
+    /// Convert sequence of Dockerfile entities to human-readable Dockerfile string.
+    /// </summary>
+    /// <param name="value">Sequence of entities to convert.</param>
+    /// <returns>Dockerfile string.</returns>
+    let render (value : Entities) : string =
+        let rec renderInstruction (instr : InstructionType) : string =
             match instr with
-            | Simple s ->
-                if s.Name = "#" then
-                    sprintf "%s %s" s.Name s.Value
-                else
-                    print s.Name s.Value
+            | Simple s when s.Name = "#" && s.Value = empty -> empty
 
-            | SimpleQuoted s -> print s.Name (quote s.Value)
+            | Simple s when s.Name = "#" -> $"%s{s.Name}%s{ws}%s{s.Value}"
 
-            | List l -> print l.Name (printList l.Elements.Collection)
+            | Simple s -> print s.Name s.Value
 
-            | KeyValue kv -> print kv.Name (printKVQ kv.Key kv.Value)
+            | SimpleQuoted s -> s.Value |> quote |> print s.Name
+
+            | List l -> l.Elements.Collection |> printList |> print l.Name
+
+            | KeyValue kv -> printKVQ kv.Key kv.Value |> print kv.Name
 
             | KeyValueList l ->
                 str {
                     l.Name
-                    " "
+                    ws
 
                     l.Elements
                     |> Seq.map (fun e -> printKVQ e.Key e.Value)
@@ -59,10 +90,11 @@ module Dockerfile =
                 str {
                     "FROM"
                     printParameterQ "platform" f.Platform
-                    sprintf " %s" f.Image
+                    ws
+                    f.Image
 
                     if f.Name.IsSome then
-                        sprintf " AS %s" f.Name.Value
+                        $" AS %s{f.Name.Value}"
 
                     eol
                 }
@@ -79,10 +111,10 @@ module Dockerfile =
                         |> sprintf "--mount=%s"
 
                     if r.Network.IsSome then
-                        sprintf "--network=%s" ((nameof r.Network.Value).ToLower ())
+                        $"--network=%s{r.Network.Value.ToString().ToLower ()}"
 
                     if r.Security.IsSome then
-                        sprintf "--security=%s" ((nameof r.Network.Value).ToLower ())
+                        $"--security=%s{r.Security.Value.ToString().ToLower ()}"
 
                     for arg in r.Arguments do
                         arg
@@ -97,12 +129,12 @@ module Dockerfile =
                     printFlag "link" a.Link
 
                     if a.KeepGitDir then
-                        sprintf " --keep-git-dir=true"
+                        " --keep-git-dir=true"
 
                     printParameter "chmod" a.Chmod
                     printParameter "chown" a.Chown
                     printParameter "checksum" a.Checksum
-                    " "
+                    ws
                     printList a.Elements.Collection
 
                     eol
@@ -115,47 +147,58 @@ module Dockerfile =
                     printParameter "from" cp.From
                     printParameter "chmod" cp.Chmod
                     printParameter "chown" cp.Chown
-                    " "
+                    ws
                     printList cp.Elements.Collection
 
                     eol
                 }
 
             | Healthcheck hc ->
-                let hcstr =
-                    seq {
-                        "HEALTCHECK"
+                seq {
+                    "HEALTCHECK"
 
-                        for opt in hc.Options do
-                            printParameter opt.Key (Some opt.Value)
+                    for opt in hc.Options do
+                        printParameter opt.Key (Some opt.Value)
 
-                        "CMD"
-                        printList hc.Instructions.Collection
-                    }
-                    |> String.concat " "
+                    "CMD"
+                    printList hc.Instructions.Collection
+                }
+                |> String.concat ws
+                |> sprintf "%s%s"
+                <| eol
 
-                hcstr + eol
+            | Onbuild onb ->
+                seq { onb.Instruction } |> renderSubpart |> sprintf "ONBUILD %s%s" <| eol
 
-            | Onbuild onb -> seq { onb.Instruction } |> r |> sprintf "ONBUILD %s\n"
-
-        and r sub =
-            sub
+        and renderSubpart (part : Entities) : string =
+            part
             |> Seq.map (fun instr ->
                 match instr with
                 | Plain t -> t
                 | Instruction i -> renderInstruction i
-                | Subpart s -> r s |> trim
+                | Subpart sp -> sp |> renderSubpart |> trim
             )
             |> String.concat eol
 
-        r df |> trim
+        value |> renderSubpart |> trim
 
-
+    /// <summary>
+    /// Creates a new file, writes the Dockerfile string to the file, and then closes the
+    /// file. If the target file already exists, it is overwritten.
+    /// </summary>
+    /// <param name="path">Path to the target file.</param>
+    /// <param name="text">Dockerfile string.</param>
     let toFile (path : string) (text : string) = File.WriteAllText (path, text)
 
+    /// <summary>
+    /// Reads entities from Dockerfile.
+    /// </summary>
+    /// <param name="path">Path to the Dockerfile.</param>
+    let fromFile (path : string) : Entities =
+        if not (File.Exists path) then
+            raise (ArgumentException ("File not found", nameof path))
 
-    let fromFile (path : string) =
         seq {
-            for line in File.ReadLines (path) do
+            for line in File.ReadLines path do
                 plain line
         }

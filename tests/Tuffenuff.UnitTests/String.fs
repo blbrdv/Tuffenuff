@@ -1,37 +1,54 @@
 module Tests.String
 
+open System
 open Expecto
 open Tuffenuff.String
-open Tuffenuff.StringCE
 
 [<Tests>]
 let tests =
     testList "string tests" [
         testCase "quote test"
         <| fun _ ->
-            Expect.equal (quote "quoted text") "\"quoted text\""
-            <| "String should be quoted"
-
+            Expect.equal
+                (quote "quoted text")
+                "\"quoted text\""
+                "String must contain\n\
+                  1. quote symbol\n\
+                  2. unformatted text\n\
+                  3. quote symbol\n\n"
 
         testCase "print test"
         <| fun _ ->
             Expect.equal
                 (print "INSTRUCTION" "argument")
-                (sprintf "INSTRUCTION argument%s" eol)
-            <| "Instruction and argument should be printed separately"
-
+                $"INSTRUCTION argument%s{eol}"
+                "String must contain\n\
+                  1. name from first argument\n\
+                  2. whitespace\n\
+                  3. value from second argument\n\
+                  4. EOL\n\n"
 
         testCase "printKV test"
         <| fun _ ->
-            Expect.equal (printKV "key.name" "somevalue") "key.name=somevalue"
-            <| "Key-Value print should be prettified"
-
+            Expect.equal
+                (printKV "key.name" "foo")
+                "key.name=foo"
+                "String must contain\n\
+                  1. key from first argument\n\
+                  2. equals symbol\n\
+                  3. value from second argument\n\n"
 
         testCase "printKVQ test"
         <| fun _ ->
-            Expect.equal (printKVQ "key.name" "somevalue") "key.name=\"somevalue\""
-            <| "Key-Value print should be prettified"
-
+            Expect.equal
+                (printKVQ "key.name" "foo")
+                "key.name=\"foo\""
+                "String must contain\n\
+                  1. key from first argument\n\
+                  2. equals symbol\n\
+                  3. quote symbol\n\
+                  4. value from second argument\n\
+                  5. quote symbol\n\n"
 
         testCase "printList seq test"
         <| fun _ ->
@@ -44,78 +61,94 @@ let tests =
                     }
                 ))
                 "a b c"
-            <| "Seq should be printed in shell form"
-
+                "String must contain all strings from argument seperated with whitespace"
 
         testCase "printList list test"
         <| fun _ ->
-            Expect.equal (printList [ "a" ; "b" ; "c" ]) "a b c"
-            <| "List should be printed in shell form"
+            Expect.equal
+                (printList [ "a" ; "b" ; "c" ])
+                "a b c"
+                "String must contain all strings from argument seperated with whitespace"
 
-        testCase "rintList array test"
+        testCase "printList array test"
         <| fun _ ->
-            Expect.equal (printList [| "a" ; "b" ; "c" |]) """[ "a", "b", "c" ]"""
-            <| "Array should be printed in exec form"
-
+            Expect.equal
+                (printList [| "a" ; "b" ; "c" |])
+                """[ "a", "b", "c" ]"""
+                "String must contain\n\
+                  1. left bracket\n\
+                  2. whitespace\n\
+                  3. all strings from argument, quoted and seperated by comma and \
+                  whitespace\n\
+                  4. whitespace\n\
+                  5. right bracket\n\n"
 
         testCase "printFlag true test"
         <| fun _ ->
-            Expect.equal (printFlag "flag-name" true) " --flag-name"
-            <| "Passed flag should be prettified"
-
+            Expect.equal
+                (printFlag "flag-name" true)
+                " --flag-name"
+                "String must contain\n\
+                  1. whitespace\n\
+                  2. two minus symbols\n\
+                  3. flag name unmodified\n\n"
 
         testCase "printFlag false test"
         <| fun _ ->
-            Expect.equal (printFlag "flag-name" false) ""
-            <| "Unpassed flag should be equal to empty string"
+            Expect.equal (printFlag "flag-name" false) String.Empty "String must be empty"
 
         testCase "printParameter some test"
         <| fun _ ->
-            Expect.equal (printParameter "parameter" (Some 3)) " --parameter=3"
-            <| "Parameter with value shoyld be prettified"
-
+            Expect.equal
+                (printParameter "parameter" (Some 3))
+                " --parameter=3"
+                "String must contain\n\
+                  1. whitespace\n\
+                  2. two minus symbols\n\
+                  3. parameter name from first argument\n\
+                  4. equals symbol\n\
+                  5. unfolded value from second argument\n\n"
 
         testCase "printParameter none test"
         <| fun _ ->
-            Expect.equal (printParameter "parameter" None) ""
-            <| "Parameter without value should be equal to empty string"
+            Expect.equal
+                (printParameter "parameter" None)
+                String.Empty
+                "String must be empty"
 
-
-        testCase "printParameterQ test"
-        <| fun _ ->
-            Expect.equal (printParameterQ "parameter" (Some 3)) " --parameter=\"3\""
-            <| "String parameter should be quoted"
-
-
-        testCase "trim test"
+        testCase "printParameterQ some test"
         <| fun _ ->
             Expect.equal
-                (trim
-                    """
+                (printParameterQ "parameter" (Some 3))
+                " --parameter=\"3\""
+                "String must contain\n\
+                  1. whitespace\n\
+                  2. two minus symbols\n\
+                  3. parameter name from first argument\n\
+                  4. equals symbol\n\
+                  5. quote symbol\n\
+                  6. unfolded value from second argument\n\
+                  7. quote symbol\n\n"
 
-FROM scratch""")
-                "FROM scratch"
-            <| "First FROM instruction should be on first line"
-
-
-        testCase "StringBuilder CE test"
+        testCase "printParameterQ none test"
         <| fun _ ->
-            let a = "A"
-            let b = "B"
-            let c = "C"
+            Expect.equal
+                (printParameterQ "parameter" None)
+                String.Empty
+                "String must be empty"
 
-            let expected =
-                """A B
-C"""
+        testCase "trim empty lines test"
+        <| fun _ ->
+            Expect.equal
+                (trim $"{eol} {eol}{eol} FROM scratch")
+                "FROM scratch"
+                "String must contain text starting from first occurence of \
+                symbols except whitespaces and EOL"
 
-            let actual =
-                str {
-                    a
-                    " "
-                    b
-                    eol
-                    c
-                }
-
-            Expect.equal actual expected "String should be builded"
+        testCase "trim non-empty lines test"
+        <| fun _ ->
+            Expect.equal
+                (trim $"foo{eol} {eol}{eol} FROM scratch")
+                $"foo{eol} {eol}{eol} FROM scratch"
+                "String must be equal to provided in argument"
     ]

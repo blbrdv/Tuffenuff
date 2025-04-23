@@ -1,55 +1,53 @@
-module Tuffenuff.String
+namespace Tuffenuff
 
-open System
+module internal String =
+    open System
 
+    [<Literal>]
+    let empty = ""
 
-let eol = Environment.NewLine
+    [<Literal>]
+    let ws = " "
 
+    [<Literal>]
+    let tab = "    "
 
-let eol_slash = sprintf " \\%s    " eol
+    [<Literal>]
+    let q = "\""
 
+    let eol = Environment.NewLine
 
-let quote value = sprintf "%c%s%c" '"' (string value) '"'
+    let eol_slash = $"%s{ws}\\%s{eol}%s{tab}"
 
+    let quote (value : 'a) : string = $"%s{q}%s{string value}%s{q}"
 
-let print name value = sprintf "%s %s%s" name value eol
+    let print (name : string) (value : string) : string =
+        $"%s{name}%s{ws}%s{value}%s{eol}"
 
+    let printKV (key : string) (value : string) : string = $"%s{key}=%s{value}"
 
-let printKV key value = sprintf "%s=%s" key value
+    let printKVQ (key : string) (value : 'a) : string = value |> quote |> printKV key
 
+    // ReSharper disable once FSharpRedundantParens
+    let printList (values : #(string seq)) : string =
+        if (values :> obj) :? string[] then
+            values |> Seq.map quote |> String.concat ", " |> sprintf "[ %s ]"
+        else
+            values |> String.concat ws
 
-let printKVQ key value = printKV key (quote value)
+    let printFlag (name : string) (value : bool) : string =
+        if value then $"%s{ws}--%s{name}" else empty
 
+    let printParameter<'T> (name : string) (value : 'T option) : string =
+        if value.IsSome then
+            $"%s{ws}--%s{name}=%s{string value.Value}"
+        else
+            empty
 
-let printList list =
-    if (list :> obj) :? string[] then
-        list |> Seq.map quote |> String.concat ", " |> sprintf "[ %s ]"
-    else
-        list |> String.concat " "
+    let printParameterQ<'T> (name : string) (value : 'T option) : string =
+        match value with
+        | Some s -> s |> quote |> Some
+        | _ -> None
+        |> printParameter name
 
-
-let printFlag name value =
-    if value then sprintf " --%s" name else ""
-
-
-let printParameter<'T> name (value : 'T option) =
-    if value.IsSome then
-        sprintf " --%s=%s" name (string value.Value)
-    else
-        ""
-
-
-let printParameterQ<'T> name (value : 'T option) =
-    match value with
-    | Some s -> s |> quote |> Some
-    | _ -> None
-    |> printParameter name
-
-
-let trim (text : string) = text.TrimStart (eol.ToCharArray ())
-
-
-let variable = sprintf "${%s}"
-
-
-let (~%) = variable
+    let trim (value : string) : string = value.TrimStart [| ' ' ; '\n' ; '\r' |]

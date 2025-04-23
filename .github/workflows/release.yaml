@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     paths-ignore:
-    - '.config/**'
+    - '.idea/**'
     - '.vscode/**'
     tags:
       - "*"
@@ -14,6 +14,8 @@ jobs:
     
     permissions:
       contents: write
+
+    name: Release project on Nuget
 
     steps:
     - uses: actions/checkout@v3
@@ -34,10 +36,12 @@ jobs:
       with:
         global-json-file: global.json
 
-    - name: Restore tools
-      run: dotnet tool restore
-
-    - name: Nuget release
+    - name: Build
       env:
         KEY: ${{ secrets.NUGET_API_KEY }}
-      run: dotnet fake run build.fsx -t Release -e key=$KEY
+      run: ./run.sh Build
+
+    - name: Release
+      env:
+        KEY: ${{ secrets.NUGET_API_KEY }}
+      run: ./run.sh Release -e NUGET_API_KEY=$KEY

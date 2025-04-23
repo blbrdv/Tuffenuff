@@ -22,7 +22,3 @@ fsharp_bar_before_discriminated_union_declaration=true
 fsharp_multiline_bracket_style=aligned
 fsharp_max_array_or_list_width=60
 fsharp_experimental_elmish=true
-
-[*.fsi]
-fsharp_newline_between_type_definition_and_members=true
-fsharp_keep_max_number_of_blank_lines=1
