@@ -113,7 +113,7 @@ See [examples](examples).
 
 ## Local development
 
-1. Install DotNet SDK version [6.0.x](https://dotnet.microsoft.com/download/dotnet/6.0)
+1. Install DotNet SDK version [8.0.x](https://dotnet.microsoft.com/download/dotnet/8.0)
 2. Run `dotnet tool restore`
 3. Use automation script for building/testing project and more.
 
