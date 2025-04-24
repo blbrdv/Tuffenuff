@@ -28,10 +28,7 @@ module internal StringCE =
         member _.YieldFrom (buffer : StringBuffer) : StringBuffer = buffer
 
         member _.Combine
-            (
-                bufferLeft : StringBuffer,
-                bufferRight : StringBuffer<'a>
-            )
+            (bufferLeft : StringBuffer, bufferRight : StringBuffer<'a>)
             : StringBuffer<'a>
             =
             fun (builder : StringBuilder) ->

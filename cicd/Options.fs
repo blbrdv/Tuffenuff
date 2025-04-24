@@ -2,10 +2,13 @@ module CICD.Options
 
 open Fake.DotNet
 
+// https://github.com/fsprojects/FAKE/issues/2744#issuecomment-2325173747
 /// If trace level is not verbose - disable any output for MSBuild.
 let inline private setLogParams (args : MSBuild.CliArguments) =
     if isVerbose then
-        args
+        { args with
+            DisableInternalBinLog = true
+        }
     else
         { args with
             NoConsoleLogger = true
@@ -13,6 +16,7 @@ let inline private setLogParams (args : MSBuild.CliArguments) =
             BinaryLoggers = None
             DistributedLoggers = None
             FileLoggers = None
+            DisableInternalBinLog = true 
         }
 
 /// Default 'dotnet test' command options.

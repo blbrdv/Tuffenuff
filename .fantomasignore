@@ -4,3 +4,6 @@ cicd/**
 
 # generated files
 **/*.gen.fs
+
+# AssemblyAttributes files with monikers
+src/**/*.AssemblyAttributes.fs

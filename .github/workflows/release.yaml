@@ -18,7 +18,7 @@ jobs:
     name: Release project on Nuget
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - run: |
         if [[ $GITHUB_REF_NAME == *"-"* ]]; then
@@ -28,11 +28,11 @@ jobs:
         fi
 
     - name: Github release
-      uses: docker://antonyurchenko/git-release:latest
+      uses: anton-yurchenko/git-release@v6
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - uses: actions/setup-dotnet@v3
+    - uses: actions/setup-dotnet@v4
       with:
         global-json-file: global.json
 

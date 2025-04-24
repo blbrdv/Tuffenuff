@@ -74,5 +74,5 @@ out/
 examples/Dockerfile.*
 !examples/Dockerfile.part
 
-# experiments
-x*
+# AssemblyAttributes files with monikers
+src/**/*.AssemblyAttributes.fs

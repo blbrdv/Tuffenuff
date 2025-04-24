@@ -12,7 +12,7 @@ let part2 =
     Dockerfile.fromFile (Path.Combine (__SOURCE_DIRECTORY__, "Dockerfile.part"))
 
 df [
-    !/ "Partial dockerfile"
+    !/"Partial dockerfile"
     from "ubuntu:latest"
     !&part1
     !&part2
